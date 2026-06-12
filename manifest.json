@@ -2,7 +2,7 @@
   "name": "Glipx",
   "short_name": "Glipx",
   "description": "Tap the circles. Build combos. Beat your record.",
-  "start_url": "/index.html",
+  "start_url": "/manifest.json",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#0a0a1a",
@@ -21,6 +21,10 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["games", "entertainment"],
-  "lang": "en"
+  "categories": [
+    "games",
+    "entertainment"
+  ],
+  "lang": "en",
+  "id": "Glipx"
 }
