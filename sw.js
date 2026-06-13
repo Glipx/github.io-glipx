@@ -1,10 +1,12 @@
 const CACHE_NAME = 'glipx-v1';
 const ASSETS = [
-  '/glipx/',
-  '/glipx/index.html',
-  '/glipx/manifest.json',
-  '/glipx/icon-192.png',
-  '/glipx/icon-512.png'
+  '/github.io-glipx/',
+  '/github.io-glipx/index.html',
+  '/github.io-glipx/manifest.json',
+  '/github.io-glipx/icon-192.png',
+  '/github.io-glipx/icon-512.png',
+  '/github.io-glipx/screenshot-1.png',
+  '/github.io-glipx/screenshot-2.png'
 ];
 
 self.addEventListener('install', event => {

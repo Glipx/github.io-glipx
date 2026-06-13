@@ -1,10 +1,10 @@
 {
-  "id": "/glipx/",
+  "id": "/github.io-glipx/",
   "name": "Glipx",
   "short_name": "Glipx",
   "description": "Tap the circles. Build combos. Level up. Beat your record.",
-  "start_url": "/glipx/index.html",
-  "scope": "/glipx/",
+  "start_url": "/github.io-glipx/index.html",
+  "scope": "/github.io-glipx/",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#0a0a1a",
