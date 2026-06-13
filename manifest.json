@@ -2,7 +2,8 @@
   "name": "Glipx",
   "short_name": "Glipx",
   "description": "Tap the circles. Build combos. Beat your record.",
-  "start_url": "/manifest.json",
+  "start_url": "/glipx/index.html",
+  "scope": "/glipx/",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#0a0a1a",
@@ -12,19 +13,27 @@
       "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "categories": [
-    "games",
-    "entertainment"
-  ],
-  "lang": "en",
-  "id": "Glipx"
+  "categories": ["games", "entertainment"],
+  "lang": "en"
 }
