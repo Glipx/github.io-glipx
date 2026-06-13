@@ -1,13 +1,17 @@
 {
+  "id": "/glipx/",
   "name": "Glipx",
   "short_name": "Glipx",
-  "description": "Tap the circles. Build combos. Beat your record.",
+  "description": "Tap the circles. Build combos. Level up. Beat your record.",
   "start_url": "/glipx/index.html",
   "scope": "/glipx/",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#0a0a1a",
   "theme_color": "#0a0a1a",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["games", "entertainment"],
   "icons": [
     {
       "src": "icon-192.png",
@@ -34,6 +38,20 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["games", "entertainment"],
-  "lang": "en"
+  "screenshots": [
+    {
+      "src": "screenshot-1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Glipx gameplay"
+    },
+    {
+      "src": "screenshot-2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Glipx level up"
+    }
+  ]
 }
