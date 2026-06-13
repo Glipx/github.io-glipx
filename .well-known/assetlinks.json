@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.glipx.twa",
+    "sha256_cert_fingerprints": ["17:49:04:94:D7:F0:08:CE:01:95:F0:A8:98:60:60:D9:26:20:8E:C0:B8:9B:4A:F3:95:CA:FA:2F:18:CB:57:2D"]
+  }
+}]
