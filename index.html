@@ -11,14 +11,21 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;background:#0a0a1a;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-    #gw{max-width:480px;margin:0 auto;padding:12px;height:100vh;display:flex;flex-direction:column;gap:10px;user-select:none}
-    #header{display:flex;justify-content:space-between;align-items:center;gap:6px}
-    .stat-box{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:8px 10px;text-align:center;flex:1}
-    .stat-label{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em}
-    .stat-value{font-size:20px;font-weight:500;color:#e0e8ff}
-    #mode-toggle-btn{background:#1a1a2e;border:0.5px solid #378ADD;border-radius:12px;padding:8px 12px;text-align:center;cursor:pointer;flex:1.2;transition:all .2s}
-    #mode-toggle-label{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em}
-    #mode-toggle-value{font-size:16px;font-weight:500;color:#a0c4ff}
+    #gw{max-width:480px;margin:0 auto;padding:12px;height:100vh;display:flex;flex-direction:column;gap:8px;user-select:none}
+    #header{display:flex;justify-content:space-between;align-items:center;gap:5px}
+    .stat-box{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:7px 8px;text-align:center;flex:1}
+    .stat-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em}
+    .stat-value{font-size:18px;font-weight:500;color:#e0e8ff}
+    #mode-toggle-btn{background:#1a1a2e;border:0.5px solid #378ADD;border-radius:12px;padding:7px 10px;text-align:center;cursor:pointer;flex:1.1;transition:all .2s}
+    #mode-toggle-btn.locked{opacity:0.35;cursor:not-allowed;border-color:#2a2a4e}
+    #mode-toggle-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em}
+    #mode-toggle-value{font-size:14px;font-weight:500;color:#a0c4ff}
+    #level-bar-wrap{background:#1a1a2e;border-radius:8px;padding:6px 10px;border:0.5px solid #2a2a4e}
+    #level-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+    #level-label{font-size:11px;color:#6677aa}
+    #level-goal{font-size:11px;color:#6677aa}
+    #level-progress-bg{background:#0a0a1a;border-radius:4px;height:6px;overflow:hidden}
+    #level-progress-fill{height:6px;background:#378ADD;border-radius:4px;transition:width .3s}
     #arena{position:relative;flex:1;background:#0a0a1a;border-radius:16px;border:0.5px solid #2a2a4e;overflow:hidden;cursor:crosshair;min-height:0}
     #stars-canvas{position:absolute;inset:0;pointer-events:none}
     .target{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pop-in .1s ease-out}
@@ -27,23 +34,39 @@
     @keyframes flash-red{from{opacity:.25}to{opacity:0}}
     @keyframes combo-float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-30px)}}
     @keyframes shrink-ring{from{stroke-dashoffset:0}to{stroke-dashoffset:188}}
+    @keyframes levelup-anim{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
+    @keyframes shield-pulse{0%,100%{box-shadow:0 0 0 0 #7F77DD88}50%{box-shadow:0 0 0 8px #7F77DD00}}
     .combo-pop{position:absolute;pointer-events:none;font-size:13px;font-weight:500;animation:combo-float .6s ease-out forwards}
     .miss-flash{position:absolute;inset:0;background:rgba(220,60,40,.18);pointer-events:none;border-radius:16px;animation:flash-red .25s ease-out forwards}
     #timer-bar{position:absolute;bottom:0;left:0;height:4px;background:#378ADD;border-radius:0 0 0 16px}
-    #lives-bar{position:absolute;top:8px;right:10px;display:flex;gap:4px}
-    .life-dot{width:9px;height:9px;border-radius:50%;background:#5DCAA5}
-    .life-dot.lost{background:#333}
-    #start-screen,#game-over-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0a0a1aee;border-radius:16px}
-    .game-logo{font-size:42px;font-weight:700;color:#e0e8ff;letter-spacing:3px}
+    #lives-display{position:absolute;top:8px;left:10px;display:flex;gap:4px}
+    .life-heart{font-size:14px;line-height:1}
+    .life-heart.lost{opacity:0.2}
+    #shield-indicator{position:absolute;top:8px;right:10px;font-size:13px;display:none}
+    #boost-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#FAC775;color:#412402;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap}
+    #slow-banner{position:absolute;top:32px;left:50%;transform:translateX(-50%);background:#7F77DD;color:#fff;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap}
+    #levelup-splash{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;display:none;text-align:center;z-index:10}
+    #levelup-splash.show{display:block;animation:levelup-anim 1.2s ease-out forwards}
+    .levelup-text{font-size:36px;font-weight:700;color:#FAC775;text-shadow:0 0 20px #FAC77588;white-space:nowrap}
+    .levelup-sub{font-size:14px;color:#e0e8ff;margin-top:4px}
+    #start-screen,#game-over-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;background:#0a0a1aee;border-radius:16px}
+    .game-logo{font-size:40px;font-weight:700;color:#e0e8ff;letter-spacing:3px}
     .game-logo span{color:#378ADD}
-    .mode-hint{font-size:13px;color:#6677aa;text-align:center;max-width:260px;line-height:1.6;padding:0 20px}
-    .play-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:14px 40px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
-    .go-score{font-size:52px;font-weight:600;color:#e0e8ff}
+    .mode-hint{font-size:13px;color:#6677aa;text-align:center;max-width:270px;line-height:1.6;padding:0 20px}
+    .play-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:13px 38px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit}
+    .go-score{font-size:48px;font-weight:600;color:#e0e8ff}
     .go-label{font-size:13px;color:#6677aa}
+    .go-level{font-size:15px;color:#a0c4ff;font-weight:500}
     .pb-badge{background:#FAC775;color:#412402;border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600}
-    .pu-time{box-shadow:0 0 12px #378ADD88}.pu-boost{box-shadow:0 0 12px #FAC77588}.pu-clear{box-shadow:0 0 12px #5DCAA588}
-    #boost-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#FAC775;color:#412402;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none}
-    #ad-banner{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+    /* power-up glows */
+    .pu-time{box-shadow:0 0 14px #378ADD99}
+    .pu-boost{box-shadow:0 0 14px #FAC77599}
+    .pu-clear{box-shadow:0 0 14px #5DCAA599}
+    .pu-heart{box-shadow:0 0 14px #ff6b8899}
+    .pu-shield{box-shadow:0 0 14px #7F77DD99}
+    .pu-slow{box-shadow:0 0 14px #a0c4ff99}
+    .pu-bomb{box-shadow:0 0 14px #ff444499;animation:pop-in .1s ease-out}
+    #ad-banner{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
     .ad-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
     .ad-text{font-size:12px;color:#a0b0cc}
     .ad-cta{background:#378ADD;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
@@ -67,19 +90,16 @@
     .slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#6677aa;border-radius:50%;transition:.2s}
     input:checked+.slider{background:#378ADD}
     input:checked+.slider:before{transform:translateX(20px);background:#fff}
+    .toggle.locked-toggle .slider{opacity:0.4;cursor:not-allowed}
     .premium-box{background:#1a1a2e;border:0.5px solid #EF9F27;border-radius:12px;padding:14px;margin:12px 0}
     .premium-title{font-size:14px;font-weight:600;color:#FAC775;margin-bottom:4px}
     .premium-sub{font-size:12px;color:#6677aa;margin-bottom:10px;line-height:1.5}
     .premium-btn{background:#EF9F27;color:#1a0e00;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
     .premium-active{font-size:12px;color:#5DCAA5;text-align:center;margin-top:6px}
     .settings-close{margin-top:14px;width:100%;padding:10px;background:none;border:0.5px solid #2a2a4e;border-radius:12px;color:#6677aa;font-size:13px;cursor:pointer;font-family:inherit}
-    #hs-section{flex-shrink:0}
-    .hs-title{font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
-    .hs-row{display:flex;gap:10px;padding:5px 0;border-bottom:0.5px solid #1a1a2e;font-size:13px}
-    .hs-rank{color:#6677aa;min-width:22px}
-    .hs-pts{font-weight:500;color:#e0e8ff;margin-left:auto}
-    .hs-new{color:#FAC775;font-weight:500}
-    .settings-link{font-size:11px;color:#6677aa;cursor:pointer;margin-top:4px}
+    .settings-link{font-size:11px;color:#6677aa;cursor:pointer;margin-top:2px}
+    .powerup-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center}
+    .pu-legend-item{font-size:11px;color:#6677aa;background:#1a1a2e;border-radius:6px;padding:3px 7px}
   </style>
 </head>
 <body>
@@ -102,15 +122,15 @@
       <div><div class="setting-label">Sound effects</div><div class="setting-sub">Hit, miss and power-up sounds</div></div>
       <label class="toggle"><input type="checkbox" id="sound-toggle" checked><span class="slider"></span></label>
     </div>
-    <div class="setting-row" id="ads-row">
-      <div><div class="setting-label">Show ads</div><div class="setting-sub">Supports free development</div></div>
-      <label class="toggle"><input type="checkbox" id="ads-toggle" checked><span class="slider"></span></label>
+    <div class="setting-row">
+      <div><div class="setting-label">Ads</div><div class="setting-sub" id="ads-sub">Buy Premium to remove ads</div></div>
+      <label class="toggle locked-toggle" id="ads-toggle-wrap"><input type="checkbox" id="ads-toggle" checked disabled><span class="slider"></span></label>
     </div>
     <div class="premium-box">
       <div class="premium-title">⭐ Glipx Premium</div>
       <div class="premium-sub">Remove all ads forever and support the developer.</div>
       <button class="premium-btn" id="premium-btn">Remove ads — $1.99</button>
-      <div class="premium-active" id="premium-active" style="display:none">✓ You have Premium — thank you!</div>
+      <div class="premium-active" id="premium-active" style="display:none">✓ You have Premium — no ads!</div>
     </div>
     <button class="settings-close" id="settings-close">Close</button>
   </div>
@@ -121,20 +141,39 @@
     <div class="stat-box"><div class="stat-label">Score</div><div class="stat-value" id="score-disp">0</div></div>
     <div class="stat-box"><div class="stat-label">Combo</div><div class="stat-value" id="combo-disp">x1</div></div>
     <div class="stat-box" id="time-box"><div class="stat-label">Time</div><div class="stat-value" id="time-disp">30</div></div>
-    <div class="stat-box"><div class="stat-label">Best</div><div class="stat-value" id="pb-disp">—</div></div>
+    <div class="stat-box"><div class="stat-label">Best</div><div class="stat-value" id="pb-disp">—</div><div style="font-size:9px;color:#6677aa;margin-top:1px" id="pb-level-disp"></div></div>
     <div id="mode-toggle-btn">
       <div id="mode-toggle-label">Mode</div>
       <div id="mode-toggle-value">Normal</div>
     </div>
   </div>
+  <div id="level-bar-wrap" style="display:none">
+    <div id="level-info">
+      <span id="level-label">Level 1</span>
+      <span id="level-goal">0 / 100 pts</span>
+    </div>
+    <div id="level-progress-bg"><div id="level-progress-fill" style="width:0%"></div></div>
+  </div>
   <div id="arena">
     <canvas id="stars-canvas"></canvas>
     <div id="timer-bar" style="width:100%;transition:none"></div>
-    <div id="lives-bar" style="display:none"></div>
+    <div id="lives-display"></div>
+    <div id="shield-indicator">🛡️</div>
     <div id="boost-banner">2x boost!</div>
+    <div id="slow-banner">Slow motion!</div>
+    <div id="levelup-splash"><div class="levelup-text" id="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
     <div id="start-screen">
       <div class="game-logo">GLIP<span>X</span></div>
-      <p class="mode-hint" id="mode-hint">Tap the circles — build combos, grab power-ups, beat your record!</p>
+      <p class="mode-hint" id="mode-hint">Tap circles, build combos, level up!</p>
+      <div class="powerup-legend">
+        <span class="pu-legend-item">T +5sec</span>
+        <span class="pu-legend-item">2x boost</span>
+        <span class="pu-legend-item">* clear</span>
+        <span class="pu-legend-item">❤️ life</span>
+        <span class="pu-legend-item">🛡️ shield</span>
+        <span class="pu-legend-item">❄️ slow</span>
+        <span class="pu-legend-item">💣 bomb</span>
+      </div>
       <button class="play-btn" id="start-btn">Play</button>
       <div class="settings-link" id="settings-link">⚙️ Settings</div>
     </div>
@@ -146,10 +185,6 @@
     </div>
     <button class="ad-cta" id="ad-cta-btn">$1.99</button>
   </div>
-  <div id="hs-section" style="display:none">
-    <div class="hs-title">High scores</div>
-    <div id="hs-rows"></div>
-  </div>
 </div>
 
 <script>
@@ -159,13 +194,21 @@ const scoreDisp=document.getElementById('score-disp');
 const comboDisp=document.getElementById('combo-disp');
 const timeDisp=document.getElementById('time-disp');
 const pbDisp=document.getElementById('pb-disp');
+const pbLevelDisp=document.getElementById('pb-level-disp');
 const timerBar=document.getElementById('timer-bar');
 const startScreen=document.getElementById('start-screen');
 const startBtn=document.getElementById('start-btn');
-const livesBar=document.getElementById('lives-bar');
+const livesDisplay=document.getElementById('lives-display');
+const shieldIndicator=document.getElementById('shield-indicator');
 const boostBanner=document.getElementById('boost-banner');
-const hsSection=document.getElementById('hs-section');
-const hsRows=document.getElementById('hs-rows');
+const slowBanner=document.getElementById('slow-banner');
+const levelBarWrap=document.getElementById('level-bar-wrap');
+const levelLabel=document.getElementById('level-label');
+const levelGoal=document.getElementById('level-goal');
+const levelFill=document.getElementById('level-progress-fill');
+const levelupSplash=document.getElementById('levelup-splash');
+const levelupText=document.getElementById('levelup-text');
+const levelupSub=document.getElementById('levelup-sub');
 const timeBox=document.getElementById('time-box');
 const adBanner=document.getElementById('ad-banner');
 const interstitial=document.getElementById('interstitial');
@@ -177,58 +220,353 @@ const soundToggle=document.getElementById('sound-toggle');
 const adsToggle=document.getElementById('ads-toggle');
 const premiumBtn=document.getElementById('premium-btn');
 const premiumActive=document.getElementById('premium-active');
-const adsRow=document.getElementById('ads-row');
 const modeToggleBtn=document.getElementById('mode-toggle-btn');
 const modeToggleValue=document.getElementById('mode-toggle-value');
 const modeHint=document.getElementById('mode-hint');
-const MODES={normal:{label:'Normal',color:'#a0c4ff',hint:'Tap the circles — build combos, grab power-ups, beat your record!',duration:30,lives:0},blitz:{label:'Blitz',color:'#F0997B',hint:'Ultra fast! Everything is quicker from the first tap.',duration:15,lives:0},zen:{label:'Zen',color:'#7ee8bb',hint:'No timer — but you only have 20 lives. Good luck!',duration:0,lives:20}};
+
+// LEVEL CONFIG: each level = {pointsNeeded, timeLimit, spawnDelay, lifeMs}
+const LEVEL_CONFIG=[
+  {pts:80,  time:35, spawnBase:900, lifeBase:1800}, // 1
+  {pts:120, time:35, spawnBase:820, lifeBase:1650}, // 2
+  {pts:160, time:33, spawnBase:750, lifeBase:1500}, // 3
+  {pts:200, time:33, spawnBase:680, lifeBase:1380}, // 4
+  {pts:250, time:30, spawnBase:620, lifeBase:1250}, // 5
+  {pts:300, time:30, spawnBase:560, lifeBase:1120}, // 6
+  {pts:360, time:28, spawnBase:500, lifeBase:1000}, // 7
+  {pts:420, time:28, spawnBase:450, lifeBase:900},  // 8
+  {pts:490, time:26, spawnBase:400, lifeBase:820},  // 9
+  {pts:560, time:26, spawnBase:360, lifeBase:740},  // 10 — repeats harder after
+];
+
+const MODES={
+  normal:{label:'Normal',color:'#a0c4ff',hint:'Tap circles, build combos, level up!',zen:false},
+  blitz:{label:'Blitz',color:'#F0997B',hint:'Blitz: faster targets, shorter time per level!',zen:false},
+  zen:{label:'Zen',color:'#7ee8bb',hint:'Zen: no time limit — 5 lives per level.',zen:true}
+};
 const MODE_ORDER=['normal','blitz','zen'];
 let currentModeIdx=0,currentMode='normal';
-function cycleMode(){if(running)return;currentModeIdx=(currentModeIdx+1)%3;currentMode=MODE_ORDER[currentModeIdx];const m=MODES[currentMode];modeToggleValue.textContent=m.label;modeToggleValue.style.color=m.color;modeToggleBtn.style.borderColor=m.color;modeHint.textContent=m.hint;timeBox.querySelector('.stat-label').textContent=currentMode==='zen'?'Lives':'Time';timeDisp.textContent=currentMode==='zen'?m.lives:m.duration;}
+
+function cycleMode(){
+  if(running)return;
+  currentModeIdx=(currentModeIdx+1)%3;
+  currentMode=MODE_ORDER[currentModeIdx];
+  const m=MODES[currentMode];
+  modeToggleValue.textContent=m.label;
+  modeToggleValue.style.color=m.color;
+  modeToggleBtn.style.borderColor=m.color;
+  modeHint.textContent=m.hint;
+  timeBox.querySelector('.stat-label').textContent=m.zen?'Lives':'Time';
+}
 modeToggleBtn.addEventListener('click',cycleMode);
 modeToggleValue.style.color=MODES.normal.color;
-let soundOn=true,adsOn=true,isPremium=false;
-let score=0,combo=1,timeLeft=30,livesLeft=20,running=false,boostActive=false;
-let boostTimeout=null,targets=[],spawnTimer=null,countTimer=null,gamesPlayed=0;
-function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;adsOn=p.adsOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
-function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,adsOn,isPremium}));}catch{}}
-function applyPrefs(){soundToggle.checked=soundOn;adsToggle.checked=adsOn;adBanner.style.display=(adsOn&&!isPremium)?'flex':'none';if(isPremium){premiumBtn.style.display='none';premiumActive.style.display='block';adsRow.style.opacity='0.4';adsRow.style.pointerEvents='none';adBanner.style.display='none';}else{premiumBtn.style.display='block';premiumActive.style.display='none';adsRow.style.opacity='1';adsRow.style.pointerEvents='auto';}}
+
+let soundOn=true,isPremium=false;
+let score=0,combo=1,timeLeft=0,livesLeft=0,running=false;
+let boostActive=false,slowActive=false,shieldActive=false;
+let boostTimeout=null,slowTimeout=null;
+let targets=[],spawnTimer=null,countTimer=null,gamesPlayed=0;
+let currentLevel=1,levelScore=0;
+
+function getLevelCfg(lvl){
+  const idx=Math.min(lvl-1,LEVEL_CONFIG.length-1);
+  const cfg=LEVEL_CONFIG[idx];
+  if(lvl>LEVEL_CONFIG.length){
+    const extra=lvl-LEVEL_CONFIG.length;
+    return{pts:cfg.pts+extra*80,time:Math.max(20,cfg.time-extra),spawnBase:Math.max(280,cfg.spawnBase-extra*30),lifeBase:Math.max(600,cfg.lifeBase-extra*60)};
+  }
+  return cfg;
+}
+
+function loadPrefs(){
+  try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}
+  applyPrefs();
+}
+function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium}));}catch{}}
+function applyPrefs(){
+  soundToggle.checked=soundOn;
+  adBanner.style.display=isPremium?'none':'flex';
+  if(isPremium){premiumBtn.style.display='none';premiumActive.style.display='block';adsToggle.checked=false;}
+  else{premiumBtn.style.display='block';premiumActive.style.display='none';adsToggle.checked=true;}
+}
+
+// Sound
 const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null;
 function getAC(){if(!ac)ac=new AC();return ac;}
 function beep(freq,dur,type='sine',gain=0.18){if(!soundOn)return;try{const a=getAC();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.type=type;o.frequency.setValueAtTime(freq,a.currentTime);g.gain.setValueAtTime(gain,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);o.start();o.stop(a.currentTime+dur);}catch{}}
 function soundHit(c){const f=300+Math.min(c-1,7)*60;beep(f,.08,'sine',.15);setTimeout(()=>beep(f*1.5,.06,'sine',.08),40);}
 function soundMiss(){beep(120,.15,'sawtooth',.12);}
-function soundPowerup(t){if(t==='time'){beep(440,.05);setTimeout(()=>beep(660,.1),60);}else if(t==='boost'){beep(550,.05);setTimeout(()=>beep(880,.12),60);}else{beep(330,.05);setTimeout(()=>beep(990,.15),60);}}
+function soundLevelUp(){beep(440,.08);setTimeout(()=>beep(550,.08),90);setTimeout(()=>beep(660,.15),180);}
+function soundPowerup(t){
+  if(t==='time'){beep(440,.05);setTimeout(()=>beep(660,.1),60);}
+  else if(t==='boost'){beep(550,.05);setTimeout(()=>beep(880,.12),60);}
+  else if(t==='heart'){beep(523,.08);setTimeout(()=>beep(659,.12),90);}
+  else if(t==='shield'){beep(392,.08);setTimeout(()=>beep(523,.12),90);}
+  else if(t==='slow'){beep(300,.1,'sine',.12);setTimeout(()=>beep(250,.15,'sine',.1),110);}
+  else if(t==='bomb'){beep(150,.2,'sawtooth',.2);}
+  else{beep(330,.05);setTimeout(()=>beep(990,.15),60);}
+}
 function soundGameOver(){beep(440,.1,'sawtooth',.15);setTimeout(()=>beep(330,.1,'sawtooth',.15),120);setTimeout(()=>beep(220,.2,'sawtooth',.15),240);}
+
+// Stars
 const starCanvas=document.getElementById('stars-canvas');
 let stars=[];
 function initStars(){starCanvas.width=arena.clientWidth;starCanvas.height=arena.clientHeight;stars=Array.from({length:55},()=>({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.5+.3,a:Math.random()*.8+.2,speed:Math.random()*.3+.1}));}
 function drawStars(){const ctx=starCanvas.getContext('2d');ctx.clearRect(0,0,starCanvas.width,starCanvas.height);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(180,200,255,${s.a})`;ctx.fill();s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;});requestAnimationFrame(drawStars);}
-function getScores(){try{return JSON.parse(localStorage.getItem('glipx_scores')||'[]');}catch{return[];}}
-function saveScore(s,mode){let scores=getScores();scores.push({pts:s,mode,date:new Date().toLocaleDateString('en-GB')});scores.sort((a,b)=>b.pts-a.pts);scores=scores.slice(0,10);try{localStorage.setItem('glipx_scores',JSON.stringify(scores));}catch{}return scores;}
+
+// Storage
+function getScores(){try{return JSON.parse(localStorage.getItem('glipx_scores2')||'[]');}catch{return[];}}
+function saveScore(s,mode,lvl){let scores=getScores();scores.push({pts:s,mode,lvl,date:new Date().toLocaleDateString('en-GB')});scores.sort((a,b)=>b.pts-a.pts);scores=scores.slice(0,10);try{localStorage.setItem('glipx_scores2',JSON.stringify(scores));}catch{}return scores;}
+
+// Lives display
+function updateLivesDisplay(){
+  livesDisplay.innerHTML='';
+  for(let i=0;i<livesLeft+1;i++){const h=document.createElement('div');h.className='life-heart';h.textContent='❤️';livesDisplay.appendChild(h);}
+}
+function loseLife(){
+  if(livesLeft>0){livesLeft--;updateLivesDisplay();}
+  else{endGame();}
+}
+
+// Level bar
+function updateLevelBar(){
+  const cfg=getLevelCfg(currentLevel);
+  levelLabel.textContent=`Level ${currentLevel}`;
+  levelGoal.textContent=`${levelScore} / ${cfg.pts} pts`;
+  levelFill.style.width=Math.min(100,(levelScore/cfg.pts)*100)+'%';
+}
+
+// Level up
+function doLevelUp(){
+  soundLevelUp();
+  clearTimeout(spawnTimer);
+  running=false;
+  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  currentLevel++;
+  levelScore=0;
+  const cfg=getLevelCfg(currentLevel);
+  levelupText.textContent='LEVEL UP!';
+  levelupSub.textContent=`Level ${currentLevel} — ${cfg.pts} pts needed`;
+  levelupSplash.classList.remove('show');
+  void levelupSplash.offsetWidth;
+  levelupSplash.classList.add('show');
+  updateLevelBar();
+  setTimeout(()=>{
+    if(!running){
+      // reset timer for new level
+      timeLeft=currentMode==='blitz'?Math.max(15,cfg.time-5):cfg.time;
+      timeDisp.textContent=timeLeft;
+      timerBar.style.transition='none';timerBar.style.width='100%';
+      requestAnimationFrame(()=>{timerBar.style.transition=`width ${timeLeft}s linear`;timerBar.style.width='0%';});
+      running=true;
+      spawnTimer=setTimeout(spawnTarget,400);
+    }
+  },1300);
+}
+
 const COLORS=[{bg:'#1a3a5c',border:'#378ADD',text:'#a0d0ff'},{bg:'#1a3d2e',border:'#1D9E75',text:'#7ee8bb'},{bg:'#3d1a1a',border:'#D85A30',text:'#ffaa88'},{bg:'#2d1a3d',border:'#7F77DD',text:'#c4b8ff'},{bg:'#3d2e00',border:'#EF9F27',text:'#ffd88a'}];
-const PU_TYPES=['time','boost','clear'];
-function showInterstitial(onDone){if(!adsOn||isPremium){onDone();return;}interstitial.style.display='flex';interCloseBtn.disabled=true;interSkip.style.display='none';let secs=5;interCountdown.textContent=`You can skip in ${secs} seconds...`;const t=setInterval(()=>{secs--;if(secs>0){interCountdown.textContent=`You can skip in ${secs} seconds...`;}else{clearInterval(t);interCountdown.textContent='';interCloseBtn.disabled=false;interSkip.style.display='block';}},1000);interCloseBtn.onclick=()=>{interstitial.style.display='none';onDone();};interSkip.onclick=()=>{interstitial.style.display='none';openSettings();};}
+const ALL_PU=['time','boost','clear','heart','shield','slow','bomb'];
+// Bomb only appears from level 4+
+function getPUTypes(){
+  const base=['time','boost','clear','heart','shield','slow'];
+  if(currentLevel>=4)base.push('bomb');
+  return base;
+}
+
+function spawnTarget(){
+  if(!running)return;
+  const puTypes=getPUTypes();
+  const isPU=Math.random()<0.14;
+  const puType=isPU?puTypes[Math.floor(Math.random()*puTypes.length)]:null;
+  const cfg=getLevelCfg(currentLevel);
+  const blitzMod=currentMode==='blitz'?0.7:1;
+  const slowMod=slowActive?1.6:1;
+  const size=Math.max(36,62-currentLevel*1.5);
+  const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
+  const x=Math.random()*(arenaW-size-8)+4;
+  const y=Math.random()*(arenaH-size-20)+10;
+  const c=COLORS[Math.floor(Math.random()*COLORS.length)];
+  const lifeMs=Math.max(550,cfg.lifeBase*blitzMod*slowMod);
+  const el=document.createElement('div');
+  const puColor={time:'#378ADD',boost:'#FAC775',clear:'#5DCAA5',heart:'#ff6b88',shield:'#7F77DD',slow:'#a0c4ff',bomb:'#ff4444'}[puType]||c.border;
+  el.className='target'+(isPU?' pu-'+puType:'');
+  el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:${isPU?'#0a0a1a':c.bg};border:2.5px solid ${isPU?puColor:c.border};`;
+  const r=(size/2)-3;const circ=2*Math.PI*r;
+  const icons={time:'T',boost:'2x',clear:'*',heart:'❤',shield:'🛡',slow:'❄',bomb:'💣'};
+  const icon=isPU?(icons[puType]||''):'';
+  el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${isPU?puColor:c.border}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${isPU?14:11}px;position:relative;z-index:1;color:${isPU?'#e0e8ff':c.text};font-weight:500">${icon}</span>`;
+  let hit=false;
+  el.addEventListener('pointerdown',e=>{
+    e.stopPropagation();
+    if(!hit&&running){
+      hit=true;
+      if(isPU){handlePowerup(puType,x,y,size);}
+      else{
+        const pts=Math.round(10*combo*(boostActive?2:1));
+        score+=pts;levelScore+=pts;
+        scoreDisp.textContent=score;comboDisp.textContent='x'+combo;
+        combo=Math.min(combo+1,10);
+        soundHit(combo);
+        showPop(x+size/2-16,y-6,boostActive?'#FAC775':'#5DCAA5',`+${pts}`);
+        updateLevelBar();
+        const cfg2=getLevelCfg(currentLevel);
+        if(levelScore>=cfg2.pts){doLevelUp();}
+      }
+      el.remove();targets=targets.filter(t=>t.el!==el);
+    }
+  });
+  const timeout=setTimeout(()=>{
+    if(!hit&&running){
+      combo=1;comboDisp.textContent='x1';
+      if(isPU&&puType==='bomb'){
+        // bomb exploded — lose points
+        const penalty=Math.min(score,30);score=Math.max(0,score-penalty);scoreDisp.textContent=score;
+        soundPowerup('bomb');showPop(x,y-6,'#ff4444',`-${penalty}`);
+        const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
+      } else if(!isPU){
+        soundMiss();
+        const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
+        if(MODES[currentMode].zen){
+          if(shieldActive){shieldActive=false;shieldIndicator.style.display='none';showPop(arenaW/2-20,arenaH/2,'#7F77DD','🛡 blocked!');}
+          else{loseLife();}
+        }
+      }
+    }
+    el.remove();targets=targets.filter(t=>t.el!==el);
+  },lifeMs);
+  arena.appendChild(el);targets.push({el,timeout});
+  const nextDelay=Math.max(260,cfg.spawnBase*blitzMod*slowMod);
+  spawnTimer=setTimeout(spawnTarget,nextDelay);
+}
+
+function handlePowerup(type,x,y,size){
+  soundPowerup(type);
+  const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
+  if(type==='time'&&!MODES[currentMode].zen){
+    timeLeft=Math.min(timeLeft+5,60);timeDisp.textContent=timeLeft;
+    showPop(x,y-6,'#378ADD','+5 sec!');
+  } else if(type==='boost'){
+    boostActive=true;boostBanner.style.display='block';
+    clearTimeout(boostTimeout);boostTimeout=setTimeout(()=>{boostActive=false;boostBanner.style.display='none';},6000);
+    showPop(x,y-6,'#FAC775','2x boost!');
+  } else if(type==='clear'){
+    const bonus=targets.length*5*(boostActive?2:1);score+=bonus;levelScore+=bonus;scoreDisp.textContent=score;
+    targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+    updateLevelBar();showPop(arenaW/2-30,arenaH/2-10,'#5DCAA5',`+${bonus} clear!`);
+    if(levelScore>=getLevelCfg(currentLevel).pts)doLevelUp();
+  } else if(type==='heart'){
+    livesLeft=Math.min(livesLeft+1,9);updateLivesDisplay();
+    showPop(x,y-6,'#ff6b88','+1 life!');
+  } else if(type==='shield'){
+    shieldActive=true;shieldIndicator.style.display='block';
+    showPop(x,y-6,'#7F77DD','Shield!');
+  } else if(type==='slow'){
+    slowActive=true;slowBanner.style.display='block';
+    clearTimeout(slowTimeout);slowTimeout=setTimeout(()=>{slowActive=false;slowBanner.style.display='none';},5000);
+    showPop(x,y-6,'#a0c4ff','Slow motion!');
+  } else if(type==='bomb'){
+    // Player tapped bomb — good! Get points
+    const pts=Math.round(15*combo*(boostActive?2:1));
+    score+=pts;levelScore+=pts;scoreDisp.textContent=score;
+    showPop(x,y-6,'#ff8844',`+${pts} defused!`);
+    updateLevelBar();if(levelScore>=getLevelCfg(currentLevel).pts)doLevelUp();
+  }
+}
+
+function showPop(x,y,color,text){const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${Math.min(x,arena.clientWidth-90)}px;top:${Math.max(y,10)}px;color:${color};font-size:13px`;pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),700);}
+
+function showInterstitial(onDone){
+  if(isPremium){onDone();return;}
+  interstitial.style.display='flex';interCloseBtn.disabled=true;interSkip.style.display='none';
+  let secs=5;interCountdown.textContent=`You can skip in ${secs} seconds...`;
+  const t=setInterval(()=>{secs--;if(secs>0){interCountdown.textContent=`You can skip in ${secs} seconds...`;}else{clearInterval(t);interCountdown.textContent='';interCloseBtn.disabled=false;interSkip.style.display='block';}},1000);
+  interCloseBtn.onclick=()=>{interstitial.style.display='none';onDone();};
+  interSkip.onclick=()=>{interstitial.style.display='none';openSettings();};
+}
+
 function openSettings(){settingsPanel.style.display='flex';}
 document.getElementById('settings-close').addEventListener('click',()=>{settingsPanel.style.display='none';});
 document.getElementById('settings-link').addEventListener('click',openSettings);
 soundToggle.addEventListener('change',()=>{soundOn=soundToggle.checked;savePrefs();});
-adsToggle.addEventListener('change',()=>{if(isPremium)return;adsOn=adsToggle.checked;adBanner.style.display=adsOn?'flex':'none';savePrefs();});
-premiumBtn.addEventListener('click',()=>{isPremium=true;adsOn=false;applyPrefs();savePrefs();alert('Thank you for purchasing Glipx Premium! Ads removed.');settingsPanel.style.display='none';});
+// Ads toggle is fully locked — only premium removes ads
+adsToggle.addEventListener('change',()=>{adsToggle.checked=!isPremium;});
+premiumBtn.addEventListener('click',()=>{
+  isPremium=true;applyPrefs();savePrefs();
+  alert('Thank you for purchasing Glipx Premium! Ads removed.');
+  settingsPanel.style.display='none';
+});
 document.getElementById('ad-cta-btn').addEventListener('click',openSettings);
-function spawnTarget(){if(!running)return;const isPU=Math.random()<0.12;const puType=isPU?PU_TYPES[Math.floor(Math.random()*3)]:null;const size=Math.max(38,66-score*.07-(currentMode==='blitz'?12:0));const arenaW=arena.clientWidth,arenaH=arena.clientHeight;const x=Math.random()*(arenaW-size-8)+4;const y=Math.random()*(arenaH-size-20)+10;const c=COLORS[Math.floor(Math.random()*COLORS.length)];const lifeMs=Math.max(600,1800-score*(currentMode==='blitz'?3:1.5));const el=document.createElement('div');el.className='target'+(isPU?' pu-'+puType:'');el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:${isPU?'#0a1628':c.bg};border:2.5px solid ${isPU?(puType==='time'?'#378ADD':puType==='boost'?'#FAC775':'#5DCAA5'):c.border};`;const r=(size/2)-3;const circ=2*Math.PI*r;const icon=isPU?(puType==='time'?'T':puType==='boost'?'2x':'*'):'';el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${isPU?(puType==='time'?'#378ADD':puType==='boost'?'#FAC775':'#5DCAA5'):c.border}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${isPU?13:11}px;position:relative;z-index:1;color:${isPU?'#e0e8ff':c.text};font-weight:500">${icon}</span>`;let hit=false;el.addEventListener('pointerdown',e=>{e.stopPropagation();if(!hit&&running){hit=true;if(isPU){handlePowerup(puType,x,y,size);}else{const pts=Math.round(10*combo*(boostActive?2:1));score+=pts;combo=Math.min(combo+1,10);scoreDisp.textContent=score;comboDisp.textContent='x'+combo;soundHit(combo);const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${x+size/2-16}px;top:${y-6}px;color:${boostActive?'#FAC775':'#5DCAA5'}`;pop.textContent=`+${pts}`;arena.appendChild(pop);setTimeout(()=>pop.remove(),650);}el.remove();targets=targets.filter(t=>t.el!==el);}});const timeout=setTimeout(()=>{if(!hit&&running){combo=1;comboDisp.textContent='x1';soundMiss();const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);if(currentMode==='zen'){livesLeft--;updateLives();if(livesLeft<=0){endGame();return;}}}el.remove();targets=targets.filter(t=>t.el!==el);},lifeMs);arena.appendChild(el);targets.push({el,timeout});spawnTimer=setTimeout(spawnTarget,Math.max(280,850-score*(currentMode==='blitz'?3:1)));}
-function handlePowerup(type,x,y,size){soundPowerup(type);if(type==='time'&&currentMode!=='zen'){timeLeft=Math.min(timeLeft+5,currentMode==='blitz'?20:40);timeDisp.textContent=timeLeft;showPop(x,y,'#378ADD','+5 sec!');}else if(type==='boost'){boostActive=true;boostBanner.style.display='block';clearTimeout(boostTimeout);boostTimeout=setTimeout(()=>{boostActive=false;boostBanner.style.display='none';},5000);showPop(x,y,'#FAC775','2x boost!');}else{const bonus=targets.length*5*(boostActive?2:1);score+=bonus;scoreDisp.textContent=score;targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];showPop(x,y,'#5DCAA5',`+${bonus} clear!`);}}
-function showPop(x,y,color,text){const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${Math.min(x,arena.clientWidth-80)}px;top:${y-6}px;color:${color};font-size:13px`;pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),700);}
-function updateLives(){livesBar.innerHTML='';for(let i=0;i<20;i++){const d=document.createElement('div');d.className='life-dot'+(i>=livesLeft?' lost':'');livesBar.appendChild(d);}timeDisp.textContent=livesLeft;}
-function startGame(){score=0;combo=1;running=true;boostActive=false;boostBanner.style.display='none';scoreDisp.textContent='0';comboDisp.textContent='x1';targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];const go=document.getElementById('game-over-screen');if(go)go.remove();startScreen.style.display='none';const m=MODES[currentMode];if(currentMode==='zen'){livesLeft=m.lives;livesBar.style.display='flex';updateLives();timerBar.style.width='0';}else{timeLeft=m.duration;timeDisp.textContent=timeLeft;livesBar.style.display='none';timerBar.style.transition='none';timerBar.style.width='100%';requestAnimationFrame(()=>{timerBar.style.transition=`width ${m.duration}s linear`;timerBar.style.width='0%';});countTimer=setInterval(()=>{timeLeft--;timeDisp.textContent=timeLeft;if(timeLeft<=0)endGame();},1000);}spawnTimer=setTimeout(spawnTarget,currentMode==='blitz'?150:300);}
-function endGame(){running=false;clearTimeout(spawnTimer);clearInterval(countTimer);clearTimeout(boostTimeout);boostActive=false;boostBanner.style.display='none';targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];soundGameOver();gamesPlayed++;const scores=saveScore(score,currentMode);const pb=scores[0].pts;pbDisp.textContent=pb;const isNewPB=scores[0].pts===score&&scores.filter(s=>s.pts===score).length===1;const showGO=()=>{const go=document.createElement('div');go.id='game-over-screen';go.innerHTML=`<div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div><div class="go-label">${MODES[currentMode].label} mode</div><div class="go-score">${score}</div><div class="go-label">points</div>${isNewPB?'<div class="pb-badge">🏆 New record!</div>':`<div class="go-label">Best: ${pb}</div>`}<button class="play-btn" id="retry-btn">Play again</button><div class="settings-link" id="open-settings-go">⚙️ Settings</div>`;arena.appendChild(go);document.getElementById('retry-btn').addEventListener('click',()=>{if(gamesPlayed%3===0&&adsOn&&!isPremium){showInterstitial(startGame);}else{startGame();}});document.getElementById('open-settings-go').addEventListener('click',openSettings);};if(gamesPlayed%3===0&&adsOn&&!isPremium){showInterstitial(showGO);}else{showGO();}renderHS(scores,score);}
-function renderHS(scores,justScored){hsSection.style.display='block';hsRows.innerHTML='';scores.slice(0,5).forEach((s,i)=>{const isNew=justScored!==null&&i===0&&s.pts===justScored;const row=document.createElement('div');row.className='hs-row';row.innerHTML=`<span class="hs-rank">#${i+1}</span><span class="${isNew?'hs-new':''}">${s.date} · ${s.mode}</span><span class="hs-pts">${s.pts}</span>`;hsRows.appendChild(row);});}
+
+function startGame(){
+  score=0;combo=1;running=true;currentLevel=1;levelScore=0;
+  boostActive=false;slowActive=false;shieldActive=false;
+  boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
+  scoreDisp.textContent='0';comboDisp.textContent='x1';
+  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  const go=document.getElementById('game-over-screen');if(go)go.remove();
+  startScreen.style.display='none';
+  levelBarWrap.style.display='block';
+  updateLevelBar();
+
+  // Lock mode button
+  modeToggleBtn.classList.add('locked');
+
+  const cfg=getLevelCfg(1);
+  const isZen=MODES[currentMode].zen;
+  if(isZen){
+    livesLeft=4;updateLivesDisplay();livesDisplay.style.display='flex';
+    timeDisp.textContent='∞';timeBox.querySelector('.stat-label').textContent='Lives';
+    timerBar.style.width='0';
+  } else {
+    livesLeft=0;livesDisplay.innerHTML='';
+    timeLeft=currentMode==='blitz'?Math.max(15,cfg.time-5):cfg.time;
+    timeDisp.textContent=timeLeft;
+    timerBar.style.transition='none';timerBar.style.width='100%';
+    requestAnimationFrame(()=>{timerBar.style.transition=`width ${timeLeft}s linear`;timerBar.style.width='0%';});
+    clearInterval(countTimer);
+    countTimer=setInterval(()=>{
+      timeLeft--;timeDisp.textContent=timeLeft;
+      if(timeLeft<=0){endGame();}
+    },1000);
+  }
+  spawnTimer=setTimeout(spawnTarget,300);
+}
+
+function endGame(){
+  running=false;clearTimeout(spawnTimer);clearInterval(countTimer);
+  clearTimeout(boostTimeout);clearTimeout(slowTimeout);
+  boostActive=false;slowActive=false;shieldActive=false;
+  boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
+  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  levelBarWrap.style.display='none';
+  modeToggleBtn.classList.remove('locked');
+  soundGameOver();gamesPlayed++;
+  const scores=saveScore(score,currentMode,currentLevel);
+  const pb=scores[0].pts;const pbLvl=scores[0].lvl||1;pbDisp.textContent=pb;pbLevelDisp.textContent=`Lvl ${pbLvl}`;
+  const isNewPB=scores[0].pts===score&&scores.filter(s=>s.pts===score).length===1;
+  const showGO=()=>{
+    const go=document.createElement('div');go.id='game-over-screen';
+    go.innerHTML=`
+      <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
+      <div class="go-level">Reached Level ${currentLevel}</div>
+      <div class="go-score">${score}</div>
+      <div class="go-label">points</div>
+      ${isNewPB?'<div class="pb-badge">🏆 New record!</div>':`<div class="go-label">Best: ${pb}</div>`}
+      <button class="play-btn" id="retry-btn">Play again</button>
+      <div class="settings-link" id="open-settings-go">⚙️ Settings</div>
+    `;
+    arena.appendChild(go);
+    document.getElementById('retry-btn').addEventListener('click',()=>{if(gamesPlayed%3===0&&!isPremium){showInterstitial(startGame);}else{startGame();}});
+    document.getElementById('open-settings-go').addEventListener('click',openSettings);
+  };
+  if(gamesPlayed%3===0&&!isPremium){showInterstitial(showGO);}else{showGO();}
+}
+
 startBtn.addEventListener('click',startGame);
 loadPrefs();
 initStars();drawStars();
 const scores=getScores();
-if(scores.length){pbDisp.textContent=scores[0].pts;renderHS(scores,null);}
+if(scores.length){pbDisp.textContent=scores[0].pts;pbLevelDisp.textContent=`Lvl ${scores[0].lvl||1}`;}
 })();
 </script>
 
@@ -237,6 +575,5 @@ if(scores.length){pbDisp.textContent=scores[0].pts;renderHS(scores,null);}
     navigator.serviceWorker.register('/glipx/sw.js');
   }
 </script>
-
 </body>
 </html>
