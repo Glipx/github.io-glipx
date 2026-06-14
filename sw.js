@@ -1,4 +1,5 @@
-const CACHE_NAME = 'glipx-v1';
+const CACHE_VERSION = 'glipx-v' + Date.now();
+const CACHE_NAME = CACHE_VERSION;
 const ASSETS = [
   '/github.io-glipx/',
   '/github.io-glipx/index.html',
@@ -27,6 +28,8 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
+    fetch(event.request).catch(() =>
+      caches.match(event.request)
+    )
   );
 });
