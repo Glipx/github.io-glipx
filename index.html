@@ -60,9 +60,9 @@
     #records-wrap{width:calc(100% - 32px)}
     /* record line - compact */
     /* SINGLE MODE BUTTON */
-    #mode-cycle-btn{background:#1a1a2e;border:0.5px solid #378ADD;border-radius:12px;padding:13px 50px;color:#a0c4ff;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+    #mode-cycle-btn{background:#1a1a2e;border:0.5px solid #378ADD;border-radius:12px;padding:13px 0;color:#a0c4ff;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;width:176px}
     .mode-desc-text{font-size:11px;color:#6677aa;text-align:center;min-height:16px;max-width:260px;padding:0 10px}
-    .play-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:13px 50px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+    .play-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:13px 0;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;width:176px}
     .settings-link{font-size:11px;color:#6677aa;cursor:pointer}
     #info-btn-start{font-size:11px;color:#6677aa;cursor:pointer;background:none;border:0.5px solid #2a2a4e;border-radius:8px;padding:4px 10px;font-family:inherit}
     /* GAME OVER */
@@ -117,7 +117,7 @@
   </style>
 </head>
 <body>
- 
+
 <div id="interstitial">
   <div id="interstitial-box">
     <div class="inter-ad-label">Advertisement</div>
@@ -128,7 +128,7 @@
     <div class="inter-skip" id="inter-skip" style="display:none">Remove ads — $1.99</div>
   </div>
 </div>
- 
+
 <div id="settings-panel">
   <div id="settings-box">
     <div class="panel-title">⚙️ Settings</div>
@@ -149,13 +149,13 @@
     <button class="panel-close" id="settings-close">Close</button>
   </div>
 </div>
- 
+
 <div id="info-panel">
   <div id="info-box">
     <div class="panel-title">ℹ️ Power-ups</div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#378ADD;font-weight:700">T</div><div><div class="pu-info-name">+5 Seconds</div><div class="pu-info-desc">Adds 5 seconds to your timer</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-weight:700">2x</div><div><div class="pu-info-name">Score Boost</div><div class="pu-info-desc">Doubles all points for 6 seconds</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon" style="color:#5DCAA5;font-weight:700">*</div><div><div class="pu-info-name">Clear</div><div class="pu-info-desc">Removes all circles and gives bonus points</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon" style="color:#5DCAA5;font-weight:700;font-size:18px">✦</div><div><div class="pu-info-name">Clear</div><div class="pu-info-desc">Removes all circles and gives bonus points</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Extra Life</div><div class="pu-info-desc">Adds one life (Zen mode)</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield</div><div class="pu-info-desc">Blocks one missed circle</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
@@ -163,7 +163,7 @@
     <button class="panel-close" id="info-close">Close</button>
   </div>
 </div>
- 
+
 <div id="gw">
   <div id="header">
     <div class="stat-box"><div class="stat-label">Score</div><div class="stat-value" id="score-disp">0</div></div>
@@ -184,13 +184,13 @@
     <div id="achievement-toast"></div>
     <div id="levelup-splash"><div class="levelup-text" id="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
     <button id="pause-btn">⏸</button>
- 
+
     <div id="start-screen">
       <div class="game-logo">GLIP<span>X</span></div>
- 
+
       <!-- Compact single-line record -->
       <div id="record-line" style="font-size:12px;color:#6677aa;text-align:center;background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:7px 16px;min-width:260px"></div>
- 
+
       <!-- Single cycle mode button above play -->
       <button id="mode-cycle-btn">Mode: Normal →</button>
       <div class="mode-desc-text" id="mode-desc-text">40 sec per level — build combos and level up!</div>
@@ -200,7 +200,7 @@
         <div class="settings-link" id="settings-link">⚙️ Settings</div>
       </div>
     </div>
- 
+
     <div id="pause-screen">
       <div class="pause-title">Paused</div>
       <div style="font-size:13px;color:#6677aa">Score: <span id="pause-score">0</span> · Level <span id="pause-level">1</span></div>
@@ -213,7 +213,7 @@
     <button class="ad-cta" id="ad-cta-btn">$1.99</button>
   </div>
 </div>
- 
+
 <script>
 (()=>{
 const arena=document.getElementById('arena');
@@ -252,7 +252,7 @@ const achievementToast=document.getElementById('achievement-toast');
 const modeCycleBtn=document.getElementById('mode-cycle-btn');
 const modeDescText=document.getElementById('mode-desc-text');
 // record displayed in #record-line
- 
+
 const LEVEL_CONFIG=[
   {pts:200,time:40,spawnBase:950,lifeBase:2000},
   {pts:300,time:40,spawnBase:880,lifeBase:1850},
@@ -271,7 +271,7 @@ function getLevelCfg(lvl){
   if(lvl>LEVEL_CONFIG.length){const e=lvl-LEVEL_CONFIG.length;return{pts:cfg.pts+e*200,time:Math.max(22,cfg.time-e),spawnBase:Math.max(260,cfg.spawnBase-e*25),lifeBase:Math.max(580,cfg.lifeBase-e*50)};}
   return cfg;
 }
- 
+
 // MODE — single cycle button
 const MODES={
   normal:{label:'Normal',desc:'40 sec per level — build combos and level up!',color:'#a0c4ff'},
@@ -297,20 +297,20 @@ modeCycleBtn.addEventListener('click',()=>{
   loadStartRecords(currentMode);
 });
 updateModeCycleBtn();
- 
+
 let activeRecTab='normal';
- 
+
 let soundOn=true,isPremium=false;
 let score=0,combo=1,bestCombo=1,timeLeft=0,livesLeft=0,running=false,paused=false;
 let boostActive=false,slowActive=false,shieldActive=false;
 let boostTimeout=null,slowTimeout=null;
 let targets=[],spawnTimer=null,countTimer=null,gamesPlayed=0;
 let currentLevel=1,levelScore=0;
- 
+
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
 function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium}));}catch{}}
 function applyPrefs(){soundToggle.checked=soundOn;adBanner.style.display=isPremium?'none':'flex';if(isPremium){premiumBtn.style.display='none';premiumActive.style.display='block';}else{premiumBtn.style.display='block';premiumActive.style.display='none';}}
- 
+
 // SOUND
 const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null;
@@ -321,20 +321,20 @@ function soundMiss(){beep(120,.15,'sawtooth',.12);}
 function soundLevelUp(){beep(440,.08);setTimeout(()=>beep(550,.08),90);setTimeout(()=>beep(660,.2),180);}
 function soundPowerup(t){if(t==='time'){beep(440,.05);setTimeout(()=>beep(660,.1),60);}else if(t==='boost'){beep(550,.05);setTimeout(()=>beep(880,.12),60);}else if(t==='heart'){beep(523,.08);setTimeout(()=>beep(659,.12),90);}else if(t==='shield'){beep(392,.08);setTimeout(()=>beep(523,.12),90);}else if(t==='slow'){beep(300,.1,'sine',.12);}else if(t==='bomb'){beep(150,.2,'sawtooth',.2);}else{beep(330,.05);setTimeout(()=>beep(990,.15),60);}}
 function soundGameOver(){beep(440,.1,'sawtooth',.15);setTimeout(()=>beep(330,.1,'sawtooth',.15),120);setTimeout(()=>beep(220,.2,'sawtooth',.15),240);}
- 
+
 // STARS
 const starCanvas=document.getElementById('stars-canvas');
 let stars=[];
 function initStars(){starCanvas.width=arena.clientWidth;starCanvas.height=arena.clientHeight;stars=Array.from({length:55},()=>({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.5+.3,a:Math.random()*.8+.2,speed:Math.random()*.3+.1}));}
 function drawStars(){const ctx=starCanvas.getContext('2d');ctx.clearRect(0,0,starCanvas.width,starCanvas.height);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(180,200,255,${s.a})`;ctx.fill();s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;});requestAnimationFrame(drawStars);}
- 
+
 // PARTICLES
 function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const angle=Math.random()*Math.PI*2;const dist=30+Math.random()*40;p.style.cssText=`width:6px;height:6px;background:${color};left:${x}px;top:${y}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
- 
+
 // ACHIEVEMENT TOAST
 let achTimer=null;
 function showAchievement(text){achievementToast.textContent=text;achievementToast.style.display='block';clearTimeout(achTimer);achTimer=setTimeout(()=>{achievementToast.style.display='none';},2500);}
- 
+
 // STORAGE — per mode records
 function getAllRecords(){try{return JSON.parse(localStorage.getItem('glipx_records')||'{}');}catch{return{};}}
 function saveAllRecords(data){try{localStorage.setItem('glipx_records',JSON.stringify(data));}catch{}}
@@ -362,7 +362,7 @@ function loadStartRecords(mode){
   const comboStr=r.combo?` · Combo <span style="color:#e0e8ff">x${r.combo}</span>`:'';
   document.getElementById('record-line').innerHTML=`<span style="color:${mColor};font-weight:500">${mLabel}</span> &nbsp;Best: ${scoreStr}${lvlStr}${comboStr}`;
 }
- 
+
 // ACHIEVEMENTS
 const ACHIEVEMENTS=[
   {id:'combo5',check:()=>combo>=5,text:'🔥 Combo x5!'},
@@ -376,14 +376,14 @@ let unlockedAch=new Set();
 function loadAch(){try{unlockedAch=new Set(JSON.parse(localStorage.getItem('glipx_ach')||'[]'));}catch{}}
 function saveAch(){try{localStorage.setItem('glipx_ach',JSON.stringify([...unlockedAch]));}catch{}}
 function checkAch(){ACHIEVEMENTS.forEach(a=>{if(!unlockedAch.has(a.id)&&a.check()){unlockedAch.add(a.id);saveAch();setTimeout(()=>showAchievement(a.text),300);}});}
- 
+
 function updateLevelBar(){
   const cfg=getLevelCfg(currentLevel);
   levelLabel.textContent=`Level ${currentLevel}`;
   levelGoal.textContent=`${Math.min(levelScore,cfg.pts)} / ${cfg.pts} pts`;
   levelFill.style.width=Math.min(100,(levelScore/cfg.pts)*100)+'%';
 }
- 
+
 function doLevelUp(){
   soundLevelUp();
   clearTimeout(spawnTimer);clearInterval(countTimer);
@@ -409,11 +409,11 @@ function doLevelUp(){
     spawnTimer=setTimeout(spawnTarget,500);
   },1500);
 }
- 
+
 const COLORS=[{bg:'#1a3a5c',border:'#378ADD',text:'#a0d0ff'},{bg:'#1a3d2e',border:'#1D9E75',text:'#7ee8bb'},{bg:'#3d1a1a',border:'#D85A30',text:'#ffaa88'},{bg:'#2d1a3d',border:'#7F77DD',text:'#c4b8ff'},{bg:'#3d2e00',border:'#EF9F27',text:'#ffd88a'}];
 const PU_BASE=['time','boost','clear','heart','shield','slow'];
 function getPUTypes(){const t=[...PU_BASE];if(currentMode==='zen')t.splice(t.indexOf('time'),1);if(currentLevel>=4)t.push('bomb');return t;}
- 
+
 function spawnTarget(){
   if(!running||paused)return;
   const puTypes=getPUTypes();
@@ -433,9 +433,10 @@ function spawnTarget(){
   el.className='target'+(isPU?' pu-'+puType:'');
   el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:${isPU?'#0a0a1a':c.bg};border:2.5px solid ${isPU?puColor:c.border};`;
   const r=(size/2)-3;const circ=2*Math.PI*r;
-  const icons={time:'T',boost:'2x',clear:'*',heart:'❤',shield:'🛡',slow:'❄',bomb:'💣'};
+  const icons={time:'T',boost:'2x',clear:'✦',heart:'❤',shield:'🛡',slow:'❄',bomb:'💣'};
   const icon=isPU?(icons[puType]||''):'';
-  el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${isPU?puColor:c.border}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${isPU?14:11}px;position:relative;z-index:1;color:${isPU?'#e0e8ff':c.text};font-weight:500">${icon}</span>`;
+  const iconSize=isPU?(puType==='clear'?18:14):11;
+el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${isPU?puColor:c.border}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${iconSize}px;position:relative;z-index:1;color:${isPU?'#e0e8ff':c.text};font-weight:500">${icon}</span>`;
   let hit=false;
   el.addEventListener('pointerdown',e=>{
     e.stopPropagation();
@@ -486,7 +487,7 @@ function spawnTarget(){
   const nextDelay=Math.max(250,cfg.spawnBase*blitzMod*slowMod);
   spawnTimer=setTimeout(spawnTarget,nextDelay);
 }
- 
+
 function handlePowerup(type,x,y,size){
   soundPowerup(type);
   const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
@@ -497,20 +498,20 @@ function handlePowerup(type,x,y,size){
   else if(type==='shield'){shieldActive=true;shieldIndicator.style.display='block';showPop(x,y-6,'#7F77DD','🛡 Shield!');}
   else if(type==='slow'){slowActive=true;slowBanner.style.display='block';clearTimeout(slowTimeout);slowTimeout=setTimeout(()=>{slowActive=false;slowBanner.style.display='none';},5000);showPop(x,y-6,'#a0c4ff','❄ Slow!');}
   else if(type==='bomb'){
-    // BOMB TAPPED: bonus points AND level progress
-    const pts=Math.round(20*combo*(boostActive?2:1));
-    score+=pts;levelScore+=pts;
+    // BOMB TAPPED: minus points, levelScore unchanged
+    const penalty=Math.min(score,30);
+    score=Math.max(0,score-penalty);
     scoreDisp.textContent=score;
-    showPop(x,y-6,'#ff8844',`+${pts} defused!`);
-    updateLevelBar();
-    if(levelScore>=getLevelCfg(currentLevel).pts)doLevelUp();
+    soundPowerup('bomb');
+    showPop(x,y-6,'#ff4444',`-${penalty} oops!`);
+    const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
   }
 }
- 
+
 function showPop(x,y,color,text){const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${Math.min(Math.max(x,5),arena.clientWidth-90)}px;top:${Math.max(y,10)}px;color:${color};font-size:13px`;pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),700);}
- 
+
 function updateLivesDisplay(){livesDisplay.innerHTML='';for(let i=0;i<=livesLeft;i++){const h=document.createElement('div');h.className='life-heart';h.textContent='❤️';livesDisplay.appendChild(h);}}
- 
+
 function pauseGame(){if(!running||paused)return;paused=true;document.getElementById('pause-score').textContent=score;document.getElementById('pause-level').textContent=currentLevel;pauseScreen.style.display='flex';}
 function resumeGame(){paused=false;pauseScreen.style.display='none';if(running)spawnTimer=setTimeout(spawnTarget,300);}
 function quitToMenu(){
@@ -528,7 +529,7 @@ pauseBtn.addEventListener('click',pauseGame);
 resumeBtn.addEventListener('click',resumeGame);
 quitBtn.addEventListener('click',quitToMenu);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)pauseGame();});
- 
+
 function showInterstitial(onDone){if(isPremium){onDone();return;}interstitial.style.display='flex';interCloseBtn.disabled=true;interSkip.style.display='none';let secs=5;interCountdown.textContent=`You can skip in ${secs} seconds...`;const t=setInterval(()=>{secs--;if(secs>0){interCountdown.textContent=`You can skip in ${secs} seconds...`;}else{clearInterval(t);interCountdown.textContent='';interCloseBtn.disabled=false;interSkip.style.display='block';}},1000);interCloseBtn.onclick=()=>{interstitial.style.display='none';onDone();};interSkip.onclick=()=>{interstitial.style.display='none';openSettings();};}
 function openSettings(){settingsPanel.style.display='flex';}
 function openInfo(){infoPanel.style.display='flex';}
@@ -539,7 +540,7 @@ document.getElementById('info-btn-start').addEventListener('click',openInfo);
 soundToggle.addEventListener('change',()=>{soundOn=soundToggle.checked;savePrefs();});
 premiumBtn.addEventListener('click',()=>{isPremium=true;applyPrefs();savePrefs();alert('Thank you for Glipx Premium! Ads removed.');settingsPanel.style.display='none';});
 document.getElementById('ad-cta-btn').addEventListener('click',openSettings);
- 
+
 function startGame(){
   score=0;combo=1;bestCombo=1;running=true;paused=false;currentLevel=1;levelScore=0;
   boostActive=false;slowActive=false;shieldActive=false;
@@ -568,7 +569,7 @@ function startGame(){
   }
   spawnTimer=setTimeout(spawnTarget,350);
 }
- 
+
 function endGame(){
   running=false;paused=false;
   clearTimeout(spawnTimer);clearInterval(countTimer);clearTimeout(boostTimeout);clearTimeout(slowTimeout);
@@ -607,7 +608,7 @@ function endGame(){
   };
   if(gamesPlayed%3===0&&!isPremium){showInterstitial(showGO);}else{showGO();}
 }
- 
+
 startBtn.addEventListener('click',startGame);
 loadPrefs();loadAch();
 initStars();drawStars();
