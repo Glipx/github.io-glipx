@@ -117,7 +117,7 @@
   </style>
 </head>
 <body>
-
+ 
 <div id="interstitial">
   <div id="interstitial-box">
     <div class="inter-ad-label">Advertisement</div>
@@ -128,7 +128,7 @@
     <div class="inter-skip" id="inter-skip" style="display:none">Remove ads — $1.99</div>
   </div>
 </div>
-
+ 
 <div id="settings-panel">
   <div id="settings-box">
     <div class="panel-title">⚙️ Settings</div>
@@ -149,7 +149,7 @@
     <button class="panel-close" id="settings-close">Close</button>
   </div>
 </div>
-
+ 
 <div id="info-panel">
   <div id="info-box">
     <div class="panel-title">ℹ️ Power-ups</div>
@@ -163,7 +163,7 @@
     <button class="panel-close" id="info-close">Close</button>
   </div>
 </div>
-
+ 
 <div id="gw">
   <div id="header">
     <div class="stat-box"><div class="stat-label">Score</div><div class="stat-value" id="score-disp">0</div></div>
@@ -184,13 +184,13 @@
     <div id="achievement-toast"></div>
     <div id="levelup-splash"><div class="levelup-text" id="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
     <button id="pause-btn">⏸</button>
-
+ 
     <div id="start-screen">
       <div class="game-logo">GLIP<span>X</span></div>
-
+ 
       <!-- Compact single-line record -->
       <div id="record-line" style="font-size:12px;color:#6677aa;text-align:center;background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:7px 16px;min-width:260px"></div>
-
+ 
       <!-- Single cycle mode button above play -->
       <button id="mode-cycle-btn">Mode: Normal →</button>
       <div class="mode-desc-text" id="mode-desc-text">40 sec per level — build combos and level up!</div>
@@ -200,7 +200,7 @@
         <div class="settings-link" id="settings-link">⚙️ Settings</div>
       </div>
     </div>
-
+ 
     <div id="pause-screen">
       <div class="pause-title">Paused</div>
       <div style="font-size:13px;color:#6677aa">Score: <span id="pause-score">0</span> · Level <span id="pause-level">1</span></div>
@@ -213,7 +213,7 @@
     <button class="ad-cta" id="ad-cta-btn">$1.99</button>
   </div>
 </div>
-
+ 
 <script>
 (()=>{
 const arena=document.getElementById('arena');
@@ -252,7 +252,7 @@ const achievementToast=document.getElementById('achievement-toast');
 const modeCycleBtn=document.getElementById('mode-cycle-btn');
 const modeDescText=document.getElementById('mode-desc-text');
 // record displayed in #record-line
-
+ 
 const LEVEL_CONFIG=[
   {pts:200,time:40,spawnBase:950,lifeBase:2000},
   {pts:300,time:40,spawnBase:880,lifeBase:1850},
@@ -271,7 +271,7 @@ function getLevelCfg(lvl){
   if(lvl>LEVEL_CONFIG.length){const e=lvl-LEVEL_CONFIG.length;return{pts:cfg.pts+e*200,time:Math.max(22,cfg.time-e),spawnBase:Math.max(260,cfg.spawnBase-e*25),lifeBase:Math.max(580,cfg.lifeBase-e*50)};}
   return cfg;
 }
-
+ 
 // MODE — single cycle button
 const MODES={
   normal:{label:'Normal',desc:'40 sec per level — build combos and level up!',color:'#a0c4ff'},
@@ -297,20 +297,20 @@ modeCycleBtn.addEventListener('click',()=>{
   loadStartRecords(currentMode);
 });
 updateModeCycleBtn();
-
+ 
 let activeRecTab='normal';
-
+ 
 let soundOn=true,isPremium=false;
 let score=0,combo=1,bestCombo=1,timeLeft=0,livesLeft=0,running=false,paused=false;
 let boostActive=false,slowActive=false,shieldActive=false;
 let boostTimeout=null,slowTimeout=null;
 let targets=[],spawnTimer=null,countTimer=null,gamesPlayed=0;
 let currentLevel=1,levelScore=0;
-
+ 
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
 function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium}));}catch{}}
 function applyPrefs(){soundToggle.checked=soundOn;adBanner.style.display=isPremium?'none':'flex';if(isPremium){premiumBtn.style.display='none';premiumActive.style.display='block';}else{premiumBtn.style.display='block';premiumActive.style.display='none';}}
-
+ 
 // SOUND
 const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null;
@@ -321,20 +321,20 @@ function soundMiss(){beep(120,.15,'sawtooth',.12);}
 function soundLevelUp(){beep(440,.08);setTimeout(()=>beep(550,.08),90);setTimeout(()=>beep(660,.2),180);}
 function soundPowerup(t){if(t==='time'){beep(440,.05);setTimeout(()=>beep(660,.1),60);}else if(t==='boost'){beep(550,.05);setTimeout(()=>beep(880,.12),60);}else if(t==='heart'){beep(523,.08);setTimeout(()=>beep(659,.12),90);}else if(t==='shield'){beep(392,.08);setTimeout(()=>beep(523,.12),90);}else if(t==='slow'){beep(300,.1,'sine',.12);}else if(t==='bomb'){beep(150,.2,'sawtooth',.2);}else{beep(330,.05);setTimeout(()=>beep(990,.15),60);}}
 function soundGameOver(){beep(440,.1,'sawtooth',.15);setTimeout(()=>beep(330,.1,'sawtooth',.15),120);setTimeout(()=>beep(220,.2,'sawtooth',.15),240);}
-
+ 
 // STARS
 const starCanvas=document.getElementById('stars-canvas');
 let stars=[];
 function initStars(){starCanvas.width=arena.clientWidth;starCanvas.height=arena.clientHeight;stars=Array.from({length:55},()=>({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.5+.3,a:Math.random()*.8+.2,speed:Math.random()*.3+.1}));}
 function drawStars(){const ctx=starCanvas.getContext('2d');ctx.clearRect(0,0,starCanvas.width,starCanvas.height);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(180,200,255,${s.a})`;ctx.fill();s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;});requestAnimationFrame(drawStars);}
-
+ 
 // PARTICLES
 function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const angle=Math.random()*Math.PI*2;const dist=30+Math.random()*40;p.style.cssText=`width:6px;height:6px;background:${color};left:${x}px;top:${y}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
-
+ 
 // ACHIEVEMENT TOAST
 let achTimer=null;
 function showAchievement(text){achievementToast.textContent=text;achievementToast.style.display='block';clearTimeout(achTimer);achTimer=setTimeout(()=>{achievementToast.style.display='none';},2500);}
-
+ 
 // STORAGE — per mode records
 function getAllRecords(){try{return JSON.parse(localStorage.getItem('glipx_records')||'{}');}catch{return{};}}
 function saveAllRecords(data){try{localStorage.setItem('glipx_records',JSON.stringify(data));}catch{}}
@@ -362,7 +362,7 @@ function loadStartRecords(mode){
   const comboStr=r.combo?` · Combo <span style="color:#e0e8ff">x${r.combo}</span>`:'';
   document.getElementById('record-line').innerHTML=`<span style="color:${mColor};font-weight:500">${mLabel}</span> &nbsp;Best: ${scoreStr}${lvlStr}${comboStr}`;
 }
-
+ 
 // ACHIEVEMENTS
 const ACHIEVEMENTS=[
   {id:'combo5',check:()=>combo>=5,text:'🔥 Combo x5!'},
@@ -376,14 +376,14 @@ let unlockedAch=new Set();
 function loadAch(){try{unlockedAch=new Set(JSON.parse(localStorage.getItem('glipx_ach')||'[]'));}catch{}}
 function saveAch(){try{localStorage.setItem('glipx_ach',JSON.stringify([...unlockedAch]));}catch{}}
 function checkAch(){ACHIEVEMENTS.forEach(a=>{if(!unlockedAch.has(a.id)&&a.check()){unlockedAch.add(a.id);saveAch();setTimeout(()=>showAchievement(a.text),300);}});}
-
+ 
 function updateLevelBar(){
   const cfg=getLevelCfg(currentLevel);
   levelLabel.textContent=`Level ${currentLevel}`;
   levelGoal.textContent=`${Math.min(levelScore,cfg.pts)} / ${cfg.pts} pts`;
   levelFill.style.width=Math.min(100,(levelScore/cfg.pts)*100)+'%';
 }
-
+ 
 function doLevelUp(){
   soundLevelUp();
   clearTimeout(spawnTimer);clearInterval(countTimer);
@@ -409,11 +409,11 @@ function doLevelUp(){
     spawnTimer=setTimeout(spawnTarget,500);
   },1500);
 }
-
+ 
 const COLORS=[{bg:'#1a3a5c',border:'#378ADD',text:'#a0d0ff'},{bg:'#1a3d2e',border:'#1D9E75',text:'#7ee8bb'},{bg:'#3d1a1a',border:'#D85A30',text:'#ffaa88'},{bg:'#2d1a3d',border:'#7F77DD',text:'#c4b8ff'},{bg:'#3d2e00',border:'#EF9F27',text:'#ffd88a'}];
 const PU_BASE=['time','boost','clear','heart','shield','slow'];
 function getPUTypes(){const t=[...PU_BASE];if(currentMode==='zen')t.splice(t.indexOf('time'),1);if(currentLevel>=4)t.push('bomb');return t;}
-
+ 
 function spawnTarget(){
   if(!running||paused)return;
   const puTypes=getPUTypes();
@@ -486,7 +486,7 @@ function spawnTarget(){
   const nextDelay=Math.max(250,cfg.spawnBase*blitzMod*slowMod);
   spawnTimer=setTimeout(spawnTarget,nextDelay);
 }
-
+ 
 function handlePowerup(type,x,y,size){
   soundPowerup(type);
   const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
@@ -506,11 +506,11 @@ function handlePowerup(type,x,y,size){
     if(levelScore>=getLevelCfg(currentLevel).pts)doLevelUp();
   }
 }
-
+ 
 function showPop(x,y,color,text){const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${Math.min(Math.max(x,5),arena.clientWidth-90)}px;top:${Math.max(y,10)}px;color:${color};font-size:13px`;pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),700);}
-
+ 
 function updateLivesDisplay(){livesDisplay.innerHTML='';for(let i=0;i<=livesLeft;i++){const h=document.createElement('div');h.className='life-heart';h.textContent='❤️';livesDisplay.appendChild(h);}}
-
+ 
 function pauseGame(){if(!running||paused)return;paused=true;document.getElementById('pause-score').textContent=score;document.getElementById('pause-level').textContent=currentLevel;pauseScreen.style.display='flex';}
 function resumeGame(){paused=false;pauseScreen.style.display='none';if(running)spawnTimer=setTimeout(spawnTarget,300);}
 function quitToMenu(){
@@ -528,7 +528,7 @@ pauseBtn.addEventListener('click',pauseGame);
 resumeBtn.addEventListener('click',resumeGame);
 quitBtn.addEventListener('click',quitToMenu);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)pauseGame();});
-
+ 
 function showInterstitial(onDone){if(isPremium){onDone();return;}interstitial.style.display='flex';interCloseBtn.disabled=true;interSkip.style.display='none';let secs=5;interCountdown.textContent=`You can skip in ${secs} seconds...`;const t=setInterval(()=>{secs--;if(secs>0){interCountdown.textContent=`You can skip in ${secs} seconds...`;}else{clearInterval(t);interCountdown.textContent='';interCloseBtn.disabled=false;interSkip.style.display='block';}},1000);interCloseBtn.onclick=()=>{interstitial.style.display='none';onDone();};interSkip.onclick=()=>{interstitial.style.display='none';openSettings();};}
 function openSettings(){settingsPanel.style.display='flex';}
 function openInfo(){infoPanel.style.display='flex';}
@@ -539,7 +539,7 @@ document.getElementById('info-btn-start').addEventListener('click',openInfo);
 soundToggle.addEventListener('change',()=>{soundOn=soundToggle.checked;savePrefs();});
 premiumBtn.addEventListener('click',()=>{isPremium=true;applyPrefs();savePrefs();alert('Thank you for Glipx Premium! Ads removed.');settingsPanel.style.display='none';});
 document.getElementById('ad-cta-btn').addEventListener('click',openSettings);
-
+ 
 function startGame(){
   score=0;combo=1;bestCombo=1;running=true;paused=false;currentLevel=1;levelScore=0;
   boostActive=false;slowActive=false;shieldActive=false;
@@ -568,7 +568,7 @@ function startGame(){
   }
   spawnTimer=setTimeout(spawnTarget,350);
 }
-
+ 
 function endGame(){
   running=false;paused=false;
   clearTimeout(spawnTimer);clearInterval(countTimer);clearTimeout(boostTimeout);clearTimeout(slowTimeout);
@@ -607,7 +607,7 @@ function endGame(){
   };
   if(gamesPlayed%3===0&&!isPremium){showInterstitial(showGO);}else{showGO();}
 }
-
+ 
 startBtn.addEventListener('click',startGame);
 loadPrefs();loadAch();
 initStars();drawStars();
