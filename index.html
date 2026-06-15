@@ -165,8 +165,8 @@
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#378ADD;font-weight:700">T</div><div><div class="pu-info-name">+5 Seconds</div><div class="pu-info-desc">Adds 5 seconds to your timer</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-weight:700">2x</div><div><div class="pu-info-name">Score Boost</div><div class="pu-info-desc">Doubles all points for 6 seconds</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#5DCAA5;font-weight:700;font-size:18px">✦</div><div><div class="pu-info-name">Clear</div><div class="pu-info-desc">Removes all circles and gives bonus points</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Heart</div><div class="pu-info-desc">Zen: adds one life. Normal/Blitz: adds +8 seconds!</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield</div><div class="pu-info-desc">Blocks one missed circle</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Heart ❤️</div><div class="pu-info-desc">Adds one life — only appears in Zen mode</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield 🛡️</div><div class="pu-info-desc">All modes: blocks one missed circle. In Normal/Blitz it also saves your combo!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. Appears from Level 4!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! Appears from Level 5</div></div></div>
@@ -270,16 +270,42 @@ const starCanvas=document.getElementById('stars-canvas');
 // LEVEL CONFIG — 50% longer than before (time + min time)
 // pts = points needed, time = timer seconds, minTime = minimum seconds before level-up allowed
 const LEVEL_CONFIG=[
+  // Space: level 1-5
   {pts:250,  time:50, spawnBase:950, lifeBase:2000, theme:'space'},
-  {pts:380,  time:50, spawnBase:880, lifeBase:1880, theme:'space'},
-  {pts:520,  time:48, spawnBase:810, lifeBase:1760, theme:'space'},
-  {pts:690,  time:48, spawnBase:740, lifeBase:1640, theme:'ice'},
-  {pts:880,  time:46, spawnBase:670, lifeBase:1520, theme:'ice'},
-  {pts:1100, time:46, spawnBase:600, lifeBase:1400, theme:'ice'},
-  {pts:1350, time:44, spawnBase:540, lifeBase:1280, theme:'vulkan'},
-  {pts:1630, time:44, spawnBase:480, lifeBase:1160, theme:'vulkan'},
-  {pts:1950, time:42, spawnBase:430, lifeBase:1050, theme:'vulkan'},
-  {pts:2310, time:42, spawnBase:380, lifeBase:940,  theme:'matrix'},
+  {pts:380,  time:50, spawnBase:910, lifeBase:1950, theme:'space'},
+  {pts:530,  time:49, spawnBase:870, lifeBase:1900, theme:'space'},
+  {pts:700,  time:49, spawnBase:830, lifeBase:1850, theme:'space'},
+  {pts:890,  time:48, spawnBase:790, lifeBase:1800, theme:'space'},
+  // Ice: level 6-10
+  {pts:1100, time:48, spawnBase:740, lifeBase:1720, theme:'ice'},
+  {pts:1340, time:46, spawnBase:690, lifeBase:1640, theme:'ice'},
+  {pts:1610, time:46, spawnBase:640, lifeBase:1560, theme:'ice'},
+  {pts:1910, time:44, spawnBase:590, lifeBase:1480, theme:'ice'},
+  {pts:2250, time:44, spawnBase:540, lifeBase:1400, theme:'ice'},
+  // Vulkan: level 11-15
+  {pts:2630, time:42, spawnBase:500, lifeBase:1320, theme:'vulkan'},
+  {pts:3060, time:42, spawnBase:465, lifeBase:1240, theme:'vulkan'},
+  {pts:3540, time:40, spawnBase:430, lifeBase:1160, theme:'vulkan'},
+  {pts:4080, time:40, spawnBase:400, lifeBase:1080, theme:'vulkan'},
+  {pts:4690, time:38, spawnBase:375, lifeBase:1000, theme:'vulkan'},
+  // Matrix: level 16-20
+  {pts:5380, time:38, spawnBase:350, lifeBase:940,  theme:'matrix'},
+  {pts:6160, time:36, spawnBase:325, lifeBase:880,  theme:'matrix'},
+  {pts:7040, time:36, spawnBase:305, lifeBase:820,  theme:'matrix'},
+  {pts:8030, time:34, spawnBase:285, lifeBase:760,  theme:'matrix'},
+  {pts:9140, time:34, spawnBase:270, lifeBase:700,  theme:'matrix'},
+  // Void: level 21-25
+  {pts:10380,time:32, spawnBase:260, lifeBase:660,  theme:'void'},
+  {pts:11760,time:32, spawnBase:258, lifeBase:630,  theme:'void'},
+  {pts:13290,time:30, spawnBase:256, lifeBase:605,  theme:'void'},
+  {pts:14990,time:30, spawnBase:254, lifeBase:580,  theme:'void'},
+  {pts:16870,time:28, spawnBase:252, lifeBase:560,  theme:'void'},
+  // Neon: level 26-30
+  {pts:18950,time:28, spawnBase:250, lifeBase:560,  theme:'neon'},
+  {pts:21240,time:26, spawnBase:250, lifeBase:560,  theme:'neon'},
+  {pts:23760,time:26, spawnBase:250, lifeBase:560,  theme:'neon'},
+  {pts:26520,time:25, spawnBase:250, lifeBase:560,  theme:'neon'},
+  {pts:29540,time:25, spawnBase:250, lifeBase:560,  theme:'neon'},
 ];
 
 // THEMES
@@ -297,9 +323,9 @@ function getLevelCfg(lvl){
   const cfg={...LEVEL_CONFIG[idx]};
   if(lvl>LEVEL_CONFIG.length){
     const e=lvl-LEVEL_CONFIG.length;
-    cfg.pts+=e*3000;cfg.time=Math.max(24,cfg.time-1);
-    cfg.spawnBase=Math.max(250,cfg.spawnBase);
-    cfg.lifeBase=Math.max(560,cfg.lifeBase);
+    cfg.pts+=e*3500;cfg.time=Math.max(22,cfg.time);
+    cfg.spawnBase=250;
+    cfg.lifeBase=560;
     cfg.theme='neon';
   }
   return cfg;
@@ -766,9 +792,14 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
       } else if(!isPU&&!isFake){
         soundMiss();
         const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
-        if(currentMode==='zen'){
-          if(shieldActive){shieldActive=false;shieldIndicator.style.display='none';showPop(arenaW/2-20,arenaH/2,'#7F77DD','🛡 blocked!');}
-          else{livesLeft--;updateLivesDisplay();if(livesLeft<0)endGame();}
+        if(shieldActive){
+          shieldActive=false;shieldIndicator.style.display='none';
+          // Restore combo on shield block
+          showPop(arenaW/2-20,arenaH/2,'#7F77DD','🛡 blocked!');
+        } else if(currentMode==='zen'){
+          livesLeft--;updateLivesDisplay();if(livesLeft<0)endGame();
+        } else {
+          combo=1;comboDisp.textContent='x1';
         }
       }
     }
@@ -788,7 +819,7 @@ function handlePU(type,x,y,size){
   if(type==='time'&&currentMode!=='zen'){timeLeft=Math.min(timeLeft+5,80);timeDisp.textContent=timeLeft;showPop(x,y-6,'#378ADD','+5 sec!');}
   else if(type==='boost'){boostActive=true;boostBanner.style.display='block';clearTimeout(boostTimeout);boostTimeout=setTimeout(()=>{boostActive=false;boostBanner.style.display='none';},6000);showPop(x,y-6,'#FAC775','2x boost!');}
   else if(type==='clear'){const bonus=targets.length*8*(boostActive?2:1);score+=bonus;levelScore+=bonus;scoreDisp.textContent=score;targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];updateLevelBar();showPop(arenaW/2-30,arenaH/2-10,'#5DCAA5',`+${bonus} clear!`);tryLevelUp();}
-  else if(type==='heart'){if(currentMode==='zen'){livesLeft=Math.min(livesLeft+1,9);updateLivesDisplay();showPop(x,y-6,'#ff6b88','+1 life!');}else{timeLeft=Math.min(timeLeft+8,90);timeDisp.textContent=timeLeft;showPop(x,y-6,'#ff6b88','+8 sec! ❤');}}
+  else if(type==='heart'){livesLeft=Math.min(livesLeft+1,9);updateLivesDisplay();showPop(x,y-6,'#ff6b88','+1 life!');}
   else if(type==='shield'){shieldActive=true;shieldIndicator.style.display='block';showPop(x,y-6,'#7F77DD','🛡 Shield!');}
   else if(type==='slow'){slowActive=true;slowBanner.style.display='block';clearTimeout(slowTimeout);slowTimeout=setTimeout(()=>{slowActive=false;slowBanner.style.display='none';},5000);showPop(x,y-6,'#a0c4ff','❄ Slow!');}
   else if(type==='bomb'){
