@@ -16,57 +16,64 @@
     .stat-box{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:7px 8px;text-align:center;flex:1;min-width:0}
     .stat-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em}
     .stat-value{font-size:18px;font-weight:500;color:#e0e8ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .stat-sub{font-size:9px;color:#6677aa;margin-top:1px}
     #level-bar-wrap{background:#1a1a2e;border-radius:8px;padding:5px 10px;border:0.5px solid #2a2a4e;display:none}
     #level-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
     #level-label{font-size:11px;color:#6677aa}
     #level-goal{font-size:11px;color:#6677aa}
     #level-progress-bg{background:#0a0a1a;border-radius:4px;height:5px;overflow:hidden}
     #level-progress-fill{height:5px;background:#378ADD;border-radius:4px;transition:width .3s}
-    #arena{position:relative;flex:1;background:#0a0a1a;border-radius:16px;border:0.5px solid #2a2a4e;overflow:hidden;cursor:crosshair;min-height:0}
+
+    #arena{position:relative;flex:1;background:#0a0a1a;border-radius:16px;border:0.5px solid #2a2a4e;overflow:hidden;cursor:crosshair;min-height:0;transition:background .8s}
     #stars-canvas{position:absolute;inset:0;pointer-events:none}
-    .target{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pop-in .1s ease-out}
+
+    /* DARK ZONES */
+    .dark-zone{position:absolute;border-radius:50%;background:rgba(0,0,0,0.75);pointer-events:none;z-index:4;transition:opacity .5s}
+
+    .target{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pop-in .1s ease-out;z-index:3;pointer-events:all}
+    .target.moving{transition:left .05s linear, top .05s linear}
+    .target.fake{border-style:dashed!important}
     .target:active{transform:scale(.88)}
     @keyframes pop-in{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
     @keyframes flash-red{from{opacity:.25}to{opacity:0}}
+    @keyframes flash-green{from{opacity:.2}to{opacity:0}}
     @keyframes combo-float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-30px)}}
     @keyframes shrink-ring{from{stroke-dashoffset:0}to{stroke-dashoffset:188}}
     @keyframes levelup-anim{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
     @keyframes particle-fly{from{opacity:1;transform:translate(0,0) scale(1)}to{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}}
     @keyframes achievement-slide{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-    .combo-pop{position:absolute;pointer-events:none;font-size:13px;font-weight:600;animation:combo-float .6s ease-out forwards}
-    .particle{position:absolute;border-radius:50%;pointer-events:none;animation:particle-fly .5s ease-out forwards}
-    .miss-flash{position:absolute;inset:0;background:rgba(220,60,40,.18);pointer-events:none;border-radius:16px;animation:flash-red .25s ease-out forwards}
-    #timer-bar{position:absolute;bottom:0;left:0;height:4px;background:#378ADD;border-radius:0 0 0 16px}
-    #lives-display{position:absolute;top:8px;left:44px;display:flex;gap:3px}
+    @keyframes wave-in{0%{opacity:0;transform:scale(0)}60%{opacity:1;transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+    .combo-pop{position:absolute;pointer-events:none;font-size:13px;font-weight:600;animation:combo-float .6s ease-out forwards;z-index:10}
+    .particle{position:absolute;border-radius:50%;pointer-events:none;animation:particle-fly .5s ease-out forwards;z-index:10}
+    .miss-flash{position:absolute;inset:0;background:rgba(220,60,40,.18);pointer-events:none;border-radius:16px;animation:flash-red .25s ease-out forwards;z-index:10}
+    .good-flash{position:absolute;inset:0;background:rgba(29,158,117,.12);pointer-events:none;border-radius:16px;animation:flash-green .25s ease-out forwards;z-index:10}
+    #lives-display{position:absolute;top:8px;left:44px;display:flex;gap:3px;z-index:5}
     .life-heart{font-size:13px;line-height:1}
-    /* PAUSE BTN — left, no text */
-    #pause-btn{position:absolute;top:6px;left:8px;background:rgba(26,26,46,.85);border:0.5px solid #2a2a4e;border-radius:8px;color:#6677aa;font-size:16px;padding:3px 7px;cursor:pointer;display:none;font-family:inherit;z-index:5;line-height:1}
-    /* SHIELD — right, no overlap */
-    #shield-indicator{position:absolute;top:8px;right:10px;font-size:13px;display:none;z-index:4}
-    /* BANNERS — better contrast */
-    #boost-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:1px solid #1D9E75;color:#7ee8bb;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:6}
-    #slow-banner{position:absolute;top:34px;left:50%;transform:translateX(-50%);background:#0a1628;border:1px solid #a0c4ff;color:#a0c4ff;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:6}
-    #levelup-splash{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;display:none;text-align:center;z-index:10;width:100%}
+    #pause-btn{position:absolute;top:6px;left:8px;background:rgba(26,26,46,.85);border:0.5px solid #2a2a4e;border-radius:8px;color:#6677aa;font-size:16px;padding:3px 7px;cursor:pointer;display:none;font-family:inherit;z-index:6;line-height:1}
+    #shield-indicator{position:absolute;top:8px;right:10px;font-size:13px;display:none;z-index:5}
+    #boost-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:1px solid #1D9E75;color:#7ee8bb;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:7}
+    #slow-banner{position:absolute;top:34px;left:50%;transform:translateX(-50%);background:#0a1628;border:1px solid #a0c4ff;color:#a0c4ff;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:7}
+    #theme-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#0a0a1aee;border:1px solid #378ADD;border-radius:12px;padding:10px 20px;text-align:center;display:none;z-index:12;pointer-events:none}
+    #theme-banner-text{font-size:20px;font-weight:700;color:#e0e8ff}
+    #theme-banner-sub{font-size:12px;color:#6677aa;margin-top:3px}
+    #levelup-splash{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;display:none;text-align:center;z-index:11;width:100%}
     #levelup-splash.show{display:block;animation:levelup-anim 1.4s ease-out forwards}
     .levelup-text{font-size:48px;font-weight:700;color:#FAC775;text-shadow:0 0 30px #FAC77588}
     .levelup-sub{font-size:16px;color:#e0e8ff;margin-top:4px}
     #achievement-toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:0.5px solid #1D9E75;border-radius:10px;padding:6px 14px;font-size:12px;color:#7ee8bb;display:none;z-index:20;white-space:nowrap;animation:achievement-slide .3s ease-out}
+
     /* START SCREEN */
-    #start-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0a0a1aee;border-radius:16px}
+    #start-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0a0a1aee;border-radius:16px;z-index:15}
     .game-logo{font-size:46px;font-weight:700;color:#e0e8ff;letter-spacing:3px}
     .game-logo span{color:#378ADD}
-    /* RECORDS — per mode tabs */
-    #records-wrap{width:calc(100% - 32px)}
-    /* record line - compact */
-    /* SINGLE MODE BUTTON */
+    #record-line{font-size:12px;color:#6677aa;text-align:center;background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:7px 16px;min-width:260px}
     #mode-cycle-btn{background:#1a1a2e;border:0.5px solid #378ADD;border-radius:12px;padding:13px 0;color:#a0c4ff;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;width:176px}
     .mode-desc-text{font-size:11px;color:#6677aa;text-align:center;min-height:16px;max-width:260px;padding:0 10px}
     .play-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:13px 0;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;width:176px}
     .settings-link{font-size:11px;color:#6677aa;cursor:pointer}
     #info-btn-start{font-size:11px;color:#6677aa;cursor:pointer;background:none;border:0.5px solid #2a2a4e;border-radius:8px;padding:4px 10px;font-family:inherit}
+
     /* GAME OVER */
-    #game-over-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:#0a0a1aee;border-radius:16px}
+    #game-over-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:#0a0a1aee;border-radius:16px;z-index:15}
     .go-score{font-size:52px;font-weight:600;color:#e0e8ff}
     .go-label{font-size:13px;color:#6677aa}
     .go-level{font-size:15px;color:#a0c4ff;font-weight:500}
@@ -75,14 +82,16 @@
     .go-stat{background:#1a1a2e;border-radius:8px;padding:6px 12px;text-align:center}
     .go-stat-label{font-size:9px;color:#6677aa;text-transform:uppercase}
     .go-stat-val{font-size:15px;font-weight:500;color:#e0e8ff}
-    .pu-time{box-shadow:0 0 14px #378ADD99}.pu-boost{box-shadow:0 0 14px #FAC77599}.pu-clear{box-shadow:0 0 14px #5DCAA599}.pu-heart{box-shadow:0 0 14px #ff6b8899}.pu-shield{box-shadow:0 0 14px #7F77DD99}.pu-slow{box-shadow:0 0 14px #a0c4ff99}.pu-bomb{box-shadow:0 0 14px #ff444499}
+
+    .pu-time{box-shadow:0 0 14px #378ADD99}.pu-boost{box-shadow:0 0 14px #FAC77599}.pu-clear{box-shadow:0 0 14px #5DCAA599}.pu-heart{box-shadow:0 0 14px #ff6b8899}.pu-shield{box-shadow:0 0 14px #7F77DD99}.pu-slow{box-shadow:0 0 14px #a0c4ff99}.pu-bomb{box-shadow:0 0 14px #ff444499}.pu-mini{box-shadow:0 0 8px #FAC77566}
+
     #ad-banner{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
     .ad-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
     .ad-text{font-size:11px;color:#a0b0cc}
     .ad-cta{background:#378ADD;color:#fff;border:none;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap}
     #interstitial{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:999}
     #interstitial-box{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:16px;padding:28px 24px;max-width:320px;width:90%;text-align:center}
-    .inter-ad-label{font-size:10px;color:#6677aa;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em}
+    .inter-ad-label{font-size:10px;color:#6677aa;margin-bottom:8px;text-transform:uppercase}
     .inter-ad-title{font-size:18px;font-weight:600;color:#e0e8ff;margin-bottom:6px}
     .inter-ad-sub{font-size:13px;color:#6677aa;margin-bottom:16px;line-height:1.5}
     .inter-close{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;margin-bottom:8px}
@@ -112,8 +121,8 @@
     .pu-info-desc{font-size:11px;color:#6677aa;margin-top:2px}
     #pause-screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0a0a1aee;border-radius:16px;z-index:8}
     .pause-title{font-size:28px;font-weight:600;color:#e0e8ff}
-    .pause-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:11px 34px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:200px}
-    .pause-btn-sec{background:none;color:#6677aa;border:0.5px solid #2a2a4e;border-radius:12px;padding:10px 34px;font-size:13px;cursor:pointer;font-family:inherit;width:200px}
+    .pause-action-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:11px 34px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:200px}
+    .pause-sec-btn{background:none;color:#6677aa;border:0.5px solid #2a2a4e;border-radius:12px;padding:10px 34px;font-size:13px;cursor:pointer;font-family:inherit;width:200px}
   </style>
 </head>
 <body>
@@ -138,7 +147,7 @@
     </div>
     <div class="setting-row">
       <div><div class="setting-label">Ads</div><div class="setting-sub">Buy Premium to remove ads</div></div>
-      <label class="toggle"><input type="checkbox" id="ads-toggle" checked disabled><span class="slider" style="opacity:.4;cursor:not-allowed"></span></label>
+      <label class="toggle"><input type="checkbox" checked disabled><span class="slider" style="opacity:.4;cursor:not-allowed"></span></label>
     </div>
     <div class="premium-box">
       <div class="premium-title">⭐ Glipx Premium</div>
@@ -152,14 +161,20 @@
 
 <div id="info-panel">
   <div id="info-box">
-    <div class="panel-title">ℹ️ Power-ups</div>
+    <div class="panel-title">ℹ️ Power-ups & Obstacles</div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#378ADD;font-weight:700">T</div><div><div class="pu-info-name">+5 Seconds</div><div class="pu-info-desc">Adds 5 seconds to your timer</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-weight:700">2x</div><div><div class="pu-info-name">Score Boost</div><div class="pu-info-desc">Doubles all points for 6 seconds</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#5DCAA5;font-weight:700;font-size:18px">✦</div><div><div class="pu-info-name">Clear</div><div class="pu-info-desc">Removes all circles and gives bonus points</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Extra Life</div><div class="pu-info-desc">Adds one life (Zen mode)</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Heart</div><div class="pu-info-desc">Zen: adds one life. Normal/Blitz: adds +8 seconds!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield</div><div class="pu-info-desc">Blocks one missed circle</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
-    <div class="pu-info-row" style="border:none"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap to defuse for bonus points. Let it expire = -30 pts, no level progress! (Level 4+)</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. Appears from Level 4!</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! Appears from Level 5</div></div></div>
+    <div style="margin-top:10px;margin-bottom:4px;font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em">Obstacles & Themes</div>
+    <div class="pu-info-row"><div class="pu-info-icon">🌑</div><div><div class="pu-info-name">Dark Zones</div><div class="pu-info-desc">Areas where circles are hidden. Active from Level 3</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 6</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 5</div></div></div>
+    <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🌋</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 8</div></div></div>
     <button class="panel-close" id="info-close">Close</button>
   </div>
 </div>
@@ -171,29 +186,25 @@
     <div class="stat-box" id="time-box"><div class="stat-label">Time</div><div class="stat-value" id="time-disp">—</div></div>
   </div>
   <div id="level-bar-wrap">
-    <div id="level-info"><span id="level-label">Level 1</span><span id="level-goal">0 / 200 pts</span></div>
+    <div id="level-info"><span id="level-label">Level 1</span><span id="level-goal">0 / 300 pts</span></div>
     <div id="level-progress-bg"><div id="level-progress-fill" style="width:0%"></div></div>
   </div>
   <div id="arena">
     <canvas id="stars-canvas"></canvas>
-    <div id="timer-bar" style="width:100%;transition:none"></div>
     <div id="lives-display"></div>
     <div id="shield-indicator">🛡️</div>
     <div id="boost-banner">⚡ 2x Boost!</div>
     <div id="slow-banner">❄️ Slow Motion!</div>
     <div id="achievement-toast"></div>
-    <div id="levelup-splash"><div class="levelup-text" id="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
+    <div id="theme-banner"><div id="theme-banner-text"></div><div id="theme-banner-sub"></div></div>
+    <div id="levelup-splash"><div class="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
     <button id="pause-btn">⏸</button>
 
     <div id="start-screen">
       <div class="game-logo">GLIP<span>X</span></div>
-
-      <!-- Compact single-line record -->
-      <div id="record-line" style="font-size:12px;color:#6677aa;text-align:center;background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:7px 16px;min-width:260px"></div>
-
-      <!-- Single cycle mode button above play -->
+      <div id="record-line">Play your first game!</div>
       <button id="mode-cycle-btn">Mode: Normal →</button>
-      <div class="mode-desc-text" id="mode-desc-text">40 sec per level — build combos and level up!</div>
+      <div class="mode-desc-text" id="mode-desc-text">Survive each level — time + points both matter!</div>
       <button class="play-btn" id="start-btn">Play</button>
       <div style="display:flex;gap:12px;align-items:center">
         <button id="info-btn-start">ℹ️ Power-ups</button>
@@ -204,8 +215,8 @@
     <div id="pause-screen">
       <div class="pause-title">Paused</div>
       <div style="font-size:13px;color:#6677aa">Score: <span id="pause-score">0</span> · Level <span id="pause-level">1</span></div>
-      <button class="pause-btn" id="resume-btn">▶ Resume</button>
-      <button class="pause-btn-sec" id="quit-btn">↩ Menu</button>
+      <button class="pause-action-btn" id="resume-btn">▶ Resume</button>
+      <button class="pause-sec-btn" id="quit-btn">↩ Menu</button>
     </div>
   </div>
   <div id="ad-banner">
@@ -220,7 +231,6 @@ const arena=document.getElementById('arena');
 const scoreDisp=document.getElementById('score-disp');
 const comboDisp=document.getElementById('combo-disp');
 const timeDisp=document.getElementById('time-disp');
-const timerBar=document.getElementById('timer-bar');
 const startScreen=document.getElementById('start-screen');
 const startBtn=document.getElementById('start-btn');
 const pauseBtn=document.getElementById('pause-btn');
@@ -251,30 +261,53 @@ const premiumActive=document.getElementById('premium-active');
 const achievementToast=document.getElementById('achievement-toast');
 const modeCycleBtn=document.getElementById('mode-cycle-btn');
 const modeDescText=document.getElementById('mode-desc-text');
-// record displayed in #record-line
+const recordLine=document.getElementById('record-line');
+const themeBanner=document.getElementById('theme-banner');
+const themeBannerText=document.getElementById('theme-banner-text');
+const themeBannerSub=document.getElementById('theme-banner-sub');
+const starCanvas=document.getElementById('stars-canvas');
 
+// LEVEL CONFIG — 50% longer than before (time + min time)
+// pts = points needed, time = timer seconds, minTime = minimum seconds before level-up allowed
 const LEVEL_CONFIG=[
-  {pts:200,time:40,spawnBase:950,lifeBase:2000},
-  {pts:300,time:40,spawnBase:880,lifeBase:1850},
-  {pts:420,time:38,spawnBase:810,lifeBase:1700},
-  {pts:560,time:38,spawnBase:740,lifeBase:1580},
-  {pts:720,time:35,spawnBase:670,lifeBase:1450},
-  {pts:900,time:35,spawnBase:600,lifeBase:1320},
-  {pts:1100,time:32,spawnBase:540,lifeBase:1200},
-  {pts:1320,time:32,spawnBase:480,lifeBase:1080},
-  {pts:1560,time:30,spawnBase:430,lifeBase:980},
-  {pts:1820,time:30,spawnBase:380,lifeBase:880},
+  {pts:250,  time:50, spawnBase:950, lifeBase:2000, theme:'space'},
+  {pts:380,  time:50, spawnBase:880, lifeBase:1880, theme:'space'},
+  {pts:520,  time:48, spawnBase:810, lifeBase:1760, theme:'space'},
+  {pts:690,  time:48, spawnBase:740, lifeBase:1640, theme:'ice'},
+  {pts:880,  time:46, spawnBase:670, lifeBase:1520, theme:'ice'},
+  {pts:1100, time:46, spawnBase:600, lifeBase:1400, theme:'ice'},
+  {pts:1350, time:44, spawnBase:540, lifeBase:1280, theme:'vulkan'},
+  {pts:1630, time:44, spawnBase:480, lifeBase:1160, theme:'vulkan'},
+  {pts:1950, time:42, spawnBase:430, lifeBase:1050, theme:'vulkan'},
+  {pts:2310, time:42, spawnBase:380, lifeBase:940,  theme:'matrix'},
 ];
+
+// THEMES
+const THEMES={
+  space:{bg:'#0a0a1a',border:'#2a2a4e',star:'rgba(180,200,255,',name:'🌌 Space',desc:'The classic void',effect:'stars'},
+  ice:{bg:'#060d18',border:'#1a3050',star:'rgba(160,210,255,',name:'❄️ Ice Storm',desc:'Brace for the cold',effect:'snow'},
+  vulkan:{bg:'#150500',border:'#4e1a00',star:'rgba(255,140,60,',name:'🌋 Vulkan',desc:'The heat is rising',effect:'sparks'},
+  matrix:{bg:'#000d00',border:'#003300',star:'rgba(80,255,100,',name:'💚 Matrix',desc:'Follow the code',effect:'matrix'},
+  void:{bg:'#050508',border:'#1a1a2e',star:'rgba(140,100,255,',name:'🌀 Void',desc:'Beyond the known',effect:'pulse'},
+  neon:{bg:'#0a001a',border:'#3a0060',star:'rgba(255,100,255,',name:'⚡ Neon City',desc:'Lights never sleep',effect:'neon'},
+};
+
 function getLevelCfg(lvl){
   const idx=Math.min(lvl-1,LEVEL_CONFIG.length-1);
-  const cfg=LEVEL_CONFIG[idx];
-  if(lvl>LEVEL_CONFIG.length){const e=lvl-LEVEL_CONFIG.length;return{pts:cfg.pts+e*200,time:Math.max(22,cfg.time-e),spawnBase:Math.max(260,cfg.spawnBase-e*25),lifeBase:Math.max(580,cfg.lifeBase-e*50)};}
+  const cfg={...LEVEL_CONFIG[idx]};
+  if(lvl>LEVEL_CONFIG.length){
+    const e=lvl-LEVEL_CONFIG.length;
+    cfg.pts+=e*3000;cfg.time=Math.max(24,cfg.time-1);
+    cfg.spawnBase=Math.max(250,cfg.spawnBase);
+    cfg.lifeBase=Math.max(560,cfg.lifeBase);
+    cfg.theme='neon';
+  }
   return cfg;
 }
 
-// MODE — single cycle button
+// MODE
 const MODES={
-  normal:{label:'Normal',desc:'40 sec per level — build combos and level up!',color:'#a0c4ff'},
+  normal:{label:'Normal',desc:'Survive each level — time + points both matter!',color:'#a0c4ff'},
   blitz:{label:'Blitz',desc:'Faster circles, shorter time — for experts!',color:'#F0997B'},
   zen:{label:'Zen',desc:'No timer — 5 lives per level. How far can you go?',color:'#7ee8bb'}
 };
@@ -282,7 +315,6 @@ const MODE_ORDER=['normal','blitz','zen'];
 let modeIdx=0,currentMode='normal';
 function updateModeCycleBtn(){
   const m=MODES[currentMode];
-  const next=MODES[MODE_ORDER[(modeIdx+1)%3]];
   modeCycleBtn.textContent=`Mode: ${m.label} →`;
   modeCycleBtn.style.borderColor=m.color;
   modeCycleBtn.style.color=m.color;
@@ -291,92 +323,234 @@ function updateModeCycleBtn(){
 }
 modeCycleBtn.addEventListener('click',()=>{
   if(running)return;
-  modeIdx=(modeIdx+1)%3;
-  currentMode=MODE_ORDER[modeIdx];
-  updateModeCycleBtn();
-  loadStartRecords(currentMode);
+  modeIdx=(modeIdx+1)%3;currentMode=MODE_ORDER[modeIdx];
+  updateModeCycleBtn();loadStartRecords(currentMode);
 });
 updateModeCycleBtn();
 
-let activeRecTab='normal';
-
 let soundOn=true,isPremium=false;
-let score=0,combo=1,bestCombo=1,timeLeft=0,livesLeft=0,running=false,paused=false;
+let score=0,combo=1,bestCombo=1,timeLeft=0,livesLeft=0;
+let running=false,paused=false,minTimePassed=true;
 let boostActive=false,slowActive=false,shieldActive=false;
 let boostTimeout=null,slowTimeout=null;
-let targets=[],spawnTimer=null,countTimer=null,gamesPlayed=0;
-let currentLevel=1,levelScore=0;
+let targets=[],darkZones=[],spawnTimer=null,countTimer=null,moveTimer=null;
+let gamesPlayed=0,currentLevel=1,levelScore=0,currentTheme='space',minTimeTimer=null;
 
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
 function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium}));}catch{}}
-function applyPrefs(){soundToggle.checked=soundOn;adBanner.style.display=isPremium?'none':'flex';if(isPremium){premiumBtn.style.display='none';premiumActive.style.display='block';}else{premiumBtn.style.display='block';premiumActive.style.display='none';}}
+function applyPrefs(){soundToggle.checked=soundOn;adBanner.style.display=isPremium?'none':'flex';premiumBtn.style.display=isPremium?'none':'block';premiumActive.style.display=isPremium?'block':'none';}
 
 // SOUND
 const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null;
 function getAC(){if(!ac)ac=new AC();return ac;}
 function beep(freq,dur,type='sine',gain=0.18){if(!soundOn)return;try{const a=getAC();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.type=type;o.frequency.setValueAtTime(freq,a.currentTime);g.gain.setValueAtTime(gain,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);o.start();o.stop(a.currentTime+dur);}catch{}}
-function soundHit(c){const f=300+Math.min(c-1,7)*60;beep(f,.08,'sine',.15);setTimeout(()=>beep(f*1.5,.06,'sine',.08),40);}
-function soundMiss(){beep(120,.15,'sawtooth',.12);}
-function soundLevelUp(){beep(440,.08);setTimeout(()=>beep(550,.08),90);setTimeout(()=>beep(660,.2),180);}
-function soundPowerup(t){if(t==='time'){beep(440,.05);setTimeout(()=>beep(660,.1),60);}else if(t==='boost'){beep(550,.05);setTimeout(()=>beep(880,.12),60);}else if(t==='heart'){beep(523,.08);setTimeout(()=>beep(659,.12),90);}else if(t==='shield'){beep(392,.08);setTimeout(()=>beep(523,.12),90);}else if(t==='slow'){beep(300,.1,'sine',.12);}else if(t==='bomb'){beep(150,.2,'sawtooth',.2);}else{beep(330,.05);setTimeout(()=>beep(990,.15),60);}}
+function soundHit(c){if(paused)return;const f=300+Math.min(c-1,7)*60;beep(f,.08,'sine',.15);setTimeout(()=>{if(!paused)beep(f*1.5,.06,'sine',.08);},40);}
+function soundMiss(){if(paused)return;beep(120,.15,'sawtooth',.12);}
+function soundLevelUp(){if(paused)return;beep(440,.08);setTimeout(()=>{if(!paused)beep(550,.08);},90);setTimeout(()=>{if(!paused)beep(660,.2);},180);}
+function soundPU(t){if(paused)return;if(t==='time'){beep(440,.05);setTimeout(()=>{if(!paused)beep(660,.1);},60);}else if(t==='boost'){beep(550,.05);setTimeout(()=>{if(!paused)beep(880,.12);},60);}else if(t==='heart'){beep(523,.08);setTimeout(()=>{if(!paused)beep(659,.12);},90);}else if(t==='shield'){beep(392,.08);setTimeout(()=>{if(!paused)beep(523,.12);},90);}else if(t==='slow'){beep(300,.1,'sine',.12);}else if(t==='bomb'){beep(150,.2,'sawtooth',.2);}else{beep(330,.05);setTimeout(()=>{if(!paused)beep(990,.15);},60);}}
 function soundGameOver(){beep(440,.1,'sawtooth',.15);setTimeout(()=>beep(330,.1,'sawtooth',.15),120);setTimeout(()=>beep(220,.2,'sawtooth',.15),240);}
 
-// STARS
-const starCanvas=document.getElementById('stars-canvas');
-let stars=[];
-function initStars(){starCanvas.width=arena.clientWidth;starCanvas.height=arena.clientHeight;stars=Array.from({length:55},()=>({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.5+.3,a:Math.random()*.8+.2,speed:Math.random()*.3+.1}));}
-function drawStars(){const ctx=starCanvas.getContext('2d');ctx.clearRect(0,0,starCanvas.width,starCanvas.height);stars.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(180,200,255,${s.a})`;ctx.fill();s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;});requestAnimationFrame(drawStars);}
+// VISUAL EFFECTS ENGINE
+let stars=[],particles2=[],matrixCols=[],rafId=null;
+function initStars(){
+  starCanvas.width=arena.clientWidth;starCanvas.height=arena.clientHeight;
+  stars=Array.from({length:70},()=>({
+    x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,
+    r:Math.random()*1.8+.3,a:Math.random()*.8+.2,speed:Math.random()*.3+.1,
+    vy:0,vx:0
+  }));
+  particles2=[];
+  // Matrix columns
+  const cols=Math.floor(starCanvas.width/14);
+  matrixCols=Array.from({length:cols},(_,i)=>({x:i*14,y:Math.random()*starCanvas.height,speed:2+Math.random()*3,chars:[]}));
+}
+function drawStars(){
+  const ctx=starCanvas.getContext('2d');
+  const W=starCanvas.width,H=starCanvas.height;
+  const t=THEMES[currentTheme]||THEMES.space;
+  const eff=t.effect||'stars';
+
+  ctx.clearRect(0,0,W,H);
+
+  if(eff==='stars'){
+    // Classic twinkling stars
+    stars.forEach(s=>{
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=t.star+s.a+')';ctx.fill();
+      s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;
+    });
+
+  } else if(eff==='snow'){
+    // Falling snowflakes
+    stars.forEach(s=>{
+      if(!s.vy){s.vy=0.3+Math.random()*0.8;s.vx=(Math.random()-.5)*0.4;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*1.2,0,Math.PI*2);
+      ctx.fillStyle='rgba(200,230,255,'+s.a+')';ctx.fill();
+      s.y+=s.vy;s.x+=s.vx;
+      s.a+=s.speed*.015;if(s.a>0.9||s.a<0.2)s.speed*=-1;
+      if(s.y>H+5){s.y=-5;s.x=Math.random()*W;}
+    });
+
+  } else if(eff==='sparks'){
+    // Rising sparks from bottom
+    stars.forEach(s=>{
+      if(!s.vy||s.y<-10){
+        s.x=Math.random()*W;s.y=H+5;
+        s.vy=-(1+Math.random()*3);s.vx=(Math.random()-.5)*1.5;
+        s.r=Math.random()*2+.5;s.a=0.9;s.speed=0.02;
+      }
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      const heat=s.y/H;
+      ctx.fillStyle=`rgba(255,${Math.floor(100+heat*100)},20,${s.a})`;ctx.fill();
+      s.y+=s.vy;s.x+=s.vx;s.vy+=0.04;s.a-=0.008;
+    });
+    // Glow at bottom
+    const grad=ctx.createLinearGradient(0,H-40,0,H);
+    grad.addColorStop(0,'rgba(255,60,0,0)');grad.addColorStop(1,'rgba(255,60,0,0.15)');
+    ctx.fillStyle=grad;ctx.fillRect(0,H-40,W,40);
+
+  } else if(eff==='matrix'){
+    // Falling green characters
+    ctx.fillStyle='rgba(0,10,0,0.18)';ctx.fillRect(0,0,W,H);
+    ctx.font='12px monospace';
+    matrixCols.forEach(col=>{
+      const char=String.fromCharCode(0x30A0+Math.random()*96);
+      ctx.fillStyle='rgba(0,255,70,0.9)';
+      ctx.fillText(char,col.x,col.y);
+      ctx.fillStyle='rgba(0,200,50,0.4)';
+      for(let i=1;i<5;i++){ctx.fillText(char,col.x,col.y-i*14);}
+      col.y+=col.speed;
+      if(col.y>H+20)col.y=Math.random()*-100;
+    });
+    // Extra twinkling
+    stars.slice(0,20).forEach(s=>{
+      ctx.fillStyle='rgba(100,255,120,'+s.a*0.3+')';
+      ctx.fillText(String.fromCharCode(0x30A0+Math.random()*96),s.x,s.y);
+      s.a+=s.speed*.03;if(s.a>0.8||s.a<0.1)s.speed*=-1;
+    });
+
+  } else if(eff==='pulse'){
+    // Pulsing void rings
+    stars.forEach(s=>{
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(140,100,255,'+s.a+')';ctx.fill();
+      s.a+=s.speed*.02;if(s.a>0.8||s.a<0.1)s.speed*=-1;
+    });
+    // Central pulse rings
+    const now=Date.now()/1000;
+    for(let i=0;i<3;i++){
+      const phase=(now*0.5+i/3)%1;
+      const radius=phase*Math.min(W,H)*0.5;
+      const alpha=(1-phase)*0.15;
+      ctx.beginPath();ctx.arc(W/2,H/2,radius,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(120,80,255,${alpha})`;ctx.lineWidth=2;ctx.stroke();
+    }
+
+  } else if(eff==='neon'){
+    // Neon city — bright streaks and glows
+    stars.forEach(s=>{
+      const colors=['255,0,255','0,255,255','255,50,150','150,0,255'];
+      const c=colors[Math.floor(s.x/W*colors.length)];
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${c},${s.a})`;ctx.fill();
+      // Glow
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${c},${s.a*0.1})`;ctx.fill();
+      s.a+=s.speed*.025;if(s.a>0.9||s.a<0.1)s.speed*=-1;
+    });
+    // Horizontal neon lines
+    const now2=Date.now()/1000;
+    for(let i=0;i<3;i++){
+      const y=((now2*30+i*H/3)%H);
+      const grad2=ctx.createLinearGradient(0,y,W,y);
+      grad2.addColorStop(0,'rgba(255,0,255,0)');
+      grad2.addColorStop(0.5,'rgba(255,0,255,0.12)');
+      grad2.addColorStop(1,'rgba(0,255,255,0)');
+      ctx.fillStyle=grad2;ctx.fillRect(0,y-1,W,2);
+    }
+  }
+
+  rafId=requestAnimationFrame(drawStars);
+}
+
+// THEME
+function applyTheme(theme){
+  if(currentTheme===theme)return;
+  currentTheme=theme;
+  const t=THEMES[theme];
+  arena.style.background=t.bg;
+  arena.style.borderColor=t.border;
+  themeBannerText.textContent=t.name;
+  themeBannerSub.textContent=t.desc;
+  themeBanner.style.display='block';
+  // Reinit visual effect particles for new theme
+  initStars();
+  setTimeout(()=>{themeBanner.style.display='none';},2500);
+}
+
+// DARK ZONES (level 3+)
+function updateDarkZones(){
+  darkZones.forEach(z=>z.remove());darkZones=[];
+  if(currentLevel<3)return;
+  const count=Math.min(currentLevel-2,4);
+  const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
+  for(let i=0;i<count;i++){
+    const z=document.createElement('div');z.className='dark-zone';
+    const r=40+Math.random()*50;
+    z.style.cssText=`width:${r*2}px;height:${r*2}px;left:${Math.random()*(arenaW-r*2)}px;top:${Math.random()*(arenaH-r*2)+20}px;opacity:${0.5+Math.random()*0.3}`;
+    arena.appendChild(z);darkZones.push(z);
+  }
+}
 
 // PARTICLES
-function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const angle=Math.random()*Math.PI*2;const dist=30+Math.random()*40;p.style.cssText=`width:6px;height:6px;background:${color};left:${x}px;top:${y}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
+function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const a=Math.random()*Math.PI*2;const d=30+Math.random()*40;p.style.cssText=`width:6px;height:6px;background:${color};left:${x}px;top:${y}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
 
-// ACHIEVEMENT TOAST
+// ACHIEVEMENT
 let achTimer=null;
 function showAchievement(text){achievementToast.textContent=text;achievementToast.style.display='block';clearTimeout(achTimer);achTimer=setTimeout(()=>{achievementToast.style.display='none';},2500);}
 
-// STORAGE — per mode records
+// RECORDS
 function getAllRecords(){try{return JSON.parse(localStorage.getItem('glipx_records')||'{}');}catch{return{};}}
-function saveAllRecords(data){try{localStorage.setItem('glipx_records',JSON.stringify(data));}catch{}}
-function getRecord(mode){const all=getAllRecords();return all[mode]||{score:0,combo:0,level:0,scoreLvl:0};}
+function saveAllRecords(d){try{localStorage.setItem('glipx_records',JSON.stringify(d));}catch{}}
+function getRecord(mode){return getAllRecords()[mode]||{score:0,combo:0,level:0,scoreLvl:0};}
 function updateRecords(){
-  const all=getAllRecords();
-  const r=all[currentMode]||{score:0,combo:0,level:0,scoreLvl:0};
-  const isNewScore=score>r.score;
-  const isNewCombo=bestCombo>r.combo;
-  const isNewLevel=currentLevel>r.level;
+  const all=getAllRecords();const r=all[currentMode]||{score:0,combo:0,level:0,scoreLvl:0};
+  const isNewScore=score>r.score,isNewCombo=bestCombo>r.combo,isNewLevel=currentLevel>r.level;
   if(isNewScore){r.score=score;r.scoreLvl=currentLevel;}
-  if(isNewCombo)r.combo=bestCombo;
-  if(isNewLevel)r.level=currentLevel;
-  all[currentMode]=r;
-  saveAllRecords(all);
+  if(isNewCombo)r.combo=bestCombo;if(isNewLevel)r.level=currentLevel;
+  all[currentMode]=r;saveAllRecords(all);
   return{isNewScore,isNewCombo,isNewLevel};
 }
 function loadStartRecords(mode){
-  const m=mode||currentMode;
-  const r=getRecord(m);
-  const mLabel=MODES[m].label;
-  const mColor=MODES[m].color;
-  const scoreStr=r.score?`<span style="color:#e0e8ff;font-weight:500">${r.score} pts</span>`:'<span style="color:#e0e8ff">—</span>';
-  const lvlStr=r.scoreLvl?` · Lvl ${r.scoreLvl}`:'';
-  const comboStr=r.combo?` · Combo <span style="color:#e0e8ff">x${r.combo}</span>`:'';
-  document.getElementById('record-line').innerHTML=`<span style="color:${mColor};font-weight:500">${mLabel}</span> &nbsp;Best: ${scoreStr}${lvlStr}${comboStr}`;
+  const r=getRecord(mode||currentMode);const m=MODES[mode||currentMode];
+  if(!r.score){recordLine.innerHTML=`<span style="color:${m.color};font-weight:500">${m.label}</span> &nbsp;No record yet — be the first!`;return;}
+  recordLine.innerHTML=`<span style="color:${m.color};font-weight:500">${m.label}</span> &nbsp;Best: <span style="color:#e0e8ff;font-weight:500">${r.score} pts</span>${r.scoreLvl?` · Lvl ${r.scoreLvl}`:''}${r.combo?` · Combo <span style="color:#e0e8ff">x${r.combo}</span>`:''}`;
 }
 
 // ACHIEVEMENTS
 const ACHIEVEMENTS=[
   {id:'combo5',check:()=>combo>=5,text:'🔥 Combo x5!'},
   {id:'combo10',check:()=>combo>=10,text:'⚡ Combo x10!'},
+  {id:'combo20',check:()=>combo>=20,text:'🌟 Combo x20!'},
+  {id:'combo50',check:()=>combo>=50,text:'👑 Combo x50! Insane!'},
   {id:'level5',check:()=>currentLevel>=5,text:'🏆 Reached Level 5!'},
+  {id:'level6',check:()=>currentLevel>=6,text:'❄️ Ice Storm unlocked!'},
   {id:'level10',check:()=>currentLevel>=10,text:'🌟 Reached Level 10!'},
+  {id:'level11',check:()=>currentLevel>=11,text:'🌋 Vulkan unlocked!'},
+  {id:'level16',check:()=>currentLevel>=16,text:'💚 Matrix unlocked!'},
+  {id:'level21',check:()=>currentLevel>=21,text:'🌀 Void unlocked!'},
+  {id:'level26',check:()=>currentLevel>=26,text:'⚡ Neon City unlocked!'},
   {id:'score1000',check:()=>score>=1000,text:'💯 1000 Points!'},
   {id:'score5000',check:()=>score>=5000,text:'🚀 5000 Points!'},
+  {id:'score20000',check:()=>score>=20000,text:'🏅 20,000 Points!'},
 ];
 let unlockedAch=new Set();
 function loadAch(){try{unlockedAch=new Set(JSON.parse(localStorage.getItem('glipx_ach')||'[]'));}catch{}}
 function saveAch(){try{localStorage.setItem('glipx_ach',JSON.stringify([...unlockedAch]));}catch{}}
-function checkAch(){ACHIEVEMENTS.forEach(a=>{if(!unlockedAch.has(a.id)&&a.check()){unlockedAch.add(a.id);saveAch();setTimeout(()=>showAchievement(a.text),300);}});}
+function checkAch(){ACHIEVEMENTS.forEach(a=>{if(!unlockedAch.has(a.id)&&a.check()){unlockedAch.add(a.id);saveAch();setTimeout(()=>showAchievement(a.text),400);}});}
 
+// LEVEL BAR + MIN TIME
 function updateLevelBar(){
   const cfg=getLevelCfg(currentLevel);
   levelLabel.textContent=`Level ${currentLevel}`;
@@ -384,95 +558,212 @@ function updateLevelBar(){
   levelFill.style.width=Math.min(100,(levelScore/cfg.pts)*100)+'%';
 }
 
+// LEVEL UP
+function tryLevelUp(){
+  const cfg=getLevelCfg(currentLevel);
+  if(levelScore>=cfg.pts)doLevelUp();
+}
+
 function doLevelUp(){
   soundLevelUp();
-  clearTimeout(spawnTimer);clearInterval(countTimer);
+  clearTimeout(spawnTimer);clearInterval(countTimer);clearInterval(moveTimer);
   running=false;
-  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  targets.forEach(t=>{clearTimeout(t.timeout);if(t.moveInterval)clearInterval(t.moveInterval);t.el.remove();});targets=[];
+  darkZones.forEach(z=>z.remove());darkZones=[];
   currentLevel++;levelScore=0;
   const cfg=getLevelCfg(currentLevel);
   levelupSub.textContent=`Level ${currentLevel} · ${cfg.pts} pts needed`;
-  levelupSplash.classList.remove('show');
-  void levelupSplash.offsetWidth;
-  levelupSplash.classList.add('show');
+  levelupSplash.classList.remove('show');void levelupSplash.offsetWidth;levelupSplash.classList.add('show');
   updateLevelBar();checkAch();
+  applyTheme(cfg.theme);
   setTimeout(()=>{
     running=true;
-    if(currentMode!=='zen'){
-      timeLeft=currentMode==='blitz'?Math.max(18,cfg.time-8):cfg.time;
-      timeDisp.textContent=timeLeft;
-      timerBar.style.transition='none';timerBar.style.width='100%';
-      requestAnimationFrame(()=>{timerBar.style.transition=`width ${timeLeft}s linear`;timerBar.style.width='0%';});
-      clearInterval(countTimer);
-      countTimer=setInterval(()=>{if(!paused){timeLeft--;timeDisp.textContent=timeLeft;if(timeLeft<=0)endGame();}},1000);
-    }
-    spawnTimer=setTimeout(spawnTarget,500);
-  },1500);
+    updateDarkZones();
+    startLevelTimer();
+    spawnTimer=setTimeout(()=>spawnTarget(),500);
+    // Wave attack level 8+
+    if(currentLevel>=8)setTimeout(()=>spawnWave(),3000);
+  },1600);
 }
 
-const COLORS=[{bg:'#1a3a5c',border:'#378ADD',text:'#a0d0ff'},{bg:'#1a3d2e',border:'#1D9E75',text:'#7ee8bb'},{bg:'#3d1a1a',border:'#D85A30',text:'#ffaa88'},{bg:'#2d1a3d',border:'#7F77DD',text:'#c4b8ff'},{bg:'#3d2e00',border:'#EF9F27',text:'#ffd88a'}];
-const PU_BASE=['time','boost','clear','heart','shield','slow'];
-function getPUTypes(){const t=[...PU_BASE];if(currentMode==='zen')t.splice(t.indexOf('time'),1);if(currentLevel>=4)t.push('bomb');return t;}
+function startLevelTimer(){
+  const cfg=getLevelCfg(currentLevel);
+  if(currentMode==='zen')return;
+  timeLeft=currentMode==='blitz'?Math.max(20,cfg.time-10):cfg.time;
+  timeDisp.textContent=timeLeft;
+  clearInterval(countTimer);
+  countTimer=setInterval(()=>{
+    if(paused)return;
+    timeLeft--;timeDisp.textContent=timeLeft;
+    if(timeLeft<=0)endGame();
+  },1000);
+}
 
-function spawnTarget(){
+// COLORS per theme
+function getColors(){
+  if(currentTheme==='ice')return[
+    {bg:'#0a1e38',border:'#4a90d9',text:'#a0d0ff'},
+    {bg:'#0a1e2e',border:'#5DC4E8',text:'#b0e8ff'},
+    {bg:'#0e1a2e',border:'#7F77DD',text:'#c4b8ff'},
+    {bg:'#0a1828',border:'#378ADD',text:'#80c0ff'},
+    {bg:'#0e2030',border:'#1D9E75',text:'#7ee8bb'},
+  ];
+  if(currentTheme==='vulkan')return[
+    {bg:'#2e0a00',border:'#D85A30',text:'#ffaa88'},
+    {bg:'#2e1000',border:'#EF9F27',text:'#ffd88a'},
+    {bg:'#1e0800',border:'#cc3300',text:'#ff8866'},
+    {bg:'#280e00',border:'#ff6600',text:'#ffcc88'},
+    {bg:'#1a0600',border:'#ff4400',text:'#ff9966'},
+  ];
+  if(currentTheme==='matrix')return[
+    {bg:'#001400',border:'#00cc44',text:'#88ffaa'},
+    {bg:'#001800',border:'#00ff66',text:'#aaffcc'},
+    {bg:'#001000',border:'#009933',text:'#66ee88'},
+    {bg:'#001600',border:'#33ff88',text:'#99ffbb'},
+    {bg:'#000e00',border:'#00ee55',text:'#77ffaa'},
+  ];
+  return[
+    {bg:'#1a3a5c',border:'#378ADD',text:'#a0d0ff'},
+    {bg:'#1a3d2e',border:'#1D9E75',text:'#7ee8bb'},
+    {bg:'#3d1a1a',border:'#D85A30',text:'#ffaa88'},
+    {bg:'#2d1a3d',border:'#7F77DD',text:'#c4b8ff'},
+    {bg:'#3d2e00',border:'#EF9F27',text:'#ffd88a'},
+  ];
+}
+
+const PU_BASE=['time','boost','clear','shield','slow'];
+const PU_ZEN=['boost','clear','heart','shield','slow'];
+function getPUTypes(){
+  const t=currentMode==='zen'?[...PU_ZEN]:[...PU_BASE];
+  if(currentLevel>=4)t.push('bomb');
+  if(currentLevel>=5)t.push('mini');
+  return t;
+}
+
+function spawnWave(){
+  if(!running||paused)return;
+  const count=2+Math.floor(currentLevel/4);
+  for(let i=0;i<Math.min(count,5);i++){
+    setTimeout(()=>{if(running&&!paused)spawnTarget(false,false,true);},i*180);
+  }
+}
+
+function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   if(!running||paused)return;
   const puTypes=getPUTypes();
-  const isPU=Math.random()<0.13;
+  const roll=Math.random();
+  const isFake=forceFake||(currentLevel>=6&&roll<0.08);
+  const isMini=forceMini||(!isFake&&currentLevel>=5&&roll>=0.08&&roll<0.15);
+  const isPU=!isFake&&!isMini&&roll>=0.15&&roll<0.28;
   const puType=isPU?puTypes[Math.floor(Math.random()*puTypes.length)]:null;
   const cfg=getLevelCfg(currentLevel);
   const blitzMod=currentMode==='blitz'?0.68:1;
   const slowMod=slowActive?1.7:1;
-  const size=Math.max(36,64-currentLevel*1.2);
+  const COLORS=getColors();
   const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
-  const x=Math.random()*(arenaW-size-8)+4;
-  const y=Math.random()*(arenaH-size-20)+10;
+
+  let size;
+  if(isMini)size=Math.max(22,28-currentLevel*0.5);
+  else if(isFake)size=Math.max(36,62-currentLevel*1.1);
+  else size=Math.max(36,64-currentLevel*1.1);
+
+  let x,y;
+  // Level 3+: 40% chance to spawn inside a dark zone to hide the circle
+  if(currentLevel>=3&&darkZones.length>0&&Math.random()<0.4){
+    const dz=darkZones[Math.floor(Math.random()*darkZones.length)];
+    const dzX=parseFloat(dz.style.left);const dzY=parseFloat(dz.style.top);
+    const dzR=parseFloat(dz.style.width)/2;
+    x=Math.min(Math.max(dzX+dzR/2,4),arenaW-size-4);
+    y=Math.min(Math.max(dzY+dzR/2,10),arenaH-size-10);
+  } else {
+    x=Math.random()*(arenaW-size-8)+4;
+    y=Math.random()*(arenaH-size-20)+10;
+  }
   const c=COLORS[Math.floor(Math.random()*COLORS.length)];
-  const lifeMs=Math.max(560,cfg.lifeBase*blitzMod*slowMod);
+  const lifeMs=Math.max(560,cfg.lifeBase*blitzMod*slowMod*(isMini?0.8:1));
+
   const el=document.createElement('div');
-  const puColor={time:'#378ADD',boost:'#FAC775',clear:'#5DCAA5',heart:'#ff6b88',shield:'#7F77DD',slow:'#a0c4ff',bomb:'#ff4444'}[puType]||c.border;
-  el.className='target'+(isPU?' pu-'+puType:'');
-  el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:${isPU?'#0a0a1a':c.bg};border:2.5px solid ${isPU?puColor:c.border};`;
+  const puColor={time:'#378ADD',boost:'#FAC775',clear:'#5DCAA5',heart:'#ff6b88',shield:'#7F77DD',slow:'#a0c4ff',bomb:'#ff4444',mini:'#FAC775'}[puType]||c.border;
+  let cls='target';
+  if(isPU)cls+=` pu-${puType}`;
+  if(isFake)cls+=' fake';
+  if(isMini)cls+=' pu-mini';
+  el.className=cls;
+
+  const fakeBorderColor=currentTheme==='matrix'?'#ff4444':'#cc2222';
+  const borderColor=isFake?fakeBorderColor:(isPU?puColor:(isMini?'#FAC775':c.border));
+  const bgColor=isPU?'#0a0a1a':(isFake?'#1a0000':(isMini?'#1a1400':c.bg));
+  el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:${bgColor};border:2.5px ${isFake?'dashed':'solid'} ${borderColor};`;
+
   const r=(size/2)-3;const circ=2*Math.PI*r;
-  const icons={time:'T',boost:'2x',clear:'✦',heart:'❤',shield:'🛡',slow:'❄',bomb:'💣'};
-  const icon=isPU?(icons[puType]||''):'';
-  const iconSize=isPU?(puType==='clear'?18:14):11;
-el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${isPU?puColor:c.border}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${iconSize}px;position:relative;z-index:1;color:${isPU?'#e0e8ff':c.text};font-weight:500">${icon}</span>`;
+  const icons={time:'T',boost:'2x',clear:'✦',heart:'❤',shield:'🛡',slow:'❄',bomb:'💣',mini:'●'};
+  const icon=isPU?(icons[puType]||''):(isFake?'✕':(isMini?'●':''));
+  const iconColor=isFake?'#ff4444':(isPU?'#e0e8ff':(isMini?'#FAC775':c.text));
+  const iconSize=isPU?(puType==='clear'?18:14):(isFake?12:(isMini?9:11));
+  el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${iconSize}px;position:relative;z-index:1;color:${iconColor};font-weight:500">${icon}</span>`;
+
+  // MOVING circles (level 5+)
+  let moveInterval=null;
+  if(currentLevel>=5&&!isMini&&!isFake&&Math.random()<Math.min(0.5,(currentLevel-4)*0.1)){
+    let cx=x,cy=y;
+    const dx=(Math.random()-0.5)*2.5,dy=(Math.random()-0.5)*2.5;
+    moveInterval=setInterval(()=>{
+      if(!running||paused){clearInterval(moveInterval);return;}
+      cx+=dx;cy+=dy;
+      if(cx<4)cx=4;if(cx>arenaW-size-4)cx=arenaW-size-4;
+      if(cy<10)cy=10;if(cy>arenaH-size-10)cy=arenaH-size-10;
+      el.style.left=cx+'px';el.style.top=cy+'px';
+    },30);
+  }
+
   let hit=false;
   el.addEventListener('pointerdown',e=>{
     e.stopPropagation();
     if(!hit&&running&&!paused){
       hit=true;
-      if(isPU){handlePowerup(puType,x,y,size);}
-      else{
-        const pts=Math.round(10*combo*(boostActive?2:1));
+      if(moveInterval)clearInterval(moveInterval);
+      if(isFake){
+        // FAKE: penalty
+        const penalty=Math.min(score,20);
+        score=Math.max(0,score-penalty);
+        scoreDisp.textContent=score;
+        soundMiss();
+        showPop(x+size/2-16,y-6,'#ff4444',`-${penalty} fake!`);
+        const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
+      } else if(isPU){
+        handlePU(puType,x,y,size);
+      } else {
+        // Normal or mini
+        const multiplier=isMini?2:1;
+        const pts=Math.round(10*combo*(boostActive?2:1)*multiplier);
         score+=pts;levelScore+=pts;
         scoreDisp.textContent=score;
-        combo=Math.min(combo+1,12);
+        combo=combo+1;
         if(combo>bestCombo)bestCombo=combo;
         comboDisp.textContent='x'+combo;
         soundHit(combo);
         spawnParticles(x+size/2,y+size/2,c.border);
-        showPop(x+size/2-16,y-6,boostActive?'#FAC775':'#5DCAA5',`+${pts}`);
+        showPop(x+size/2-16,y-6,boostActive?'#FAC775':(isMini?'#FAC775':'#5DCAA5'),`+${pts}${isMini?' ×2':''}`);
         updateLevelBar();checkAch();
-        if(levelScore>=getLevelCfg(currentLevel).pts)doLevelUp();
+        tryLevelUp();
       }
       el.remove();targets=targets.filter(t=>t.el!==el);
     }
   });
+
   const timeout=setTimeout(()=>{
-    if(!hit&&running){
+    if(moveInterval)clearInterval(moveInterval);
+    if(!hit&&running&&!paused){
       combo=1;comboDisp.textContent='x1';
       if(isPU&&puType==='bomb'){
-        // BOMB EXPIRED: minus score AND minus levelScore
         const penalty=Math.min(score,30);
         score=Math.max(0,score-penalty);
         levelScore=Math.max(0,levelScore-penalty);
         scoreDisp.textContent=score;
-        updateLevelBar();
-        soundPowerup('bomb');
+        soundPU('bomb');updateLevelBar();
         showPop(x,y-6,'#ff4444',`-${penalty}`);
         const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
-      } else if(!isPU){
+      } else if(!isPU&&!isFake){
         soundMiss();
         const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
         if(currentMode==='zen'){
@@ -483,47 +774,57 @@ el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;point
     }
     el.remove();targets=targets.filter(t=>t.el!==el);
   },lifeMs);
-  arena.appendChild(el);targets.push({el,timeout});
-  const nextDelay=Math.max(250,cfg.spawnBase*blitzMod*slowMod);
-  spawnTimer=setTimeout(spawnTarget,nextDelay);
+
+  arena.appendChild(el);targets.push({el,timeout,moveInterval});
+  if(!fromWave){
+    const nextDelay=Math.max(240,cfg.spawnBase*blitzMod*slowMod);
+    spawnTimer=setTimeout(()=>spawnTarget(),nextDelay);
+  }
 }
 
-function handlePowerup(type,x,y,size){
-  soundPowerup(type);
+function handlePU(type,x,y,size){
+  soundPU(type);
   const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
-  if(type==='time'&&currentMode!=='zen'){timeLeft=Math.min(timeLeft+5,70);timeDisp.textContent=timeLeft;showPop(x,y-6,'#378ADD','+5 sec!');}
+  if(type==='time'&&currentMode!=='zen'){timeLeft=Math.min(timeLeft+5,80);timeDisp.textContent=timeLeft;showPop(x,y-6,'#378ADD','+5 sec!');}
   else if(type==='boost'){boostActive=true;boostBanner.style.display='block';clearTimeout(boostTimeout);boostTimeout=setTimeout(()=>{boostActive=false;boostBanner.style.display='none';},6000);showPop(x,y-6,'#FAC775','2x boost!');}
-  else if(type==='clear'){const bonus=targets.length*8*(boostActive?2:1);score+=bonus;levelScore+=bonus;scoreDisp.textContent=score;targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];updateLevelBar();showPop(arenaW/2-30,arenaH/2-10,'#5DCAA5',`+${bonus} clear!`);if(levelScore>=getLevelCfg(currentLevel).pts)doLevelUp();}
-  else if(type==='heart'){livesLeft=Math.min(livesLeft+1,9);updateLivesDisplay();showPop(x,y-6,'#ff6b88','+1 life!');}
+  else if(type==='clear'){const bonus=targets.length*8*(boostActive?2:1);score+=bonus;levelScore+=bonus;scoreDisp.textContent=score;targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];updateLevelBar();showPop(arenaW/2-30,arenaH/2-10,'#5DCAA5',`+${bonus} clear!`);tryLevelUp();}
+  else if(type==='heart'){if(currentMode==='zen'){livesLeft=Math.min(livesLeft+1,9);updateLivesDisplay();showPop(x,y-6,'#ff6b88','+1 life!');}else{timeLeft=Math.min(timeLeft+8,90);timeDisp.textContent=timeLeft;showPop(x,y-6,'#ff6b88','+8 sec! ❤');}}
   else if(type==='shield'){shieldActive=true;shieldIndicator.style.display='block';showPop(x,y-6,'#7F77DD','🛡 Shield!');}
   else if(type==='slow'){slowActive=true;slowBanner.style.display='block';clearTimeout(slowTimeout);slowTimeout=setTimeout(()=>{slowActive=false;slowBanner.style.display='none';},5000);showPop(x,y-6,'#a0c4ff','❄ Slow!');}
   else if(type==='bomb'){
-    // BOMB TAPPED: minus points, levelScore unchanged
     const penalty=Math.min(score,30);
     score=Math.max(0,score-penalty);
     scoreDisp.textContent=score;
-    soundPowerup('bomb');
+    soundPU('bomb');
     showPop(x,y-6,'#ff4444',`-${penalty} oops!`);
     const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
+  }
+  else if(type==='mini'){
+    // mini as PU — treat as normal hit with bonus
+    const pts=Math.round(20*combo*(boostActive?2:1));
+    score+=pts;levelScore+=pts;scoreDisp.textContent=score;
+    showPop(x,y-6,'#FAC775',`+${pts} mini!`);updateLevelBar();tryLevelUp();
   }
 }
 
 function showPop(x,y,color,text){const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${Math.min(Math.max(x,5),arena.clientWidth-90)}px;top:${Math.max(y,10)}px;color:${color};font-size:13px`;pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),700);}
-
 function updateLivesDisplay(){livesDisplay.innerHTML='';for(let i=0;i<=livesLeft;i++){const h=document.createElement('div');h.className='life-heart';h.textContent='❤️';livesDisplay.appendChild(h);}}
 
-function pauseGame(){if(!running||paused)return;paused=true;document.getElementById('pause-score').textContent=score;document.getElementById('pause-level').textContent=currentLevel;pauseScreen.style.display='flex';}
-function resumeGame(){paused=false;pauseScreen.style.display='none';if(running)spawnTimer=setTimeout(spawnTarget,300);}
+function pauseGame(){if(!running||paused)return;paused=true;clearTimeout(spawnTimer);document.getElementById('pause-score').textContent=score;document.getElementById('pause-level').textContent=currentLevel;pauseScreen.style.display='flex';}
+function resumeGame(){paused=false;pauseScreen.style.display='none';if(running)spawnTimer=setTimeout(()=>spawnTarget(),300);}
 function quitToMenu(){
   paused=false;running=false;
-  clearTimeout(spawnTimer);clearInterval(countTimer);clearTimeout(boostTimeout);clearTimeout(slowTimeout);
-  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  clearTimeout(spawnTimer);clearInterval(countTimer);clearInterval(moveTimer);
+  clearTimeout(boostTimeout);clearTimeout(slowTimeout);
+  targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
+  darkZones.forEach(z=>z.remove());darkZones=[];
   pauseScreen.style.display='none';levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   const go=document.getElementById('game-over-screen');if(go)go.remove();
+  currentTheme='space';arena.style.background='#0a0a1a';arena.style.borderColor='#2a2a4e';
+  initStars();
   startScreen.style.display='flex';
   loadStartRecords(currentMode);
-  activeRecTab=currentMode;
 }
 pauseBtn.addEventListener('click',pauseGame);
 resumeBtn.addEventListener('click',resumeGame);
@@ -546,37 +847,30 @@ function startGame(){
   boostActive=false;slowActive=false;shieldActive=false;
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   scoreDisp.textContent='0';comboDisp.textContent='x1';
-  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
+  darkZones.forEach(z=>z.remove());darkZones=[];
   const go=document.getElementById('game-over-screen');if(go)go.remove();
-  startScreen.style.display='none';
-  levelBarWrap.style.display='block';
-  pauseBtn.style.display='block';
-  updateLevelBar();
-  const cfg=getLevelCfg(1);
+  startScreen.style.display='none';levelBarWrap.style.display='block';pauseBtn.style.display='block';
+  currentTheme='space';arena.style.background='#0a0a1a';arena.style.borderColor='#2a2a4e';
+  updateLevelBar();updateDarkZones();
   if(currentMode==='zen'){
     livesLeft=4;updateLivesDisplay();livesDisplay.style.display='flex';
     timeDisp.textContent='∞';timeBox.querySelector('.stat-label').textContent='Lives';
-    timerBar.style.width='0';
   } else {
-    livesDisplay.innerHTML='';
-    timeLeft=currentMode==='blitz'?Math.max(18,cfg.time-8):cfg.time;
-    timeDisp.textContent=timeLeft;
-    timeBox.querySelector('.stat-label').textContent='Time';
-    timerBar.style.transition='none';timerBar.style.width='100%';
-    requestAnimationFrame(()=>{timerBar.style.transition=`width ${timeLeft}s linear`;timerBar.style.width='0%';});
-    clearInterval(countTimer);
-    countTimer=setInterval(()=>{if(!paused){timeLeft--;timeDisp.textContent=timeLeft;if(timeLeft<=0)endGame();}},1000);
+    livesDisplay.innerHTML='';timeBox.querySelector('.stat-label').textContent='Time';
+    startLevelTimer();
   }
-  spawnTimer=setTimeout(spawnTarget,350);
+  spawnTimer=setTimeout(()=>spawnTarget(),400);
 }
 
 function endGame(){
   running=false;paused=false;
-  clearTimeout(spawnTimer);clearInterval(countTimer);clearTimeout(boostTimeout);clearTimeout(slowTimeout);
-  boostActive=false;slowActive=false;shieldActive=false;
-  boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
-  targets.forEach(t=>{clearTimeout(t.timeout);t.el.remove();});targets=[];
+  clearTimeout(spawnTimer);clearInterval(countTimer);
+  clearTimeout(boostTimeout);clearTimeout(slowTimeout);
+  targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
+  darkZones.forEach(z=>z.remove());darkZones=[];
   levelBarWrap.style.display='none';pauseBtn.style.display='none';
+  boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   soundGameOver();gamesPlayed++;
   const{isNewScore,isNewCombo,isNewLevel}=updateRecords();
   const showGO=()=>{
