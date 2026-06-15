@@ -123,6 +123,60 @@
     .pause-title{font-size:28px;font-weight:600;color:#e0e8ff}
     .pause-action-btn{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:11px 34px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:200px}
     .pause-sec-btn{background:none;color:#6677aa;border:0.5px solid #2a2a4e;border-radius:12px;padding:10px 34px;font-size:13px;cursor:pointer;font-family:inherit;width:200px}
+  
+    /* DAILY CHALLENGE */
+    #daily-btn{background:#1a1a2e;border:0.5px solid #EF9F27;border-radius:12px;padding:8px 16px;color:#FAC775;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;width:176px;justify-content:center}
+    #daily-btn.done{border-color:#1D9E75;color:#5DCAA5}
+    #daily-streak{font-size:11px;color:#6677aa;text-align:center}
+    #daily-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
+    #daily-box{background:#0f0f22;border:0.5px solid #EF9F27;border-radius:16px;padding:24px;max-width:320px;width:90%}
+    .daily-title{font-size:11px;color:#EF9F27;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+    .daily-date{font-size:12px;color:#6677aa;margin-bottom:14px}
+    .daily-challenge-box{background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:14px;text-align:center}
+    .daily-challenge-icon{font-size:36px;margin-bottom:6px}
+    .daily-challenge-name{font-size:17px;font-weight:600;color:#e0e8ff;margin-bottom:4px}
+    .daily-challenge-desc{font-size:12px;color:#6677aa;line-height:1.5}
+    .daily-challenge-goal{font-size:13px;color:#FAC775;margin-top:8px;font-weight:500}
+    .daily-progress-wrap{margin-bottom:14px}
+    .daily-progress-label{display:flex;justify-content:space-between;font-size:11px;color:#6677aa;margin-bottom:4px}
+    .daily-progress-bg{background:#0a0a1a;border-radius:4px;height:8px;overflow:hidden}
+    .daily-progress-fill{height:8px;background:#EF9F27;border-radius:4px;transition:width .4s}
+    .daily-done-badge{background:#1a3d2e;border:0.5px solid #1D9E75;border-radius:10px;padding:10px;text-align:center;margin-bottom:14px}
+    .daily-done-text{font-size:14px;font-weight:600;color:#5DCAA5}
+    .daily-done-sub{font-size:11px;color:#6677aa;margin-top:3px}
+    .streak-display{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
+    .streak-flame{font-size:24px}
+    .streak-count{font-size:28px;font-weight:700;color:#FAC775}
+    .streak-label{font-size:12px;color:#6677aa}
+    #play-daily-btn{background:#EF9F27;color:#1a0e00;border:none;border-radius:12px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;margin-bottom:8px}
+    #play-daily-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+  
+    /* SHOP */
+    #shop-btn{font-size:11px;color:#6677aa;cursor:pointer;background:none;border:0.5px solid #2a2a4e;border-radius:8px;padding:4px 10px;font-family:inherit}
+    #shop-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
+    #shop-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:20px;max-width:340px;width:92%;max-height:88vh;overflow-y:auto}
+    .shop-title{font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:4px}
+    .shop-sub{font-size:11px;color:#6677aa;margin-bottom:14px}
+    .shop-section{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.08em;margin:14px 0 8px}
+    .shop-item{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+    .shop-item.owned{border-color:#1D9E75}
+    .shop-item.active-item{border-color:#378ADD;background:#0e1e38}
+    .shop-icon{font-size:28px;width:40px;text-align:center;flex-shrink:0}
+    .shop-info{flex:1;min-width:0}
+    .shop-name{font-size:13px;font-weight:600;color:#e0e8ff}
+    .shop-desc{font-size:11px;color:#6677aa;margin-top:2px;line-height:1.4}
+    .shop-price{font-size:12px;font-weight:600;color:#FAC775;margin-top:4px}
+    .shop-buy-btn{background:#EF9F27;color:#1a0e00;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0}
+    .shop-buy-btn.owned-btn{background:#1D9E75;color:#fff;cursor:pointer}
+    .shop-buy-btn.active-btn{background:#378ADD;color:#fff;cursor:default}
+    .shop-buy-btn:disabled{opacity:0.5;cursor:not-allowed}
+    /* Skin preview circles */
+    .skin-preview{display:flex;gap:6px;margin-top:6px}
+    .skin-dot{width:16px;height:16px;border-radius:50%;border:2px solid}
+    /* Active skin indicator in arena */
+    #active-skin-label{position:absolute;bottom:8px;right:10px;font-size:10px;color:#6677aa;z-index:4;display:none}
+
   </style>
 </head>
 <body>
@@ -206,8 +260,11 @@
       <button id="mode-cycle-btn">Mode: Normal →</button>
       <div class="mode-desc-text" id="mode-desc-text">Survive each level — time + points both matter!</div>
       <button class="play-btn" id="start-btn">Play</button>
+      <button id="daily-btn">⭐ Daily Challenge</button>
+      <div id="daily-streak"></div>
       <div style="display:flex;gap:12px;align-items:center">
         <button id="info-btn-start">ℹ️ Power-ups</button>
+        <button id="shop-btn">🛒 Shop</button>
         <div class="settings-link" id="settings-link">⚙️ Settings</div>
       </div>
     </div>
@@ -222,6 +279,74 @@
   <div id="ad-banner">
     <div><div class="ad-label">Ad</div><div class="ad-text">Play without interruptions — Glipx Premium</div></div>
     <button class="ad-cta" id="ad-cta-btn">$1.99</button>
+  </div>
+</div>
+
+
+
+<div id="shop-panel">
+  <div id="shop-box">
+    <div class="shop-title">🛒 Shop</div>
+    <div class="shop-sub">Customize your experience</div>
+
+    <div class="shop-section">Remove Ads</div>
+    <div class="shop-item" id="shop-premium-item">
+      <div class="shop-icon">⭐</div>
+      <div class="shop-info">
+        <div class="shop-name">Glipx Premium</div>
+        <div class="shop-desc">Remove all ads forever and support the developer</div>
+        <div class="shop-price">$1.99</div>
+      </div>
+      <button class="shop-buy-btn" id="shop-premium-btn">Buy</button>
+    </div>
+
+    <div class="shop-section">Themes — unlock early</div>
+    <div id="shop-themes"></div>
+
+    <div class="shop-section">Circle Skins</div>
+    <div id="shop-skins"></div>
+
+    <div class="shop-section">Streak Protection</div>
+    <div class="shop-item" id="shop-streak-item">
+      <div class="shop-icon">🛡️</div>
+      <div class="shop-info">
+        <div class="shop-name">Streak Shield</div>
+        <div class="shop-desc">Protect your daily streak once — if you miss a day your streak is saved</div>
+        <div class="shop-price">$0.49</div>
+        <div id="streak-shield-status" style="font-size:11px;color:#5DCAA5;margin-top:3px;display:none">✓ Shield active!</div>
+      </div>
+      <button class="shop-buy-btn" id="shop-streak-btn">Buy</button>
+    </div>
+
+    <button class="panel-close" id="shop-close">Close</button>
+  </div>
+</div>
+
+<div id="daily-panel">
+  <div id="daily-box">
+    <div class="daily-title">⭐ Daily Challenge</div>
+    <div class="daily-date" id="daily-date"></div>
+    <div class="streak-display">
+      <div class="streak-flame">🔥</div>
+      <div class="streak-count" id="streak-count">0</div>
+      <div class="streak-label">day streak</div>
+    </div>
+    <div class="daily-challenge-box">
+      <div class="daily-challenge-icon" id="dc-icon">🎯</div>
+      <div class="daily-challenge-name" id="dc-name">Score Attack</div>
+      <div class="daily-challenge-desc" id="dc-desc">Reach a target score in one game</div>
+      <div class="daily-challenge-goal" id="dc-goal">Goal: 1000 points</div>
+    </div>
+    <div class="daily-progress-wrap" id="dc-progress-wrap">
+      <div class="daily-progress-label"><span>Progress</span><span id="dc-progress-label">0 / 1000</span></div>
+      <div class="daily-progress-bg"><div class="daily-progress-fill" id="dc-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="daily-done-badge" id="dc-done-badge" style="display:none">
+      <div class="daily-done-text">✓ Challenge Complete!</div>
+      <div class="daily-done-sub" id="dc-done-sub">Come back tomorrow for a new challenge</div>
+    </div>
+    <button id="play-daily-btn">Play Challenge</button>
+    <button class="panel-close" id="daily-close">Close</button>
   </div>
 </div>
 
@@ -627,6 +752,11 @@ function startLevelTimer(){
 
 // COLORS per theme
 function getColors(){
+  // Check for active skin
+  const skinColors=getSkinColors();
+  if(skinColors){
+    return skinColors.map(c=>({bg:c+'22',border:c,text:c}));
+  }
   if(currentTheme==='ice')return[
     {bg:'#0a1e38',border:'#4a90d9',text:'#a0d0ff'},
     {bg:'#0a1e2e',border:'#5DC4E8',text:'#b0e8ff'},
@@ -768,6 +898,7 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
         if(combo>bestCombo)bestCombo=combo;
         comboDisp.textContent='x'+combo;
         soundHit(combo);
+        if(dailyActive&&slowActive)dailySlowScore+=pts;
         spawnParticles(x+size/2,y+size/2,c.border);
         showPop(x+size/2-16,y-6,boostActive?'#FAC775':(isMini?'#FAC775':'#5DCAA5'),`+${pts}${isMini?' ×2':''}`);
         updateLevelBar();checkAch();
@@ -823,6 +954,7 @@ function handlePU(type,x,y,size){
   else if(type==='shield'){shieldActive=true;shieldIndicator.style.display='block';showPop(x,y-6,'#7F77DD','🛡 Shield!');}
   else if(type==='slow'){slowActive=true;slowBanner.style.display='block';clearTimeout(slowTimeout);slowTimeout=setTimeout(()=>{slowActive=false;slowBanner.style.display='none';},5000);showPop(x,y-6,'#a0c4ff','❄ Slow!');}
   else if(type==='bomb'){
+    // Bomb tapped = penalty
     const penalty=Math.min(score,30);
     score=Math.max(0,score-penalty);
     scoreDisp.textContent=score;
@@ -904,6 +1036,10 @@ function endGame(){
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   soundGameOver();gamesPlayed++;
   const{isNewScore,isNewCombo,isNewLevel}=updateRecords();
+  // Check daily challenge
+  if(dailyActive){
+    checkDailyProgress({score,combo:bestCombo,level:currentLevel,bombsDefused:dailyBombsDefused,slowScore:dailySlowScore});
+  }
   const showGO=()=>{
     const go=document.createElement('div');go.id='game-over-screen';
     const badges=[];
@@ -934,8 +1070,305 @@ function endGame(){
   if(gamesPlayed%3===0&&!isPremium){showInterstitial(showGO);}else{showGO();}
 }
 
-startBtn.addEventListener('click',startGame);
-loadPrefs();loadAch();
+
+
+// ===== SHOP SYSTEM =====
+const SHOP_THEMES=[
+  {id:'ice',   name:'❄️ Ice Storm', desc:'Unlock the Ice Storm theme now',    price:'$0.99', unlocksAt:6},
+  {id:'vulkan',name:'🌋 Vulkan',    desc:'Unlock the Vulkan theme now',       price:'$0.99', unlocksAt:11},
+  {id:'matrix',name:'💚 Matrix',    desc:'Unlock the Matrix theme now',       price:'$0.99', unlocksAt:16},
+  {id:'void',  name:'🌀 Void',      desc:'Unlock the Void theme now',         price:'$0.99', unlocksAt:21},
+  {id:'neon',  name:'⚡ Neon City', desc:'Unlock the Neon City theme now',    price:'$0.99', unlocksAt:26},
+];
+
+const SHOP_SKINS=[
+  {id:'default', name:'Classic Circles', desc:'The original Glipx circles',    price:'Free',  icon:'⭕', colors:['#378ADD','#1D9E75','#D85A30','#7F77DD','#EF9F27']},
+  {id:'hearts',  name:'Heart Circles',   desc:'Cute heart-shaped style',        price:'$0.99', icon:'❤️', colors:['#ff6b88','#ff4466','#ff8899','#cc2255','#ff99aa']},
+  {id:'stars',   name:'Star Power',      desc:'Shining star vibes',             price:'$0.99', icon:'⭐', colors:['#FAC775','#EF9F27','#ffd700','#ffaa00','#ffe066']},
+  {id:'neon_s',  name:'Neon Glow',       desc:'Electric neon colors',           price:'$0.99', icon:'💜', colors:['#ff00ff','#00ffff','#ff50a0','#a000ff','#00ff80']},
+  {id:'ice_s',   name:'Frost',           desc:'Cool icy blue tones',            price:'$0.99', icon:'❄️', colors:['#a0d8ff','#5dc4e8','#80b8ff','#c0e8ff','#378ADD']},
+];
+
+function getShopData(){try{return JSON.parse(localStorage.getItem('glipx_shop')||'{}');}catch{return{};}}
+function saveShopData(d){try{localStorage.setItem('glipx_shop',JSON.stringify(d));}catch{}}
+
+let activeSkin='default';
+
+function loadShopState(){
+  const d=getShopData();
+  activeSkin=d.activeSkin||'default';
+}
+
+function getSkinColors(){
+  const d=getShopData();
+  const owned=d.ownedSkins||['default'];
+  if(!owned.includes(activeSkin))return null;
+  const skin=SHOP_SKINS.find(s=>s.id===activeSkin);
+  if(!skin||activeSkin==='default')return null;
+  return skin.colors;
+}
+
+function isThemeUnlocked(themeId){
+  const d=getShopData();
+  const owned=d.ownedThemes||[];
+  const rec=getAllRecords();
+  // Check if unlocked via level in any mode
+  const maxLevel=Math.max(...Object.values(rec).map(r=>r.level||0),0);
+  const cfg=SHOP_THEMES.find(t=>t.id===themeId);
+  if(!cfg)return true;
+  return owned.includes(themeId)||maxLevel>=cfg.unlocksAt;
+}
+
+function renderShop(){
+  const d=getShopData();
+  const ownedThemes=d.ownedThemes||[];
+  const ownedSkins=d.ownedSkins||['default'];
+  const hasStreak=d.streakShield||false;
+
+  // Premium
+  const pb=document.getElementById('shop-premium-btn');
+  const pi=document.getElementById('shop-premium-item');
+  if(isPremium){pb.textContent='✓ Owned';pb.className='shop-buy-btn owned-btn';pb.disabled=true;pi.classList.add('owned');}
+  else{pb.textContent='Buy';pb.className='shop-buy-btn';pb.disabled=false;pb.onclick=()=>buyPremium();}
+
+  // Themes
+  const themeContainer=document.getElementById('shop-themes');
+  themeContainer.innerHTML='';
+  SHOP_THEMES.forEach(t=>{
+    const alreadyUnlocked=isThemeUnlocked(t.id);
+    const owned=ownedThemes.includes(t.id)||alreadyUnlocked;
+    const div=document.createElement('div');
+    div.className='shop-item'+(owned?' owned':'');
+    const levelNote=alreadyUnlocked&&!ownedThemes.includes(t.id)?'<div style="font-size:10px;color:#5DCAA5;margin-top:3px">✓ Unlocked via level progress</div>':'';
+    div.innerHTML=`<div class="shop-icon">${t.name.split(' ')[0]}</div><div class="shop-info"><div class="shop-name">${t.name}</div><div class="shop-desc">${t.desc}</div><div class="shop-price">${owned?'Owned':t.price}</div>${levelNote}</div><button class="shop-buy-btn ${owned?'owned-btn':''}" ${owned?'disabled':''} data-theme="${t.id}">${owned?'✓':'Buy'}</button>`;
+    if(!owned)div.querySelector('button').onclick=()=>buyTheme(t.id,t.price);
+    themeContainer.appendChild(div);
+  });
+
+  // Skins
+  const skinContainer=document.getElementById('shop-skins');
+  skinContainer.innerHTML='';
+  SHOP_SKINS.forEach(s=>{
+    const owned=ownedSkins.includes(s.id);
+    const isActive=activeSkin===s.id;
+    const div=document.createElement('div');
+    div.className='shop-item'+(owned?' owned':'')+(isActive?' active-item':'');
+    const dots=s.colors.map(c=>`<div class="skin-dot" style="background:${c}33;border-color:${c}"></div>`).join('');
+    div.innerHTML=`<div class="shop-icon">${s.icon}</div><div class="shop-info"><div class="shop-name">${s.name}</div><div class="shop-desc">${s.desc}</div><div class="shop-price">${s.id==='default'?'Free':(owned?'Owned':s.price)}</div><div class="skin-preview">${dots}</div></div><button class="shop-buy-btn ${isActive?'active-btn':owned?'owned-btn':''}" data-skin="${s.id}">${isActive?'Active':owned?'Equip':'Buy'}</button>`;
+    const btn=div.querySelector('button');
+    if(isActive){btn.disabled=true;}
+    else if(owned){btn.onclick=()=>equipSkin(s.id);}
+    else if(s.id!=='default'){btn.onclick=()=>buySkin(s.id,s.price);}
+    skinContainer.appendChild(div);
+  });
+
+  // Streak shield
+  const sb=document.getElementById('shop-streak-btn');
+  const ssi=document.getElementById('streak-shield-status');
+  if(hasStreak){sb.textContent='✓ Active';sb.className='shop-buy-btn owned-btn';sb.disabled=true;ssi.style.display='block';}
+  else{sb.textContent='Buy';sb.className='shop-buy-btn';sb.disabled=false;sb.onclick=()=>buyStreakShield();}
+}
+
+function buyPremium(){
+  if(confirm('Purchase Glipx Premium for $1.99?\nThis removes all ads forever.')){
+    isPremium=true;applyPrefs();savePrefs();
+    alert('✓ Thank you for Glipx Premium! Ads removed.');
+    renderShop();
+  }
+}
+
+function buyTheme(id,price){
+  if(confirm(`Purchase ${SHOP_THEMES.find(t=>t.id===id).name} for ${price}?`)){
+    const d=getShopData();
+    d.ownedThemes=d.ownedThemes||[];
+    if(!d.ownedThemes.includes(id))d.ownedThemes.push(id);
+    saveShopData(d);
+    alert(`✓ ${SHOP_THEMES.find(t=>t.id===id).name} unlocked! It will appear when you reach its level in game.`);
+    renderShop();
+  }
+}
+
+function buySkin(id,price){
+  if(confirm(`Purchase ${SHOP_SKINS.find(s=>s.id===id).name} for ${price}?`)){
+    const d=getShopData();
+    d.ownedSkins=d.ownedSkins||['default'];
+    if(!d.ownedSkins.includes(id))d.ownedSkins.push(id);
+    saveShopData(d);
+    equipSkin(id);
+  }
+}
+
+function equipSkin(id){
+  const d=getShopData();
+  const owned=d.ownedSkins||['default'];
+  if(!owned.includes(id))return;
+  activeSkin=id;d.activeSkin=id;saveShopData(d);
+  renderShop();
+}
+
+function buyStreakShield(){
+  if(confirm('Purchase a Streak Shield for $0.49?\nThis will protect your streak once if you miss a day.')){
+    const d=getShopData();
+    d.streakShield=true;saveShopData(d);
+    alert('✓ Streak Shield active! Your next missed day will be forgiven.');
+    renderShop();
+  }
+}
+
+function openShop(){renderShop();document.getElementById('shop-panel').style.display='flex';}
+document.getElementById('shop-btn').addEventListener('click',openShop);
+document.getElementById('shop-close').addEventListener('click',()=>document.getElementById('shop-panel').style.display='none');
+document.getElementById('shop-premium-btn').addEventListener('click',buyPremium);
+// ===== END SHOP SYSTEM =====
+
+// ===== DAILY CHALLENGE SYSTEM =====
+const DAILY_CHALLENGES=[
+  {id:'score',icon:'🎯',name:'Score Attack',desc:'Reach the target score in a single game',goalLabel:'points',modes:['normal','blitz'],
+   getGoal:(seed)=>Math.floor(500+((seed%10)*150)),check:(data,goal)=>data.score>=goal,getProgress:(data)=>data.score},
+  {id:'combo',icon:'⚡',name:'Combo King',desc:'Build a combo chain without missing',goalLabel:'combo',modes:['normal','blitz','zen'],
+   getGoal:(seed)=>5+Math.floor(seed%8),check:(data,goal)=>data.combo>=goal,getProgress:(data)=>data.combo},
+  {id:'level',icon:'🏆',name:'Level Runner',desc:'Reach the target level in one game',goalLabel:'level',modes:['normal'],
+   getGoal:(seed)=>2+Math.floor(seed%4),check:(data,goal)=>data.level>=goal,getProgress:(data)=>data.level},
+  {id:'bomb',icon:'💣',name:'Bomb Defuser',desc:'Tap bombs before they explode (reach level 4 first!)',goalLabel:'bombs defused',modes:['normal'],
+   getGoal:(seed)=>3+Math.floor(seed%5),check:(data,goal)=>data.bombsDefused>=goal,getProgress:(data)=>data.bombsDefused||0},
+  {id:'survive',icon:'⏱️',name:'Survivor',desc:'Survive as long as possible — reach the target level without losing',goalLabel:'level in Zen',modes:['zen'],
+   getGoal:(seed)=>2+Math.floor(seed%3),check:(data,goal)=>data.level>=goal,getProgress:(data)=>data.level},
+  {id:'slow',icon:'❄️',name:'Slow & Steady',desc:'Score points while Slow Motion is active',goalLabel:'points with slow',modes:['normal'],
+   getGoal:(seed)=>Math.floor(200+((seed%6)*80)),check:(data,goal)=>data.slowScore>=goal,getProgress:(data)=>data.slowScore||0},
+];
+
+function getDailySeed(){
+  const d=new Date();
+  return d.getFullYear()*10000+((d.getMonth()+1)*100)+d.getDate();
+}
+function getTodayStr(){
+  const d=new Date();
+  return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+}
+function getDailyChallenge(){
+  const seed=getDailySeed();
+  const idx=seed%DAILY_CHALLENGES.length;
+  const ch={...DAILY_CHALLENGES[idx]};
+  ch.goal=ch.getGoal(seed);
+  ch.mode=ch.modes[seed%ch.modes.length];
+  return ch;
+}
+
+function getDailyState(){
+  try{return JSON.parse(localStorage.getItem('glipx_daily')||'{}');}catch{return{};}
+}
+function saveDailyState(s){try{localStorage.setItem('glipx_daily',JSON.stringify(s));}catch{}}
+
+function getDailyStreak(){
+  const s=getDailyState();
+  return s.streak||0;
+}
+
+function updateDailyBtn(){
+  const s=getDailyState();
+  const today=getTodayStr();
+  const done=s.lastCompleted===today;
+  const btn=document.getElementById('daily-btn');
+  const streakEl=document.getElementById('daily-streak');
+  const streak=s.streak||0;
+  if(done){
+    btn.textContent='✓ Daily Done';btn.className='daily-btn done';
+    document.getElementById('daily-btn').style.borderColor='#1D9E75';
+    document.getElementById('daily-btn').style.color='#5DCAA5';
+  } else {
+    btn.innerHTML='⭐ Daily Challenge';
+    btn.style.borderColor='#EF9F27';btn.style.color='#FAC775';
+  }
+  if(streak>0)streakEl.textContent=`🔥 ${streak} day streak`;
+  else streakEl.textContent='';
+}
+
+let dailyActive=false,dailyChallenge=null,dailyBombsDefused=0,dailySlowScore=0;
+
+function openDailyPanel(){
+  const ch=getDailyChallenge();
+  dailyChallenge=ch;
+  const s=getDailyState();
+  const today=getTodayStr();
+  const done=s.lastCompleted===today;
+  const progress=s.todayProgress||0;
+
+  document.getElementById('daily-date').textContent=`Today — ${today}`;
+  document.getElementById('streak-count').textContent=s.streak||0;
+  document.getElementById('dc-icon').textContent=ch.icon;
+  document.getElementById('dc-name').textContent=ch.name;
+  document.getElementById('dc-desc').textContent=ch.desc;
+  document.getElementById('dc-goal').textContent=`Goal: ${ch.goal} ${ch.goalLabel}`;
+
+  const pct=Math.min(100,(progress/ch.goal)*100);
+  document.getElementById('dc-progress-fill').style.width=pct+'%';
+  document.getElementById('dc-progress-label').textContent=`${Math.min(progress,ch.goal)} / ${ch.goal}`;
+
+  if(done){
+    document.getElementById('dc-done-badge').style.display='block';
+    document.getElementById('dc-progress-wrap').style.display='none';
+    document.getElementById('play-daily-btn').disabled=true;
+    document.getElementById('play-daily-btn').textContent='✓ Completed Today!';
+  } else {
+    document.getElementById('dc-done-badge').style.display='none';
+    document.getElementById('dc-progress-wrap').style.display='block';
+    document.getElementById('play-daily-btn').disabled=false;
+    document.getElementById('play-daily-btn').textContent=`Play — ${ch.mode.charAt(0).toUpperCase()+ch.mode.slice(1)} Mode`;
+  }
+
+  document.getElementById('daily-panel').style.display='flex';
+}
+
+function startDailyChallenge(){
+  if(!dailyChallenge)return;
+  dailyActive=true;dailyBombsDefused=0;dailySlowScore=0;
+  // Set mode to challenge mode
+  const mIdx=MODE_ORDER.indexOf(dailyChallenge.mode);
+  if(mIdx>=0){modeIdx=mIdx;currentMode=dailyChallenge.mode;updateModeCycleBtn();}
+  document.getElementById('daily-panel').style.display='none';
+  startGame();
+}
+
+function checkDailyProgress(data){
+  if(!dailyActive||!dailyChallenge)return;
+  const ch=dailyChallenge;
+  const progress=ch.getProgress(data);
+  const s=getDailyState();
+  const today=getTodayStr();
+  if(s.lastCompleted===today)return;
+
+  // Save progress
+  s.todayProgress=Math.max(s.todayProgress||0,progress);
+  saveDailyState(s);
+
+  if(ch.check(data,ch.goal)){
+    // COMPLETED!
+    dailyActive=false;
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    const yStr=`${yesterday.getDate()}/${yesterday.getMonth()+1}/${yesterday.getFullYear()}`;
+    let streak;
+    const shopD=getShopData();
+    if(s.lastCompleted===yStr){streak=(s.streak||0)+1;}
+    else if(shopD.streakShield&&s.streak>0){
+      // Use streak shield
+      streak=s.streak;shopD.streakShield=false;saveShopData(shopD);
+      setTimeout(()=>showAchievement('🛡️ Streak Shield used — streak saved!'),800);
+    } else {streak=1;}
+    s.streak=streak;s.lastCompleted=today;s.todayProgress=ch.goal;
+    saveDailyState(s);
+    updateDailyBtn();
+    // Show achievement
+    setTimeout(()=>showAchievement(`⭐ Daily complete! 🔥 ${streak} day streak!`),500);
+  }
+}
+
+document.getElementById('daily-btn').addEventListener('click',openDailyPanel);
+document.getElementById('daily-close').addEventListener('click',()=>document.getElementById('daily-panel').style.display='none');
+document.getElementById('play-daily-btn').addEventListener('click',startDailyChallenge);
+// ===== END DAILY CHALLENGE =====
+
+startBtn.addEventListener('click',()=>{dailyActive=false;startGame();});
+loadPrefs();loadAch();loadShopState();updateDailyBtn();
 initStars();drawStars();
 loadStartRecords('normal');
 })();
