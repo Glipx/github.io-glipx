@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.json"/>
   <title>Glipx</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{height:100%;background:#0a0a1a;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
     #gw{max-width:480px;margin:0 auto;padding:env(safe-area-inset-top,12px) 12px env(safe-area-inset-bottom,12px) 12px;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:8px;user-select:none}
     #header{display:flex;justify-content:space-between;align-items:center;gap:5px}
@@ -35,17 +35,15 @@
     .target:active{transform:scale(.88)}
     @keyframes pop-in{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
     @keyframes flash-red{from{opacity:.25}to{opacity:0}}
-    @keyframes flash-green{from{opacity:.2}to{opacity:0}}
-    @keyframes combo-float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-30px)}}
+        @keyframes combo-float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-30px)}}
     @keyframes shrink-ring{from{stroke-dashoffset:0}to{stroke-dashoffset:188}}
     @keyframes levelup-anim{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
     @keyframes particle-fly{from{opacity:1;transform:translate(0,0) scale(1)}to{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0)}}
     @keyframes achievement-slide{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes wave-in{0%{opacity:0;transform:scale(0)}60%{opacity:1;transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
-    .combo-pop{position:absolute;pointer-events:none;font-size:13px;font-weight:600;animation:combo-float .6s ease-out forwards;z-index:10}
+    .combo-pop{position:absolute;pointer-events:none;font-size:13px;font-weight:600;animation:combo-float .6s ease-out forwards;z-index:10;background:none;border:none;}
     .particle{position:absolute;border-radius:50%;pointer-events:none;animation:particle-fly .5s ease-out forwards;z-index:10}
     .miss-flash{position:absolute;inset:0;background:rgba(220,60,40,.18);pointer-events:none;border-radius:16px;animation:flash-red .25s ease-out forwards;z-index:10}
-    .good-flash{position:absolute;inset:0;background:rgba(29,158,117,.12);pointer-events:none;border-radius:16px;animation:flash-green .25s ease-out forwards;z-index:10}
     #lives-display{position:absolute;top:8px;left:44px;display:flex;gap:3px;z-index:5}
     .life-heart{font-size:13px;line-height:1}
     #pause-btn{position:absolute;top:6px;left:8px;background:rgba(26,26,46,.85);border:0.5px solid #2a2a4e;border-radius:8px;color:#6677aa;font-size:16px;padding:3px 7px;cursor:pointer;display:none;font-family:inherit;z-index:6;line-height:1}
@@ -707,7 +705,7 @@ function updateDarkZones(){
 }
 
 // PARTICLES
-function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const a=Math.random()*Math.PI*2;const d=30+Math.random()*40;p.style.cssText=`width:6px;height:6px;background:${color};left:${x}px;top:${y}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
+function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const a=Math.random()*Math.PI*2;const d=25+Math.random()*35;p.style.cssText=`width:5px;height:5px;border-radius:50%;background:${color};position:absolute;left:${x}px;top:${y}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;pointer-events:none;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
 
 // ACHIEVEMENT
 let achTimer=null;
@@ -908,7 +906,7 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   const icon=isPU?(icons[puType]||''):(isFake?'✕':(isMini?'●':''));
   const iconColor=isFake?'#ff4444':(isPU?'#e0e8ff':(isMini?'#FAC775':c.text));
   const iconSize=isPU?(puType==='clear'?18:14):(isFake?12:(isMini?9:11));
-  el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${iconSize}px;position:relative;z-index:1;color:${iconColor};font-weight:500">${icon}</span>`;
+  el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${iconSize}px;position:relative;z-index:1;color:${iconColor};font-weight:500">${icon}</span>`;
 
   // MOVING circles (level 5+)
   let moveInterval=null;
@@ -1153,6 +1151,7 @@ function openSharePanel(data){
   document.getElementById('share-text-box').textContent=buildShareText(data);
   document.getElementById('share-copy-confirm').textContent='';
   document.getElementById('share-panel').style.display='flex';
+  checkShareSupport();
 }
 
 function copyShareText(){
@@ -1178,9 +1177,21 @@ function shareNative(){
       title:'GLIPX — Beat my score!',
       text:text,
       url:'https://glipx.github.io/github.io-glipx/'
-    }).catch(()=>{});
+    }).then(()=>{}).catch((err)=>{
+      if(err.name!=='AbortError'){copyShareText();}
+    });
   } else {
-    copyShareText();
+    // Not supported — show message
+    document.getElementById('share-copy-confirm').textContent='⚠️ App sharing not supported on this device';
+    setTimeout(()=>document.getElementById('share-copy-confirm').textContent='',3000);
+  }
+}
+
+function checkShareSupport(){
+  const btn=document.getElementById('share-native-btn');
+  if(!navigator.share){
+    btn.style.opacity='0.4';
+    btn.title='Not supported on this browser — use Copy instead';
   }
 }
 
