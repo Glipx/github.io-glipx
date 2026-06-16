@@ -177,6 +177,31 @@
     /* Active skin indicator in arena */
     #active-skin-label{position:absolute;bottom:8px;right:10px;font-size:10px;color:#6677aa;z-index:4;display:none}
 
+  
+    /* SOCIAL SHARING */
+    .share-btn{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:8px 14px;color:#a0b0cc;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .15s}
+    .share-btn:hover{border-color:#378ADD;color:#a0c4ff}
+    #share-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:999}
+    #share-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:320px;width:92%}
+    .share-title{font-size:15px;font-weight:600;color:#e0e8ff;margin-bottom:4px}
+    .share-sub{font-size:11px;color:#6677aa;margin-bottom:16px}
+    #share-card{background:#0a0a1a;border:0.5px solid #2a2a4e;border-radius:12px;padding:16px;margin-bottom:16px;text-align:center}
+    .share-card-logo{font-size:22px;font-weight:700;color:#e0e8ff;letter-spacing:2px;margin-bottom:8px}
+    .share-card-logo span{color:#378ADD}
+    .share-card-score{font-size:42px;font-weight:700;color:#e0e8ff;line-height:1}
+    .share-card-label{font-size:11px;color:#6677aa;margin-top:2px}
+    .share-card-stats{display:flex;justify-content:center;gap:16px;margin-top:10px}
+    .share-card-stat{text-align:center}
+    .share-card-stat-val{font-size:16px;font-weight:600;color:#e0e8ff}
+    .share-card-stat-label{font-size:9px;color:#6677aa;text-transform:uppercase}
+    .share-card-tag{font-size:10px;color:#6677aa;margin-top:10px}
+    #share-text-box{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:8px;padding:10px;font-size:12px;color:#a0b0cc;line-height:1.5;margin-bottom:12px;cursor:pointer;user-select:all}
+    .share-options{display:flex;flex-direction:column;gap:8px}
+    .share-option-btn{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:11px 16px;color:#e0e8ff;font-size:13px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:10px;transition:all .15s;width:100%}
+    .share-option-btn:hover{border-color:#378ADD;background:#0e1e38}
+    .share-option-icon{font-size:18px;width:24px;text-align:center}
+    #share-copy-confirm{font-size:11px;color:#5DCAA5;text-align:center;height:16px;margin-bottom:4px}
+
   </style>
 </head>
 <body>
@@ -283,6 +308,33 @@
 </div>
 
 
+
+
+<div id="share-panel">
+  <div id="share-box">
+    <div class="share-title">📤 Share your score</div>
+    <div class="share-sub">Challenge your friends to beat this!</div>
+    <div id="share-card">
+      <div class="share-card-logo">GLIP<span>X</span></div>
+      <div class="share-card-score" id="share-score">0</div>
+      <div class="share-card-label">points</div>
+      <div class="share-card-stats">
+        <div class="share-card-stat"><div class="share-card-stat-val" id="share-level">1</div><div class="share-card-stat-label">Level</div></div>
+        <div class="share-card-stat"><div class="share-card-stat-val" id="share-combo">x1</div><div class="share-card-stat-label">Best Combo</div></div>
+        <div class="share-card-stat"><div class="share-card-stat-val" id="share-mode">Normal</div><div class="share-card-stat-label">Mode</div></div>
+      </div>
+      <div class="share-card-tag">glipx — can you beat me?</div>
+    </div>
+    <div id="share-text-box" onclick="copyShareText()" title="Tap to copy"></div>
+    <div id="share-copy-confirm"></div>
+    <div class="share-options">
+      <button class="share-option-btn" onclick="shareNative()"><span class="share-option-icon">📤</span>Share via...</button>
+      <button class="share-option-btn" onclick="shareWhatsApp()"><span class="share-option-icon">💬</span>Share on WhatsApp</button>
+      <button class="share-option-btn" onclick="copyShareText()"><span class="share-option-icon">📋</span>Copy to clipboard</button>
+    </div>
+    <button class="panel-close" id="share-close" style="margin-top:12px">Close</button>
+  </div>
+</div>
 
 <div id="shop-panel">
   <div id="shop-box">
@@ -1057,6 +1109,7 @@ function endGame(){
       </div>
       ${badges.join('')}
       <button class="play-btn" id="retry-btn">Play again</button>
+      <button class="share-btn" id="go-share-btn" style="margin:0 auto">📤 Share score</button>
       <div style="display:flex;gap:12px">
         <div class="settings-link" id="go-info">ℹ️ Power-ups</div>
         <div class="settings-link" id="go-menu">↩ Menu</div>
@@ -1066,11 +1119,78 @@ function endGame(){
     document.getElementById('retry-btn').addEventListener('click',()=>{if(gamesPlayed%3===0&&!isPremium){showInterstitial(startGame);}else{startGame();}});
     document.getElementById('go-info').addEventListener('click',openInfo);
     document.getElementById('go-menu').addEventListener('click',quitToMenu);
+    document.getElementById('go-share-btn').addEventListener('click',()=>{
+      openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
+    });
   };
   if(gamesPlayed%3===0&&!isPremium){showInterstitial(showGO);}else{showGO();}
 }
 
 
+
+
+// ===== SOCIAL SHARING =====
+let shareData={score:0,level:1,combo:1,mode:'Normal'};
+
+function buildShareText(data){
+  const emojis={space:'🌌',ice:'❄️',vulkan:'🌋',matrix:'💚',void:'🌀',neon:'⚡'};
+  const modeEmoji={Normal:'🎯',Blitz:'⚡',Zen:'🧘'}[data.mode]||'🎯';
+  return `${modeEmoji} GLIPX — ${data.mode} Mode
+🏆 Score: ${data.score} pts
+📈 Level: ${data.level}
+⚡ Best Combo: x${data.combo}
+
+Can you beat me? 👇
+https://glipx.github.io/github.io-glipx/`;
+}
+
+function openSharePanel(data){
+  shareData=data;
+  document.getElementById('share-score').textContent=data.score;
+  document.getElementById('share-level').textContent=data.level;
+  document.getElementById('share-combo').textContent='x'+data.combo;
+  document.getElementById('share-mode').textContent=data.mode;
+  document.getElementById('share-text-box').textContent=buildShareText(data);
+  document.getElementById('share-copy-confirm').textContent='';
+  document.getElementById('share-panel').style.display='flex';
+}
+
+function copyShareText(){
+  const text=buildShareText(shareData);
+  navigator.clipboard.writeText(text).then(()=>{
+    document.getElementById('share-copy-confirm').textContent='✓ Copied to clipboard!';
+    setTimeout(()=>document.getElementById('share-copy-confirm').textContent='',2500);
+  }).catch(()=>{
+    // Fallback
+    const el=document.getElementById('share-text-box');
+    const range=document.createRange();range.selectNode(el);
+    window.getSelection().removeAllRanges();window.getSelection().addRange(range);
+    document.execCommand('copy');
+    document.getElementById('share-copy-confirm').textContent='✓ Copied!';
+    setTimeout(()=>document.getElementById('share-copy-confirm').textContent='',2500);
+  });
+}
+
+function shareNative(){
+  const text=buildShareText(shareData);
+  if(navigator.share){
+    navigator.share({
+      title:'GLIPX — Beat my score!',
+      text:text,
+      url:'https://glipx.github.io/github.io-glipx/'
+    }).catch(()=>{});
+  } else {
+    copyShareText();
+  }
+}
+
+function shareWhatsApp(){
+  const text=encodeURIComponent(buildShareText(shareData));
+  window.open('https://wa.me/?text='+text,'_blank');
+}
+
+document.getElementById('share-close').addEventListener('click',()=>document.getElementById('share-panel').style.display='none');
+// ===== END SOCIAL SHARING =====
 
 // ===== SHOP SYSTEM =====
 const SHOP_THEMES=[
