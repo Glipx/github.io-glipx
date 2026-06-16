@@ -200,6 +200,26 @@
     .share-option-icon{font-size:18px;width:24px;text-align:center}
     #share-copy-confirm{font-size:11px;color:#5DCAA5;text-align:center;height:16px;margin-bottom:4px}
 
+  
+    /* REVIVE SYSTEM */
+    #revive-screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0a0a1aee;border-radius:16px;z-index:16;text-align:center}
+    .revive-title{font-size:26px;font-weight:700;color:#e0e8ff}
+    .revive-sub{font-size:13px;color:#6677aa;max-width:240px;line-height:1.6}
+    .revive-score{font-size:38px;font-weight:600;color:#e0e8ff}
+    .revive-score-label{font-size:11px;color:#6677aa}
+    #revive-countdown{font-size:13px;color:#EF9F27;font-weight:500}
+    #revive-timer-ring{transform:rotate(-90deg)}
+    .revive-ad-btn{background:#EF9F27;color:#1a0e00;border:none;border-radius:12px;padding:13px 0;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:200px;display:flex;align-items:center;justify-content:center;gap:8px}
+    .revive-skip-btn{background:none;color:#6677aa;border:0.5px solid #2a2a4e;border-radius:12px;padding:10px 0;font-size:13px;cursor:pointer;font-family:inherit;width:200px}
+    #revive-ad-overlay{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:16px}
+    #revive-ad-content{background:#1a1a2e;border-radius:16px;padding:32px 24px;max-width:320px;width:90%;text-align:center}
+    .ad-sim-label{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+    .ad-sim-title{font-size:20px;font-weight:600;color:#e0e8ff;margin-bottom:8px}
+    .ad-sim-sub{font-size:13px;color:#6677aa;margin-bottom:20px;line-height:1.5}
+    #ad-sim-timer{font-size:13px;color:#EF9F27;margin-bottom:14px}
+    #ad-sim-close{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:11px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;opacity:0.4}
+    #ad-sim-close:not(:disabled){opacity:1}
+
   </style>
 </head>
 <body>
@@ -289,6 +309,32 @@
         <button id="info-btn-start">ℹ️ Power-ups</button>
         <button id="shop-btn">🛒 Shop</button>
         <div class="settings-link" id="settings-link">⚙️ Settings</div>
+      </div>
+    </div>
+
+
+    <div id="revive-screen">
+      <div class="revive-title">💀 Game Over!</div>
+      <svg width="80" height="80" viewBox="0 0 80 80">
+        <circle cx="40" cy="40" r="36" fill="none" stroke="#2a2a4e" stroke-width="6"/>
+        <circle id="revive-timer-ring" cx="40" cy="40" r="36" fill="none" stroke="#EF9F27" stroke-width="6"
+          stroke-dasharray="226" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/>
+      </svg>
+      <div id="revive-countdown">5</div>
+      <div class="revive-score" id="revive-score-disp">0</div>
+      <div class="revive-score-label">points — Level <span id="revive-level-disp">1</span></div>
+      <div class="revive-sub">Watch a short ad to continue from where you left off</div>
+      <button class="revive-ad-btn" id="revive-watch-btn">📺 Watch ad &amp; continue</button>
+      <button class="revive-skip-btn" id="revive-skip-btn">No thanks — end game</button>
+    </div>
+
+    <div id="revive-ad-overlay">
+      <div id="revive-ad-content">
+        <div class="ad-sim-label">Advertisement</div>
+        <div class="ad-sim-title">🚀 Try Glipx Premium!</div>
+        <div class="ad-sim-sub">Remove all ads forever and play uninterrupted for just $1.99</div>
+        <div id="ad-sim-timer">Ad ends in 5 seconds...</div>
+        <button id="ad-sim-close" disabled>Continue playing ✓</button>
       </div>
     </div>
 
@@ -982,26 +1028,45 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   let shapesvg='';
   const half=size/2;
   if(skinShape==='heart'&&!isPU&&!isFake&&!isMini){
-    // Heart SVG path
-    const s2=size*0.38;
+    // Proper heart using two circles + triangle
+    // Heart built from cubic bezier — classic symmetric heart
+    const m=size*0.08; // margin
+    const hw=size-m*2; // heart width
+    const hh=size-m*2; // heart height
+    const cx1=m, cy1=m+hh*0.3;
+    const cx2=m+hw*0.5, cy2=m+hh*0.3;
+    // Classic heart path centered in viewBox
+    const hx=half, hy=half;
+    const hs=size*0.42; // scale
+    // Beautiful heart path
+    const heartPath=
+      `M${hx},${hy+hs*0.9} `+
+      `C${hx-hs*1.1},${hy+hs*0.3} ${hx-hs*1.3},${hy-hs*0.5} ${hx-hs*0.7},${hy-hs*0.7} `+
+      `C${hx-hs*0.3},${hy-hs*0.9} ${hx},${hy-hs*0.5} ${hx},${hy-hs*0.5} `+
+      `C${hx},${hy-hs*0.5} ${hx+hs*0.3},${hy-hs*0.9} ${hx+hs*0.7},${hy-hs*0.7} `+
+      `C${hx+hs*1.3},${hy-hs*0.5} ${hx+hs*1.1},${hy+hs*0.3} ${hx},${hy+hs*0.9} Z`;
+    const heartPerim=Math.round(3.2*size);
     shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
-      <path d="M${half},${half*1.55} C${half*0.3},${half*1.0} ${half*-0.15},${half*0.3} ${half*0.5},${half*0.3} C${half*0.75},${half*0.3} ${half},${half*0.55} ${half},${half*0.55} C${half},${half*0.55} ${half*1.25},${half*0.3} ${half*1.5},${half*0.3} C${half*2.15},${half*0.3} ${half*1.7},${half*1.0} ${half},${half*1.55} Z"
-        fill="${skinBorder}22" stroke="${skinBorder}" stroke-width="2.5"
-        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center"/>
+      <path d="${heartPath}" fill="${skinBorder}22" stroke="${skinBorder}44" stroke-width="1"/>
+      <path d="${heartPath}" fill="none" stroke="${skinBorder}" stroke-width="2.8"
+        stroke-dasharray="${heartPerim}" stroke-dashoffset="0" stroke-linecap="round"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
     </svg>`;
     el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
   } else if(skinShape==='star'&&!isPU&&!isFake&&!isMini){
-    // 5-pointed star SVG path
-    const pts=[];const outerR=half*0.88;const innerR=half*0.4;
+    const starPerim=Math.round(2.6*size);
+    const pts=[];const outerR=half*0.85;const innerR=half*0.38;
     for(let i=0;i<10;i++){
       const angle=(i*Math.PI/5)-(Math.PI/2);
       const rad=i%2===0?outerR:innerR;
-      pts.push(`${half+rad*Math.cos(angle)},${half+rad*Math.sin(angle)}`);
+      pts.push(`${(half+rad*Math.cos(angle)).toFixed(2)},${(half+rad*Math.sin(angle)).toFixed(2)}`);
     }
     const starPath='M'+pts.join('L')+'Z';
     shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
-      <path d="${starPath}" fill="${skinBorder}22" stroke="${skinBorder}" stroke-width="2.5"
-        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center"/>
+      <path d="${starPath}" fill="${skinBorder}22" stroke="${skinBorder}44" stroke-width="1"/>
+      <path d="${starPath}" fill="none" stroke="${skinBorder}" stroke-width="2.8"
+        stroke-dasharray="${starPerim}" stroke-dashoffset="0" stroke-linecap="round"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
     </svg>`;
     el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
   } else {
@@ -1158,7 +1223,7 @@ document.getElementById('ad-cta-btn').addEventListener('click',openSettings);
 
 function startGame(){
   score=0;combo=1;bestCombo=1;running=true;paused=false;currentLevel=1;levelScore=0;
-  boostActive=false;slowActive=false;shieldActive=false;
+  boostActive=false;slowActive=false;shieldActive=false;reviveAvailable=true;
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   scoreDisp.textContent='0';comboDisp.textContent='x1';
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
@@ -1191,7 +1256,7 @@ function endGame(){
   if(dailyActive){
     checkDailyProgress({score,combo:bestCombo,level:currentLevel,bombsDefused:dailyBombsDefused,slowScore:dailySlowScore});
   }
-  const showGO=()=>{
+  function showGOScreen(){
     const go=document.createElement('div');go.id='game-over-screen';
     const badges=[];
     if(isNewScore)badges.push('<div class="pb-badge">🏆 New Score Record!</div>');
@@ -1215,14 +1280,15 @@ function endGame(){
       </div>
     `;
     arena.appendChild(go);
-    document.getElementById('retry-btn').addEventListener('click',()=>{if(gamesPlayed%3===0&&!isPremium){showInterstitial(startGame);}else{startGame();}});
+    document.getElementById('retry-btn').addEventListener('click',()=>{reviveAvailable=true;if(gamesPlayed%3===0&&!isPremium){showInterstitial(startGame);}else{startGame();}});
     document.getElementById('go-info').addEventListener('click',openInfo);
-    document.getElementById('go-menu').addEventListener('click',quitToMenu);
+    document.getElementById('go-menu').addEventListener('click',()=>{reviveAvailable=true;quitToMenu();});
     document.getElementById('go-share-btn').addEventListener('click',()=>{
       openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
     });
-  };
-  if(gamesPlayed%3===0&&!isPremium){showInterstitial(showGO);}else{showGO();}
+  }
+  // Show revive screen first, then GO screen
+  showReviveScreen();
 }
 
 
@@ -1307,6 +1373,88 @@ document.getElementById('share-native-btn').addEventListener('click',shareNative
 document.getElementById('share-whatsapp-btn').addEventListener('click',shareWhatsApp);
 document.getElementById('share-copy-btn').addEventListener('click',copyShareText);
 // ===== END SOCIAL SHARING =====
+
+
+// ===== REVIVE SYSTEM =====
+let reviveAvailable=true;let reviveTimer=null;let reviveCountdown=5;
+
+function showReviveScreen(){
+  if(!reviveAvailable){showGOScreen();return;}
+  reviveAvailable=false;
+  const reviveScreen=document.getElementById('revive-screen');
+  document.getElementById('revive-score-disp').textContent=score;
+  document.getElementById('revive-level-disp').textContent=currentLevel;
+  reviveScreen.style.display='flex';
+  // Countdown timer ring
+  reviveCountdown=5;
+  document.getElementById('revive-countdown').textContent=reviveCountdown;
+  const ring=document.getElementById('revive-timer-ring');
+  ring.style.strokeDashoffset='0';
+  setTimeout(()=>{ring.style.strokeDashoffset='226';},50);
+  ring.style.transition='stroke-dashoffset 5s linear';
+  reviveTimer=setInterval(()=>{
+    reviveCountdown--;
+    document.getElementById('revive-countdown').textContent=reviveCountdown;
+    if(reviveCountdown<=0){
+      clearInterval(reviveTimer);
+      reviveScreen.style.display='none';
+      showGOScreen();
+    }
+  },1000);
+}
+
+function watchAdAndRevive(){
+  clearInterval(reviveTimer);
+  document.getElementById('revive-screen').style.display='none';
+  // Show simulated ad
+  const overlay=document.getElementById('revive-ad-overlay');
+  const closeBtn=document.getElementById('ad-sim-close');
+  const timerEl=document.getElementById('ad-sim-timer');
+  overlay.style.display='flex';
+  closeBtn.disabled=true;
+  let adSecs=5;
+  timerEl.textContent=`Ad ends in ${adSecs} seconds...`;
+  const adTimer=setInterval(()=>{
+    adSecs--;
+    if(adSecs>0){timerEl.textContent=`Ad ends in ${adSecs} seconds...`;}
+    else{
+      clearInterval(adTimer);
+      timerEl.textContent='Thanks for watching!';
+      closeBtn.disabled=false;
+    }
+  },1000);
+  closeBtn.onclick=()=>{
+    overlay.style.display='none';
+    reviveGame();
+  };
+}
+
+function reviveGame(){
+  // Restore game state and continue
+  running=true;paused=false;
+  combo=1;comboDisp.textContent='x1';
+  // Add 5 seconds if not zen
+  if(currentMode!=='zen'){
+    timeLeft=15;timeDisp.textContent=timeLeft;
+    clearInterval(countTimer);
+    countTimer=setInterval(()=>{if(!paused){timeLeft--;timeDisp.textContent=timeLeft;if(timeLeft<=0)endGame();}},1000);
+  } else {
+    livesLeft=2;updateLivesDisplay();
+  }
+  levelBarWrap.style.display='block';
+  pauseBtn.style.display='block';
+  updateLevelBar();
+  spawnTimer=setTimeout(spawnTarget,400);
+  showAchievement('💪 Revived! Keep going!');
+}
+
+document.getElementById('revive-watch-btn').addEventListener('click',watchAdAndRevive);
+document.getElementById('revive-skip-btn').addEventListener('click',()=>{
+  clearInterval(reviveTimer);
+  document.getElementById('revive-screen').style.display='none';
+  showGOScreen();
+});
+// ===== END REVIVE SYSTEM =====
 
 // ===== SHOP SYSTEM =====
 // No themes in shop — themes unlock via level progression
