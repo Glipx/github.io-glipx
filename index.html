@@ -350,9 +350,6 @@
       <button class="shop-buy-btn" id="shop-premium-btn">Buy</button>
     </div>
 
-    <div class="shop-section">Themes — unlock early</div>
-    <div id="shop-themes"></div>
-
     <div class="shop-section">Circle Skins</div>
     <div id="shop-skins"></div>
 
@@ -491,6 +488,11 @@ const THEMES={
   matrix:{bg:'#000d00',border:'#003300',star:'rgba(80,255,100,',name:'💚 Matrix',desc:'Follow the code',effect:'matrix'},
   void:{bg:'#050508',border:'#1a1a2e',star:'rgba(140,100,255,',name:'🌀 Void',desc:'Beyond the known',effect:'pulse'},
   neon:{bg:'#0a001a',border:'#3a0060',star:'rgba(255,100,255,',name:'⚡ Neon City',desc:'Lights never sleep',effect:'neon'},
+  // Exclusive shop themes
+  galaxy:{bg:'#02000f',border:'#1a0a3e',star:'rgba(200,180,255,',name:'🌠 Galaxy',desc:'Shooting stars',effect:'galaxy'},
+  ocean:{bg:'#000a18',border:'#003355',star:'rgba(80,180,255,',name:'🌊 Deep Ocean',desc:'Underwater world',effect:'ocean'},
+  lava:{bg:'#0f0000',border:'#4a0800',star:'rgba(255,80,0,',name:'🔥 Lava Floor',desc:'Everything is lava',effect:'lava'},
+  midnight:{bg:'#050508',border:'#15153a',star:'rgba(160,160,220,',name:'🌙 Midnight',desc:'Dark elegance',effect:'midnight'},
 };
 
 function getLevelCfg(lvl){
@@ -649,18 +651,15 @@ function drawStars(){
     }
 
   } else if(eff==='neon'){
-    // Neon city — bright streaks and glows
     stars.forEach(s=>{
       const colors=['255,0,255','0,255,255','255,50,150','150,0,255'];
       const c=colors[Math.floor(s.x/W*colors.length)];
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(${c},${s.a})`;ctx.fill();
-      // Glow
       ctx.beginPath();ctx.arc(s.x,s.y,s.r*3,0,Math.PI*2);
       ctx.fillStyle=`rgba(${c},${s.a*0.1})`;ctx.fill();
       s.a+=s.speed*.025;if(s.a>0.9||s.a<0.1)s.speed*=-1;
     });
-    // Horizontal neon lines
     const now2=Date.now()/1000;
     for(let i=0;i<3;i++){
       const y=((now2*30+i*H/3)%H);
@@ -670,6 +669,72 @@ function drawStars(){
       grad2.addColorStop(1,'rgba(0,255,255,0)');
       ctx.fillStyle=grad2;ctx.fillRect(0,y-1,W,2);
     }
+
+  } else if(eff==='galaxy'){
+    // Shooting stars
+    stars.forEach(s=>{
+      if(!s.vy){s.vy=0;s.vx=0;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,180,255,${s.a})`;ctx.fill();
+      s.a+=s.speed*.02;if(s.a>0.9||s.a<0.1)s.speed*=-1;
+    });
+    // Shooting star streaks
+    const now3=Date.now()/1000;
+    for(let i=0;i<2;i++){
+      const progress=((now3*0.3+i*0.5)%1);
+      const sx=W*(i*0.6+0.1);const sy=progress*H*0.6;
+      const len=60;
+      ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx+len,sy+len*0.4);
+      const grad3=ctx.createLinearGradient(sx,sy,sx+len,sy+len*0.4);
+      grad3.addColorStop(0,'rgba(255,255,255,0)');
+      grad3.addColorStop(1,'rgba(255,255,255,0.6)');
+      ctx.strokeStyle=grad3;ctx.lineWidth=1.5;ctx.stroke();
+    }
+
+  } else if(eff==='ocean'){
+    // Slow drifting bubbles
+    stars.forEach(s=>{
+      if(!s.vy){s.vy=-(0.2+Math.random()*0.5);s.vx=(Math.random()-.5)*0.3;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*1.3,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(80,180,255,${s.a*0.6})`;ctx.lineWidth=1;ctx.stroke();
+      s.y+=s.vy;s.x+=s.vx;
+      s.a+=s.speed*.015;if(s.a>0.7||s.a<0.1)s.speed*=-1;
+      if(s.y<-5){s.y=H+5;s.x=Math.random()*W;}
+    });
+    // Caustic light shimmer at top
+    const now4=Date.now()/1000;
+    const grad4=ctx.createLinearGradient(0,0,0,H*0.3);
+    grad4.addColorStop(0,`rgba(0,100,200,${0.06+Math.sin(now4)*0.03})`);
+    grad4.addColorStop(1,'rgba(0,100,200,0)');
+    ctx.fillStyle=grad4;ctx.fillRect(0,0,W,H*0.3);
+
+  } else if(eff==='lava'){
+    // Rising lava bubbles
+    stars.forEach(s=>{
+      if(!s.vy||s.y<-10){
+        s.x=Math.random()*W;s.y=H+10;
+        s.vy=-(0.5+Math.random()*1.5);s.r=Math.random()*4+2;s.a=0.8;s.speed=0.015;
+      }
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,${Math.floor(s.a*60)},0,${s.a})`;ctx.fill();
+      s.y+=s.vy;s.a-=0.004;
+    });
+    // Lava glow at bottom
+    const grad5=ctx.createLinearGradient(0,H-60,0,H);
+    grad5.addColorStop(0,'rgba(255,40,0,0)');grad5.addColorStop(1,'rgba(255,40,0,0.2)');
+    ctx.fillStyle=grad5;ctx.fillRect(0,H-60,W,60);
+
+  } else if(eff==='midnight'){
+    // Slow minimal stars with occasional twinkle burst
+    stars.forEach(s=>{
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*0.8,0,Math.PI*2);
+      ctx.fillStyle=`rgba(160,160,220,${s.a*0.6})`;ctx.fill();
+      s.a+=s.speed*.01;if(s.a>0.7||s.a<0.05)s.speed*=-1;
+    });
+    // Subtle moon glow top-right
+    const grad6=ctx.createRadialGradient(W*0.85,H*0.1,0,W*0.85,H*0.1,80);
+    grad6.addColorStop(0,'rgba(200,200,240,0.06)');grad6.addColorStop(1,'rgba(200,200,240,0)');
+    ctx.fillStyle=grad6;ctx.fillRect(0,0,W,H);
   }
 
   rafId=requestAnimationFrame(drawStars);
@@ -685,7 +750,6 @@ function applyTheme(theme){
   themeBannerText.textContent=t.name;
   themeBannerSub.textContent=t.desc;
   themeBanner.style.display='block';
-  // Reinit visual effect particles for new theme
   initStars();
   setTimeout(()=>{themeBanner.style.display='none';},2500);
 }
@@ -900,13 +964,50 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   const borderColor=isFake?fakeBorderColor:(isPU?puColor:(isMini?'#FAC775':c.border));
   const bgColor=isPU?'#0a0a1a':(isFake?'#1a0000':(isMini?'#1a1400':c.bg));
   el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:${bgColor};border:2.5px ${isFake?'dashed':'solid'} ${borderColor};`;
+  // Apply skin bg color
+  if(!isPU&&!isFake&&!isMini){const s=getActiveSkin();if(s){const sc=s.colors[Math.floor(Math.random()*s.colors.length)];el.style.background=sc+'18';}}
 
   const r=(size/2)-3;const circ=2*Math.PI*r;
   const icons={time:'T',boost:'2x',clear:'✦',heart:'❤',shield:'🛡',slow:'❄',bomb:'💣',mini:'●'};
   const icon=isPU?(icons[puType]||''):(isFake?'✕':(isMini?'●':''));
   const iconColor=isFake?'#ff4444':(isPU?'#e0e8ff':(isMini?'#FAC775':c.text));
   const iconSize=isPU?(puType==='clear'?18:14):(isFake?12:(isMini?9:11));
-  el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:${iconSize}px;position:relative;z-index:1;color:${iconColor};font-weight:500">${icon}</span>`;
+
+  // Shaped skin support
+  const activeSkinData=(!isPU&&!isFake&&!isMini)?getActiveSkin():null;
+  const skinShape=activeSkinData?activeSkinData.shape:'circle';
+  const useSkinColor=activeSkinData&&activeSkinData.colors;
+  const skinBorder=useSkinColor?activeSkinData.colors[Math.floor(Math.random()*activeSkinData.colors.length)]:borderColor;
+
+  let shapesvg='';
+  const half=size/2;
+  if(skinShape==='heart'&&!isPU&&!isFake&&!isMini){
+    // Heart SVG path
+    const s2=size*0.38;
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
+      <path d="M${half},${half*1.55} C${half*0.3},${half*1.0} ${half*-0.15},${half*0.3} ${half*0.5},${half*0.3} C${half*0.75},${half*0.3} ${half},${half*0.55} ${half},${half*0.55} C${half},${half*0.55} ${half*1.25},${half*0.3} ${half*1.5},${half*0.3} C${half*2.15},${half*0.3} ${half*1.7},${half*1.0} ${half},${half*1.55} Z"
+        fill="${skinBorder}22" stroke="${skinBorder}" stroke-width="2.5"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center"/>
+    </svg>`;
+    el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+  } else if(skinShape==='star'&&!isPU&&!isFake&&!isMini){
+    // 5-pointed star SVG path
+    const pts=[];const outerR=half*0.88;const innerR=half*0.4;
+    for(let i=0;i<10;i++){
+      const angle=(i*Math.PI/5)-(Math.PI/2);
+      const rad=i%2===0?outerR:innerR;
+      pts.push(`${half+rad*Math.cos(angle)},${half+rad*Math.sin(angle)}`);
+    }
+    const starPath='M'+pts.join('L')+'Z';
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
+      <path d="${starPath}" fill="${skinBorder}22" stroke="${skinBorder}" stroke-width="2.5"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center"/>
+    </svg>`;
+    el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+  } else {
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}"><circle cx="${half}" cy="${half}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg>`;
+  }
+  el.innerHTML=shapesvg+`<span style="font-size:${iconSize}px;position:relative;z-index:1;color:${iconColor};font-weight:500">${icon}</span>`;
 
   // MOVING circles (level 5+)
   let moveInterval=null;
@@ -1208,20 +1309,14 @@ document.getElementById('share-copy-btn').addEventListener('click',copyShareText
 // ===== END SOCIAL SHARING =====
 
 // ===== SHOP SYSTEM =====
-const SHOP_THEMES=[
-  {id:'ice',   name:'❄️ Ice Storm', desc:'Unlock the Ice Storm theme now',    price:'$0.99', unlocksAt:6},
-  {id:'vulkan',name:'🌋 Vulkan',    desc:'Unlock the Vulkan theme now',       price:'$0.99', unlocksAt:11},
-  {id:'matrix',name:'💚 Matrix',    desc:'Unlock the Matrix theme now',       price:'$0.99', unlocksAt:16},
-  {id:'void',  name:'🌀 Void',      desc:'Unlock the Void theme now',         price:'$0.99', unlocksAt:21},
-  {id:'neon',  name:'⚡ Neon City', desc:'Unlock the Neon City theme now',    price:'$0.99', unlocksAt:26},
-];
+// No themes in shop — themes unlock via level progression
 
 const SHOP_SKINS=[
-  {id:'default', name:'Classic Circles', desc:'The original Glipx circles',    price:'Free',  icon:'⭕', colors:['#378ADD','#1D9E75','#D85A30','#7F77DD','#EF9F27']},
-  {id:'hearts',  name:'Heart Circles',   desc:'Cute heart-shaped style',        price:'$0.99', icon:'❤️', colors:['#ff6b88','#ff4466','#ff8899','#cc2255','#ff99aa']},
-  {id:'stars',   name:'Star Power',      desc:'Shining star vibes',             price:'$0.99', icon:'⭐', colors:['#FAC775','#EF9F27','#ffd700','#ffaa00','#ffe066']},
-  {id:'neon_s',  name:'Neon Glow',       desc:'Electric neon colors',           price:'$0.99', icon:'💜', colors:['#ff00ff','#00ffff','#ff50a0','#a000ff','#00ff80']},
-  {id:'ice_s',   name:'Frost',           desc:'Cool icy blue tones',            price:'$0.99', icon:'❄️', colors:['#a0d8ff','#5dc4e8','#80b8ff','#c0e8ff','#378ADD']},
+  {id:'default', name:'Classic Circles', desc:'The original round Glipx circles',         price:'Free',  icon:'⭕', shape:'circle', colors:['#378ADD','#1D9E75','#D85A30','#7F77DD','#EF9F27']},
+  {id:'hearts',  name:'Heart Circles',   desc:'Heart-shaped targets in pink & red tones', price:'$0.99', icon:'❤️', shape:'heart',  colors:['#ff6b88','#ff4466','#ff8899','#cc2255','#ff99aa']},
+  {id:'stars',   name:'Star Power',      desc:'Star-shaped targets in gold tones',         price:'$0.99', icon:'⭐', shape:'star',   colors:['#FAC775','#EF9F27','#ffd700','#ffaa00','#ffe066']},
+  {id:'neon_s',  name:'Neon Glow',       desc:'Round circles in electric neon colors',     price:'$0.99', icon:'💜', shape:'circle', colors:['#ff00ff','#00ffff','#ff50a0','#a000ff','#00ff80']},
+  {id:'ice_s',   name:'Frost',           desc:'Round circles in cool icy blue tones',      price:'$0.99', icon:'❄️', shape:'circle', colors:['#a0d8ff','#5dc4e8','#80b8ff','#c0e8ff','#378ADD']},
 ];
 
 function getShopData(){try{return JSON.parse(localStorage.getItem('glipx_shop')||'{}');}catch{return{};}}
@@ -1234,24 +1329,22 @@ function loadShopState(){
   activeSkin=d.activeSkin||'default';
 }
 
-function getSkinColors(){
+function getActiveSkin(){
   const d=getShopData();
   const owned=d.ownedSkins||['default'];
   if(!owned.includes(activeSkin))return null;
   const skin=SHOP_SKINS.find(s=>s.id===activeSkin);
   if(!skin||activeSkin==='default')return null;
-  return skin.colors;
+  return skin;
 }
+// Legacy alias
+function getSkinColors(){const s=getActiveSkin();return s?s.colors:null;}
 
 function isThemeUnlocked(themeId){
+  // Exclusive shop themes — only via purchase
   const d=getShopData();
   const owned=d.ownedThemes||[];
-  const rec=getAllRecords();
-  // Check if unlocked via level in any mode
-  const maxLevel=Math.max(...Object.values(rec).map(r=>r.level||0),0);
-  const cfg=SHOP_THEMES.find(t=>t.id===themeId);
-  if(!cfg)return true;
-  return owned.includes(themeId)||maxLevel>=cfg.unlocksAt;
+  return owned.includes(themeId);
 }
 
 function renderShop(){
@@ -1266,19 +1359,7 @@ function renderShop(){
   if(isPremium){pb.textContent='✓ Owned';pb.className='shop-buy-btn owned-btn';pb.disabled=true;pi.classList.add('owned');}
   else{pb.textContent='Buy';pb.className='shop-buy-btn';pb.disabled=false;pb.onclick=()=>buyPremium();}
 
-  // Themes
-  const themeContainer=document.getElementById('shop-themes');
-  themeContainer.innerHTML='';
-  SHOP_THEMES.forEach(t=>{
-    const alreadyUnlocked=isThemeUnlocked(t.id);
-    const owned=ownedThemes.includes(t.id)||alreadyUnlocked;
-    const div=document.createElement('div');
-    div.className='shop-item'+(owned?' owned':'');
-    const levelNote=alreadyUnlocked&&!ownedThemes.includes(t.id)?'<div style="font-size:10px;color:#5DCAA5;margin-top:3px">✓ Unlocked via level progress</div>':'';
-    div.innerHTML=`<div class="shop-icon">${t.name.split(' ')[0]}</div><div class="shop-info"><div class="shop-name">${t.name}</div><div class="shop-desc">${t.desc}</div><div class="shop-price">${owned?'Owned':t.price}</div>${levelNote}</div><button class="shop-buy-btn ${owned?'owned-btn':''}" ${owned?'disabled':''} data-theme="${t.id}">${owned?'✓':'Buy'}</button>`;
-    if(!owned)div.querySelector('button').onclick=()=>buyTheme(t.id,t.price);
-    themeContainer.appendChild(div);
-  });
+
 
   // Skins
   const skinContainer=document.getElementById('shop-skins');
@@ -1312,16 +1393,7 @@ function buyPremium(){
   }
 }
 
-function buyTheme(id,price){
-  if(confirm(`Purchase ${SHOP_THEMES.find(t=>t.id===id).name} for ${price}?`)){
-    const d=getShopData();
-    d.ownedThemes=d.ownedThemes||[];
-    if(!d.ownedThemes.includes(id))d.ownedThemes.push(id);
-    saveShopData(d);
-    alert(`✓ ${SHOP_THEMES.find(t=>t.id===id).name} unlocked! It will appear when you reach its level in game.`);
-    renderShop();
-  }
-}
+
 
 function buySkin(id,price){
   if(confirm(`Purchase ${SHOP_SKINS.find(s=>s.id===id).name} for ${price}?`)){
