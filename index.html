@@ -325,12 +325,12 @@
       </div>
       <div class="share-card-tag">glipx — can you beat me?</div>
     </div>
-    <div id="share-text-box" onclick="copyShareText()" title="Tap to copy"></div>
+    <div id="share-text-box" title="Tap to copy"></div>
     <div id="share-copy-confirm"></div>
     <div class="share-options">
-      <button class="share-option-btn" onclick="shareNative()"><span class="share-option-icon">📤</span>Share via...</button>
-      <button class="share-option-btn" onclick="shareWhatsApp()"><span class="share-option-icon">💬</span>Share on WhatsApp</button>
-      <button class="share-option-btn" onclick="copyShareText()"><span class="share-option-icon">📋</span>Copy to clipboard</button>
+      <button class="share-option-btn" id="share-native-btn"><span class="share-option-icon">📤</span>Share via...</button>
+      <button class="share-option-btn" id="share-whatsapp-btn"><span class="share-option-icon">💬</span>Share on WhatsApp</button>
+      <button class="share-option-btn" id="share-copy-btn"><span class="share-option-icon">📋</span>Copy to clipboard</button>
     </div>
     <button class="panel-close" id="share-close" style="margin-top:12px">Close</button>
   </div>
@@ -1190,6 +1190,10 @@ function shareWhatsApp(){
 }
 
 document.getElementById('share-close').addEventListener('click',()=>document.getElementById('share-panel').style.display='none');
+document.getElementById('share-text-box').addEventListener('click',copyShareText);
+document.getElementById('share-native-btn').addEventListener('click',shareNative);
+document.getElementById('share-whatsapp-btn').addEventListener('click',shareWhatsApp);
+document.getElementById('share-copy-btn').addEventListener('click',copyShareText);
 // ===== END SOCIAL SHARING =====
 
 // ===== SHOP SYSTEM =====
