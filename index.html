@@ -10,20 +10,20 @@
   <title>Glipx</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-    html,body{height:100%;background:#0a0a1a;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+    html,body{height:100%;background:#10102a;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
     #gw{max-width:480px;margin:0 auto;padding:env(safe-area-inset-top,12px) 12px env(safe-area-inset-bottom,12px) 12px;height:100vh;height:100dvh;display:flex;flex-direction:column;gap:8px;user-select:none}
     #header{display:flex;justify-content:space-between;align-items:center;gap:5px}
-    .stat-box{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:7px 8px;text-align:center;flex:1;min-width:0}
-    .stat-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em}
-    .stat-value{font-size:18px;font-weight:500;color:#e0e8ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    #level-bar-wrap{background:#1a1a2e;border-radius:8px;padding:5px 10px;border:0.5px solid #2a2a4e;display:none}
+    .stat-box{background:#1e1e3a;border:0.5px solid #3a3a5e;border-radius:12px;padding:7px 8px;text-align:center;flex:1;min-width:0}
+    .stat-label{font-size:9px;color:#8899cc;text-transform:uppercase;letter-spacing:.05em}
+    .stat-value{font-size:18px;font-weight:500;color:#f0f4ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #level-bar-wrap{background:#1e1e3a;border-radius:8px;padding:5px 10px;border:0.5px solid #3a3a5e;display:none}
     #level-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
     #level-label{font-size:11px;color:#6677aa}
     #level-goal{font-size:11px;color:#6677aa}
     #level-progress-bg{background:#0a0a1a;border-radius:4px;height:5px;overflow:hidden}
     #level-progress-fill{height:5px;background:#378ADD;border-radius:4px;transition:width .3s}
 
-    #arena{position:relative;flex:1;background:#0a0a1a;border-radius:16px;border:0.5px solid #2a2a4e;overflow:hidden;cursor:crosshair;min-height:0;transition:background .8s}
+    #arena{position:relative;flex:1;background:#10102a;border-radius:16px;border:0.5px solid #3a3a6e;overflow:hidden;cursor:crosshair;min-height:0;transition:background .8s}
     #stars-canvas{position:absolute;inset:0;pointer-events:none}
 
     /* DARK ZONES */
@@ -81,7 +81,7 @@
     .go-stat-label{font-size:9px;color:#6677aa;text-transform:uppercase}
     .go-stat-val{font-size:15px;font-weight:500;color:#e0e8ff}
 
-    .pu-time{box-shadow:0 0 14px #378ADD99}.pu-boost{box-shadow:0 0 14px #FAC77599}.pu-clear{box-shadow:0 0 14px #5DCAA599}.pu-heart{box-shadow:0 0 14px #ff6b8899}.pu-shield{box-shadow:0 0 14px #7F77DD99}.pu-slow{box-shadow:0 0 14px #a0c4ff99}.pu-bomb{box-shadow:0 0 14px #ff444499}.pu-mini{box-shadow:0 0 8px #FAC77566}
+    .pu-time,.pu-boost,.pu-clear,.pu-heart,.pu-shield,.pu-slow,.pu-bomb,.pu-mini{box-shadow:none}
 
     #ad-banner{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:12px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
     .ad-label{font-size:9px;color:#6677aa;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
@@ -331,8 +331,8 @@
     <div id="revive-ad-overlay">
       <div id="revive-ad-content">
         <div class="ad-sim-label">Advertisement</div>
-        <div class="ad-sim-title">🚀 Try Glipx Premium!</div>
-        <div class="ad-sim-sub">Remove all ads forever and play uninterrupted for just $1.99</div>
+        <div class="ad-sim-title">📱 Advertisement</div>
+        <div class="ad-sim-sub">This is where a sponsored ad would appear. Thank you for supporting free apps!</div>
         <div id="ad-sim-timer">Ad ends in 5 seconds...</div>
         <button id="ad-sim-close" disabled>Continue playing ✓</button>
       </div>
@@ -528,10 +528,10 @@ const LEVEL_CONFIG=[
 
 // THEMES
 const THEMES={
-  space:{bg:'#0a0a1a',border:'#2a2a4e',star:'rgba(180,200,255,',name:'🌌 Space',desc:'The classic void',effect:'stars'},
-  ice:{bg:'#060d18',border:'#1a3050',star:'rgba(160,210,255,',name:'❄️ Ice Storm',desc:'Brace for the cold',effect:'snow'},
-  vulkan:{bg:'#150500',border:'#4e1a00',star:'rgba(255,140,60,',name:'🌋 Vulkan',desc:'The heat is rising',effect:'sparks'},
-  matrix:{bg:'#000d00',border:'#003300',star:'rgba(80,255,100,',name:'💚 Matrix',desc:'Follow the code',effect:'matrix'},
+  space:{bg:'#10102a',border:'#3a3a6e',star:'rgba(180,200,255,',name:'🌌 Space',desc:'The classic void',effect:'stars'},
+  ice:{bg:'#0a1828',border:'#2a4a70',star:'rgba(160,210,255,',name:'❄️ Ice Storm',desc:'Brace for the cold',effect:'snow'},
+  vulkan:{bg:'#1e0800',border:'#5e2a00',star:'rgba(255,140,60,',name:'🌋 Vulkan',desc:'The heat is rising',effect:'sparks'},
+  matrix:{bg:'#001800',border:'#004400',star:'rgba(80,255,100,',name:'💚 Matrix',desc:'Follow the code',effect:'matrix'},
   void:{bg:'#050508',border:'#1a1a2e',star:'rgba(140,100,255,',name:'🌀 Void',desc:'Beyond the known',effect:'pulse'},
   neon:{bg:'#0a001a',border:'#3a0060',star:'rgba(255,100,255,',name:'⚡ Neon City',desc:'Lights never sleep',effect:'neon'},
   // Exclusive shop themes
@@ -939,11 +939,11 @@ function getColors(){
     {bg:'#000e00',border:'#00ee55',text:'#77ffaa'},
   ];
   return[
-    {bg:'#1a3a5c',border:'#378ADD',text:'#a0d0ff'},
-    {bg:'#1a3d2e',border:'#1D9E75',text:'#7ee8bb'},
-    {bg:'#3d1a1a',border:'#D85A30',text:'#ffaa88'},
-    {bg:'#2d1a3d',border:'#7F77DD',text:'#c4b8ff'},
-    {bg:'#3d2e00',border:'#EF9F27',text:'#ffd88a'},
+    {bg:'#1e3e62',border:'#5a9ee0',text:'#c0e0ff'},
+    {bg:'#1e4232',border:'#2dbe85',text:'#9effd0'},
+    {bg:'#421e1e',border:'#e06a38',text:'#ffbba0'},
+    {bg:'#321e42',border:'#9f87ee',text:'#d4c8ff'},
+    {bg:'#423200',border:'#f5b030',text:'#ffe4a0'},
   ];
 }
 
@@ -1028,44 +1028,50 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   let shapesvg='';
   const half=size/2;
   if(skinShape==='heart'&&!isPU&&!isFake&&!isMini){
-    // Proper heart using two circles + triangle
-    // Heart built from cubic bezier — classic symmetric heart
-    const m=size*0.08; // margin
-    const hw=size-m*2; // heart width
-    const hh=size-m*2; // heart height
-    const cx1=m, cy1=m+hh*0.3;
-    const cx2=m+hw*0.5, cy2=m+hh*0.3;
-    // Classic heart path centered in viewBox
-    const hx=half, hy=half;
-    const hs=size*0.42; // scale
-    // Beautiful heart path
-    const heartPath=
+    const hx=half,hy=half,hs=size*0.40;
+    // Outer heart (slightly larger) — fixed ring
+    const hs2=hs*1.12;
+    const heartOuter=
+      `M${hx},${hy+hs2*0.9} `+
+      `C${hx-hs2*1.1},${hy+hs2*0.3} ${hx-hs2*1.3},${hy-hs2*0.5} ${hx-hs2*0.7},${hy-hs2*0.7} `+
+      `C${hx-hs2*0.3},${hy-hs2*0.9} ${hx},${hy-hs2*0.5} ${hx},${hy-hs2*0.5} `+
+      `C${hx},${hy-hs2*0.5} ${hx+hs2*0.3},${hy-hs2*0.9} ${hx+hs2*0.7},${hy-hs2*0.7} `+
+      `C${hx+hs2*1.3},${hy-hs2*0.5} ${hx+hs2*1.1},${hy+hs2*0.3} ${hx},${hy+hs2*0.9} Z`;
+    // Inner heart — animated shrink ring
+    const heartInner=
       `M${hx},${hy+hs*0.9} `+
       `C${hx-hs*1.1},${hy+hs*0.3} ${hx-hs*1.3},${hy-hs*0.5} ${hx-hs*0.7},${hy-hs*0.7} `+
       `C${hx-hs*0.3},${hy-hs*0.9} ${hx},${hy-hs*0.5} ${hx},${hy-hs*0.5} `+
       `C${hx},${hy-hs*0.5} ${hx+hs*0.3},${hy-hs*0.9} ${hx+hs*0.7},${hy-hs*0.7} `+
       `C${hx+hs*1.3},${hy-hs*0.5} ${hx+hs*1.1},${hy+hs*0.3} ${hx},${hy+hs*0.9} Z`;
-    const heartPerim=Math.round(3.2*size);
+    const heartPerim=Math.round(3.0*size);
     shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
-      <path d="${heartPath}" fill="${skinBorder}22" stroke="${skinBorder}44" stroke-width="1"/>
-      <path d="${heartPath}" fill="none" stroke="${skinBorder}" stroke-width="2.8"
+      <path d="${heartOuter}" fill="${skinBorder}18" stroke="${skinBorder}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="${heartInner}" fill="none" stroke="${skinBorder}" stroke-width="2.5"
         stroke-dasharray="${heartPerim}" stroke-dashoffset="0" stroke-linecap="round"
         style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
     </svg>`;
     el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
   } else if(skinShape==='star'&&!isPU&&!isFake&&!isMini){
-    const starPerim=Math.round(2.6*size);
-    const pts=[];const outerR=half*0.85;const innerR=half*0.38;
+    // Outer star — fixed ring
+    const outerPts=[];const innerPts=[];
+    const outerR1=half*0.88,innerR1=half*0.42;
+    const outerR2=half*0.72,innerR2=half*0.32;
     for(let i=0;i<10;i++){
       const angle=(i*Math.PI/5)-(Math.PI/2);
-      const rad=i%2===0?outerR:innerR;
-      pts.push(`${(half+rad*Math.cos(angle)).toFixed(2)},${(half+rad*Math.sin(angle)).toFixed(2)}`);
+      const r1=i%2===0?outerR1:innerR1;
+      const r2=i%2===0?outerR2:innerR2;
+      outerPts.push(`${(half+r1*Math.cos(angle)).toFixed(2)},${(half+r1*Math.sin(angle)).toFixed(2)}`);
+      innerPts.push(`${(half+r2*Math.cos(angle)).toFixed(2)},${(half+r2*Math.sin(angle)).toFixed(2)}`);
     }
-    const starPath='M'+pts.join('L')+'Z';
+    const starOuter='M'+outerPts.join('L')+'Z';
+    const starInner='M'+innerPts.join('L')+'Z';
+    const starPerim=Math.round(2.6*size);
+    const starInnerPerim=Math.round(2.0*size);
     shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
-      <path d="${starPath}" fill="${skinBorder}22" stroke="${skinBorder}44" stroke-width="1"/>
-      <path d="${starPath}" fill="none" stroke="${skinBorder}" stroke-width="2.8"
-        stroke-dasharray="${starPerim}" stroke-dashoffset="0" stroke-linecap="round"
+      <path d="${starOuter}" fill="${skinBorder}18" stroke="${skinBorder}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="${starInner}" fill="none" stroke="${skinBorder}" stroke-width="2.5"
+        stroke-dasharray="${starInnerPerim}" stroke-dashoffset="0" stroke-linecap="round"
         style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
     </svg>`;
     el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
@@ -1200,7 +1206,7 @@ function quitToMenu(){
   pauseScreen.style.display='none';levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   const go=document.getElementById('game-over-screen');if(go)go.remove();
-  currentTheme='space';arena.style.background='#0a0a1a';arena.style.borderColor='#2a2a4e';
+  currentTheme='space';arena.style.background='#10102a';arena.style.borderColor='#3a3a6e';
   initStars();
   startScreen.style.display='flex';
   loadStartRecords(currentMode);
