@@ -490,57 +490,86 @@ const starCanvas=document.getElementById('stars-canvas');
 // LEVEL CONFIG — 50% longer than before (time + min time)
 // pts = points needed, time = timer seconds, minTime = minimum seconds before level-up allowed
 const LEVEL_CONFIG=[
-  // Space: level 1-5
+  // 🌌 Space — calm (1-5)
   {pts:250,  time:50, spawnBase:950, lifeBase:2000, theme:'space'},
   {pts:380,  time:50, spawnBase:910, lifeBase:1950, theme:'space'},
   {pts:530,  time:49, spawnBase:870, lifeBase:1900, theme:'space'},
   {pts:700,  time:49, spawnBase:830, lifeBase:1850, theme:'space'},
   {pts:890,  time:48, spawnBase:790, lifeBase:1800, theme:'space'},
-  // Ice: level 6-10
-  {pts:1100, time:48, spawnBase:740, lifeBase:1720, theme:'ice'},
-  {pts:1340, time:46, spawnBase:690, lifeBase:1640, theme:'ice'},
-  {pts:1610, time:46, spawnBase:640, lifeBase:1560, theme:'ice'},
-  {pts:1910, time:44, spawnBase:590, lifeBase:1480, theme:'ice'},
-  {pts:2250, time:44, spawnBase:540, lifeBase:1400, theme:'ice'},
-  // Vulkan: level 11-15
-  {pts:2630, time:42, spawnBase:500, lifeBase:1320, theme:'vulkan'},
-  {pts:3060, time:42, spawnBase:465, lifeBase:1240, theme:'vulkan'},
-  {pts:3540, time:40, spawnBase:430, lifeBase:1160, theme:'vulkan'},
-  {pts:4080, time:40, spawnBase:400, lifeBase:1080, theme:'vulkan'},
-  {pts:4690, time:38, spawnBase:375, lifeBase:1000, theme:'vulkan'},
-  // Matrix: level 16-20
-  {pts:5380, time:38, spawnBase:350, lifeBase:940,  theme:'matrix'},
-  {pts:6160, time:36, spawnBase:325, lifeBase:880,  theme:'matrix'},
-  {pts:7040, time:36, spawnBase:305, lifeBase:820,  theme:'matrix'},
-  {pts:8030, time:34, spawnBase:285, lifeBase:760,  theme:'matrix'},
-  {pts:9140, time:34, spawnBase:270, lifeBase:700,  theme:'matrix'},
-  // Void: level 21-25
-  {pts:10380,time:32, spawnBase:260, lifeBase:660,  theme:'void'},
-  {pts:11760,time:32, spawnBase:258, lifeBase:630,  theme:'void'},
-  {pts:13290,time:30, spawnBase:256, lifeBase:605,  theme:'void'},
-  {pts:14990,time:30, spawnBase:254, lifeBase:580,  theme:'void'},
-  {pts:16870,time:28, spawnBase:252, lifeBase:560,  theme:'void'},
-  // Neon: level 26-30
-  {pts:18950,time:28, spawnBase:250, lifeBase:560,  theme:'neon'},
-  {pts:21240,time:26, spawnBase:250, lifeBase:560,  theme:'neon'},
-  {pts:23760,time:26, spawnBase:250, lifeBase:560,  theme:'neon'},
-  {pts:26520,time:25, spawnBase:250, lifeBase:560,  theme:'neon'},
-  {pts:29540,time:25, spawnBase:250, lifeBase:560,  theme:'neon'},
+  // 🌠 Space Storm — meteor rain (6-10)
+  {pts:1100, time:48, spawnBase:750, lifeBase:1720, theme:'space_storm'},
+  {pts:1340, time:46, spawnBase:710, lifeBase:1640, theme:'space_storm'},
+  {pts:1610, time:46, spawnBase:670, lifeBase:1560, theme:'space_storm'},
+  {pts:1910, time:44, spawnBase:630, lifeBase:1480, theme:'space_storm'},
+  {pts:2250, time:44, spawnBase:590, lifeBase:1400, theme:'space_storm'},
+  // ❄️ Ice — gentle snow (11-15)
+  {pts:2630, time:42, spawnBase:555, lifeBase:1320, theme:'ice'},
+  {pts:3060, time:42, spawnBase:520, lifeBase:1240, theme:'ice'},
+  {pts:3540, time:40, spawnBase:488, lifeBase:1160, theme:'ice'},
+  {pts:4080, time:40, spawnBase:458, lifeBase:1080, theme:'ice'},
+  {pts:4690, time:38, spawnBase:430, lifeBase:1000, theme:'ice'},
+  // 🌨️ Blizzard — snowstorm (16-20)
+  {pts:5380, time:38, spawnBase:405, lifeBase:940,  theme:'blizzard'},
+  {pts:6160, time:36, spawnBase:380, lifeBase:880,  theme:'blizzard'},
+  {pts:7040, time:36, spawnBase:358, lifeBase:820,  theme:'blizzard'},
+  {pts:8030, time:34, spawnBase:338, lifeBase:760,  theme:'blizzard'},
+  {pts:9140, time:34, spawnBase:318, lifeBase:700,  theme:'blizzard'},
+  // 🌋 Vulkan — calm lava (21-25)
+  {pts:10380,time:32, spawnBase:300, lifeBase:660,  theme:'vulkan'},
+  {pts:11760,time:32, spawnBase:284, lifeBase:630,  theme:'vulkan'},
+  {pts:13290,time:30, spawnBase:270, lifeBase:605,  theme:'vulkan'},
+  {pts:14990,time:30, spawnBase:258, lifeBase:580,  theme:'vulkan'},
+  {pts:16870,time:28, spawnBase:255, lifeBase:560,  theme:'vulkan'},
+  // 🔥 Eruption — sparks + lava rain (26-30)
+  {pts:18950,time:28, spawnBase:255, lifeBase:560,  theme:'eruption'},
+  {pts:21240,time:26, spawnBase:255, lifeBase:560,  theme:'eruption'},
+  {pts:23760,time:26, spawnBase:255, lifeBase:560,  theme:'eruption'},
+  {pts:26520,time:25, spawnBase:255, lifeBase:560,  theme:'eruption'},
+  {pts:29540,time:25, spawnBase:255, lifeBase:560,  theme:'eruption'},
+  // 💚 Matrix — slow code (31-35)
+  {pts:33000,time:24, spawnBase:255, lifeBase:560,  theme:'matrix'},
+  {pts:36800,time:24, spawnBase:255, lifeBase:560,  theme:'matrix'},
+  {pts:41000,time:23, spawnBase:255, lifeBase:560,  theme:'matrix'},
+  {pts:45600,time:23, spawnBase:255, lifeBase:560,  theme:'matrix'},
+  {pts:50700,time:22, spawnBase:255, lifeBase:560,  theme:'matrix'},
+  // 💥 Matrix Surge — fast code storm (36-40)
+  {pts:56300,time:22, spawnBase:255, lifeBase:560,  theme:'matrix_surge'},
+  {pts:62500,time:21, spawnBase:255, lifeBase:560,  theme:'matrix_surge'},
+  {pts:69400,time:21, spawnBase:255, lifeBase:560,  theme:'matrix_surge'},
+  {pts:77000,time:20, spawnBase:255, lifeBase:560,  theme:'matrix_surge'},
+  {pts:85400,time:20, spawnBase:255, lifeBase:560,  theme:'matrix_surge'},
+  // 🌀 Void — calm pulse (41-45)
+  {pts:94700,time:20, spawnBase:255, lifeBase:560,  theme:'void'},
+  {pts:105000,time:19,spawnBase:255, lifeBase:560,  theme:'void'},
+  {pts:116500,time:19,spawnBase:255, lifeBase:560,  theme:'void'},
+  {pts:129000,time:18,spawnBase:255, lifeBase:560,  theme:'void'},
+  {pts:143000,time:18,spawnBase:255, lifeBase:560,  theme:'void'},
+  // 🌀💥 Void Collapse — intense distortion (46-50)
+  {pts:158500,time:18,spawnBase:255, lifeBase:560,  theme:'void_collapse'},
+  {pts:175500,time:17,spawnBase:255, lifeBase:560,  theme:'void_collapse'},
+  {pts:194500,time:17,spawnBase:255, lifeBase:560,  theme:'void_collapse'},
+  {pts:215500,time:16,spawnBase:255, lifeBase:560,  theme:'void_collapse'},
+  {pts:238500,time:16,spawnBase:255, lifeBase:560,  theme:'void_collapse'},
 ];
 
 // THEMES
 const THEMES={
-  space:{bg:'#10102a',border:'#3a3a6e',star:'rgba(180,200,255,',name:'🌌 Space',desc:'The classic void',effect:'stars'},
-  ice:{bg:'#0a1828',border:'#2a4a70',star:'rgba(160,210,255,',name:'❄️ Ice Storm',desc:'Brace for the cold',effect:'snow'},
-  vulkan:{bg:'#1e0800',border:'#5e2a00',star:'rgba(255,140,60,',name:'🌋 Vulkan',desc:'The heat is rising',effect:'sparks'},
-  matrix:{bg:'#001800',border:'#004400',star:'rgba(80,255,100,',name:'💚 Matrix',desc:'Follow the code',effect:'matrix'},
-  void:{bg:'#050508',border:'#1a1a2e',star:'rgba(140,100,255,',name:'🌀 Void',desc:'Beyond the known',effect:'pulse'},
-  neon:{bg:'#0a001a',border:'#3a0060',star:'rgba(255,100,255,',name:'⚡ Neon City',desc:'Lights never sleep',effect:'neon'},
+  space:       {bg:'#10102a',border:'#3a3a6e',star:'rgba(180,200,255,',name:'🌌 Space',         desc:'The void awaits',          effect:'stars'},
+  space_storm: {bg:'#08081e',border:'#4a4a8e',star:'rgba(200,210,255,',name:'🌠 Space Storm',   desc:'Meteors incoming!',         effect:'space_storm'},
+  ice:         {bg:'#0a1828',border:'#2a4a70',star:'rgba(160,210,255,',name:'❄️ Ice',           desc:'The cold creeps in',        effect:'snow'},
+  blizzard:    {bg:'#060e18',border:'#1a3a60',star:'rgba(180,220,255,',name:'🌨️ Blizzard',      desc:'You can barely see!',       effect:'blizzard'},
+  vulkan:      {bg:'#1e0800',border:'#5e2a00',star:'rgba(255,140,60,', name:'🌋 Vulkan',         desc:'The heat is rising',        effect:'sparks'},
+  eruption:    {bg:'#280400',border:'#7e2000',star:'rgba(255,100,20,', name:'🔥 Eruption',       desc:'She's gonna blow!',        effect:'eruption'},
+  matrix:      {bg:'#001800',border:'#004400',star:'rgba(80,255,100,', name:'💚 Matrix',         desc:'Follow the code',           effect:'matrix'},
+  matrix_surge:{bg:'#000e00',border:'#006600',star:'rgba(100,255,80,', name:'💥 Matrix Surge',   desc:'The system is overloading', effect:'matrix_surge'},
+  void:        {bg:'#050508',border:'#2a2a4e',star:'rgba(140,100,255,',name:'🌀 Void',           desc:'Beyond the known',          effect:'pulse'},
+  void_collapse:{bg:'#020204',border:'#4a1a7e',star:'rgba(160,80,255,',name:'💀 Void Collapse',  desc:'Reality is breaking',       effect:'void_collapse'},
+  neon:        {bg:'#0a001a',border:'#3a0060',star:'rgba(255,100,255,',name:'⚡ Neon City',      desc:'Lights never sleep',        effect:'neon'},
   // Exclusive shop themes
-  galaxy:{bg:'#02000f',border:'#1a0a3e',star:'rgba(200,180,255,',name:'🌠 Galaxy',desc:'Shooting stars',effect:'galaxy'},
-  ocean:{bg:'#000a18',border:'#003355',star:'rgba(80,180,255,',name:'🌊 Deep Ocean',desc:'Underwater world',effect:'ocean'},
-  lava:{bg:'#0f0000',border:'#4a0800',star:'rgba(255,80,0,',name:'🔥 Lava Floor',desc:'Everything is lava',effect:'lava'},
-  midnight:{bg:'#050508',border:'#15153a',star:'rgba(160,160,220,',name:'🌙 Midnight',desc:'Dark elegance',effect:'midnight'},
+  galaxy:      {bg:'#02000f',border:'#1a0a3e',star:'rgba(200,180,255,',name:'🌠 Galaxy',         desc:'Shooting stars',            effect:'galaxy'},
+  ocean:       {bg:'#000a18',border:'#003355',star:'rgba(80,180,255,', name:'🌊 Deep Ocean',      desc:'Underwater world',          effect:'ocean'},
+  lava:        {bg:'#0f0000',border:'#4a0800',star:'rgba(255,80,0,',   name:'🔥 Lava Floor',      desc:'Everything is lava',        effect:'lava'},
+  midnight:    {bg:'#050508',border:'#15153a',star:'rgba(160,160,220,',name:'🌙 Midnight',        desc:'Dark elegance',             effect:'midnight'},
 };
 
 function getLevelCfg(lvl){
@@ -548,9 +577,9 @@ function getLevelCfg(lvl){
   const cfg={...LEVEL_CONFIG[idx]};
   if(lvl>LEVEL_CONFIG.length){
     const e=lvl-LEVEL_CONFIG.length;
-    cfg.pts+=e*3500;cfg.time=Math.max(22,cfg.time);
-    cfg.spawnBase=250;
-    cfg.lifeBase=560;
+    cfg.pts=LEVEL_CONFIG[LEVEL_CONFIG.length-1].pts+e*50000;
+    cfg.time=Math.max(15,cfg.time);
+    cfg.spawnBase=255;cfg.lifeBase=560;
     cfg.theme='neon';
   }
   return cfg;
@@ -603,100 +632,193 @@ function soundPU(t){if(paused)return;if(t==='time'){beep(440,.05);setTimeout(()=
 function soundGameOver(){beep(440,.1,'sawtooth',.15);setTimeout(()=>beep(330,.1,'sawtooth',.15),120);setTimeout(()=>beep(220,.2,'sawtooth',.15),240);}
 
 // VISUAL EFFECTS ENGINE
-let stars=[],particles2=[],matrixCols=[],rafId=null;
+let stars=[],matrixCols=[],meteors=[],sparks2=[];
 function initStars(){
   starCanvas.width=arena.clientWidth;starCanvas.height=arena.clientHeight;
+  const W=starCanvas.width,H=starCanvas.height;
   stars=Array.from({length:70},()=>({
-    x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,
+    x:Math.random()*W,y:Math.random()*H,
     r:Math.random()*1.8+.3,a:Math.random()*.8+.2,speed:Math.random()*.3+.1,
-    vy:0,vx:0
+    vy:0,vx:0,life:1
   }));
-  particles2=[];
-  // Matrix columns
-  const cols=Math.floor(starCanvas.width/14);
-  matrixCols=Array.from({length:cols},(_,i)=>({x:i*14,y:Math.random()*starCanvas.height,speed:2+Math.random()*3,chars:[]}));
+  meteors=Array.from({length:8},()=>resetMeteor({},W,H));
+  sparks2=Array.from({length:40},()=>resetSpark({},W,H));
+  const cols=Math.floor(W/14);
+  matrixCols=Array.from({length:cols},(_,i)=>({x:i*14,y:Math.random()*H,speed:2+Math.random()*3}));
 }
+function resetMeteor(m,W,H){
+  m.x=Math.random()*W*1.5;m.y=-20-Math.random()*100;
+  m.vx=-2-Math.random()*3;m.vy=3+Math.random()*4;
+  m.len=40+Math.random()*60;m.a=0.6+Math.random()*0.4;return m;
+}
+function resetSpark(s,W,H){
+  s.x=Math.random()*W;s.y=H+10;
+  s.vy=-(1.5+Math.random()*4);s.vx=(Math.random()-.5)*2;
+  s.r=Math.random()*2.5+.5;s.a=0.9;s.hot=Math.random()>0.5;return s;
+}
+
 function drawStars(){
   const ctx=starCanvas.getContext('2d');
   const W=starCanvas.width,H=starCanvas.height;
   const t=THEMES[currentTheme]||THEMES.space;
   const eff=t.effect||'stars';
+  const now=Date.now()/1000;
 
-  ctx.clearRect(0,0,W,H);
+  // Full clear for most effects
+  if(eff==='matrix'||eff==='matrix_surge'){ctx.fillStyle='rgba(0,12,0,0.18)';ctx.fillRect(0,0,W,H);}
+  else ctx.clearRect(0,0,W,H);
 
   if(eff==='stars'){
-    // Classic twinkling stars
     stars.forEach(s=>{
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=t.star+s.a+')';ctx.fill();
+      ctx.fillStyle=`rgba(180,200,255,${s.a})`;ctx.fill();
       s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;
     });
 
-  } else if(eff==='snow'){
-    // Falling snowflakes
+  } else if(eff==='space_storm'){
+    // Stars
     stars.forEach(s=>{
-      if(!s.vy){s.vy=0.3+Math.random()*0.8;s.vx=(Math.random()-.5)*0.4;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,210,255,${s.a})`;ctx.fill();
+      s.a+=s.speed*.02;if(s.a>1||s.a<.2)s.speed*=-1;
+    });
+    // Meteors
+    meteors.forEach(m=>{
+      ctx.beginPath();ctx.moveTo(m.x,m.y);ctx.lineTo(m.x-m.vx*(m.len/m.vy),m.y-m.len);
+      const g=ctx.createLinearGradient(m.x,m.y,m.x-m.vx*(m.len/m.vy),m.y-m.len);
+      g.addColorStop(0,`rgba(255,255,255,${m.a})`);g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.stroke();
+      m.x+=m.vx;m.y+=m.vy;
+      if(m.y>H+20||m.x<-50)resetMeteor(m,W,H);
+    });
+
+  } else if(eff==='snow'){
+    stars.forEach(s=>{
+      if(!s.vy){s.vy=0.3+Math.random()*0.6;s.vx=(Math.random()-.5)*0.4;}
       ctx.beginPath();ctx.arc(s.x,s.y,s.r*1.2,0,Math.PI*2);
-      ctx.fillStyle='rgba(200,230,255,'+s.a+')';ctx.fill();
-      s.y+=s.vy;s.x+=s.vx;
-      s.a+=s.speed*.015;if(s.a>0.9||s.a<0.2)s.speed*=-1;
+      ctx.fillStyle=`rgba(200,230,255,${s.a})`;ctx.fill();
+      s.y+=s.vy;s.x+=s.vx;s.a+=s.speed*.015;if(s.a>0.8||s.a<0.15)s.speed*=-1;
       if(s.y>H+5){s.y=-5;s.x=Math.random()*W;}
     });
 
-  } else if(eff==='sparks'){
-    // Rising sparks from bottom
+  } else if(eff==='blizzard'){
+    // Heavy horizontal snow
     stars.forEach(s=>{
-      if(!s.vy||s.y<-10){
-        s.x=Math.random()*W;s.y=H+5;
-        s.vy=-(1+Math.random()*3);s.vx=(Math.random()-.5)*1.5;
-        s.r=Math.random()*2+.5;s.a=0.9;s.speed=0.02;
-      }
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      const heat=s.y/H;
-      ctx.fillStyle=`rgba(255,${Math.floor(100+heat*100)},20,${s.a})`;ctx.fill();
-      s.y+=s.vy;s.x+=s.vx;s.vy+=0.04;s.a-=0.008;
+      if(!s.vy){s.vy=0.8+Math.random()*2;s.vx=-(2+Math.random()*4);}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*1.4,0,Math.PI*2);
+      ctx.fillStyle=`rgba(210,235,255,${s.a})`;ctx.fill();
+      // Snow streaks
+      ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x-s.vx*3,s.y-s.vy*1.5);
+      ctx.strokeStyle=`rgba(200,225,255,${s.a*0.4})`;ctx.lineWidth=.8;ctx.stroke();
+      s.y+=s.vy;s.x+=s.vx;s.a+=s.speed*.02;if(s.a>0.9||s.a<0.2)s.speed*=-1;
+      if(s.y>H+5||s.x<-10){s.y=Math.random()*H*0.5-10;s.x=W+5;}
     });
-    // Glow at bottom
-    const grad=ctx.createLinearGradient(0,H-40,0,H);
-    grad.addColorStop(0,'rgba(255,60,0,0)');grad.addColorStop(1,'rgba(255,60,0,0.15)');
-    ctx.fillStyle=grad;ctx.fillRect(0,H-40,W,40);
+    // Vignette blur effect
+    const vg=ctx.createRadialGradient(W/2,H/2,H*0.2,W/2,H/2,H*0.8);
+    vg.addColorStop(0,'rgba(100,160,220,0)');vg.addColorStop(1,'rgba(60,100,160,0.18)');
+    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+
+  } else if(eff==='sparks'){
+    sparks2.forEach(s=>{
+      if(s.a<=0)resetSpark(s,W,H);
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,${s.hot?140:60},10,${s.a})`;ctx.fill();
+      s.y+=s.vy;s.x+=s.vx;s.vy+=0.06;s.a-=0.012;
+    });
+    const lg=ctx.createLinearGradient(0,H-50,0,H);
+    lg.addColorStop(0,'rgba(200,40,0,0)');lg.addColorStop(1,'rgba(200,40,0,0.2)');
+    ctx.fillStyle=lg;ctx.fillRect(0,H-50,W,50);
+
+  } else if(eff==='eruption'){
+    // Heavy sparks + falling lava drops from top
+    sparks2.forEach(s=>{
+      if(s.a<=0)resetSpark(s,W,H);
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*1.3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,${s.hot?120:40},0,${s.a})`;ctx.fill();
+      // Trail
+      ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x-s.vx*4,s.y-s.vy*2);
+      ctx.strokeStyle=`rgba(255,80,0,${s.a*0.4})`;ctx.lineWidth=1;ctx.stroke();
+      s.y+=s.vy;s.x+=s.vx;s.vy+=0.08;s.a-=0.015;
+    });
+    // Falling lava drops from top
+    stars.forEach(s=>{
+      if(!s.vy||s.y>H+10){s.x=Math.random()*W;s.y=-10;s.vy=1+Math.random()*3;s.r=3+Math.random()*5;s.a=0.7;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,${Math.floor(s.a*80)},0,${s.a})`;ctx.fill();
+      s.y+=s.vy;s.a-=0.004;
+    });
+    // Heavy glow bottom
+    const eg=ctx.createLinearGradient(0,H-80,0,H);
+    eg.addColorStop(0,'rgba(255,50,0,0)');eg.addColorStop(1,'rgba(255,50,0,0.3)');
+    ctx.fillStyle=eg;ctx.fillRect(0,H-80,W,80);
 
   } else if(eff==='matrix'){
-    // Falling green characters
-    ctx.fillStyle='rgba(0,10,0,0.18)';ctx.fillRect(0,0,W,H);
     ctx.font='12px monospace';
     matrixCols.forEach(col=>{
       const char=String.fromCharCode(0x30A0+Math.random()*96);
-      ctx.fillStyle='rgba(0,255,70,0.9)';
-      ctx.fillText(char,col.x,col.y);
-      ctx.fillStyle='rgba(0,200,50,0.4)';
-      for(let i=1;i<5;i++){ctx.fillText(char,col.x,col.y-i*14);}
-      col.y+=col.speed;
-      if(col.y>H+20)col.y=Math.random()*-100;
-    });
-    // Extra twinkling
-    stars.slice(0,20).forEach(s=>{
-      ctx.fillStyle='rgba(100,255,120,'+s.a*0.3+')';
-      ctx.fillText(String.fromCharCode(0x30A0+Math.random()*96),s.x,s.y);
-      s.a+=s.speed*.03;if(s.a>0.8||s.a<0.1)s.speed*=-1;
+      ctx.fillStyle='rgba(0,255,70,0.9)';ctx.fillText(char,col.x,col.y);
+      ctx.fillStyle='rgba(0,200,50,0.3)';
+      for(let i=1;i<4;i++)ctx.fillText(char,col.x,col.y-i*14);
+      col.y+=col.speed;if(col.y>H+20)col.y=Math.random()*-100;
     });
 
+  } else if(eff==='matrix_surge'){
+    // Fast matrix with color flashes
+    ctx.fillStyle=`rgba(0,${8+Math.sin(now*2)*4},0,0.2)`;ctx.fillRect(0,0,W,H);
+    ctx.font='13px monospace';
+    matrixCols.forEach(col=>{
+      const char=String.fromCharCode(0x30A0+Math.random()*96);
+      const surge=Math.sin(now*3+col.x*0.1)>0.7;
+      ctx.fillStyle=surge?`rgba(100,255,100,0.95)`:`rgba(0,255,70,0.85)`;
+      ctx.fillText(char,col.x,col.y);
+      for(let i=1;i<6;i++){
+        ctx.fillStyle=`rgba(0,${200-i*30},50,${0.6-i*0.1})`;
+        ctx.fillText(char,col.x,col.y-i*14);
+      }
+      col.y+=col.speed*2.5;if(col.y>H+20)col.y=Math.random()*-80;
+    });
+    // Random flash
+    if(Math.random()<0.015){
+      ctx.fillStyle='rgba(0,255,80,0.06)';ctx.fillRect(0,0,W,H);
+    }
+
   } else if(eff==='pulse'){
-    // Pulsing void rings
     stars.forEach(s=>{
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(140,100,255,'+s.a+')';ctx.fill();
+      ctx.fillStyle=`rgba(140,100,255,${s.a*0.7})`;ctx.fill();
       s.a+=s.speed*.02;if(s.a>0.8||s.a<0.1)s.speed*=-1;
     });
-    // Central pulse rings
-    const now=Date.now()/1000;
     for(let i=0;i<3;i++){
-      const phase=(now*0.5+i/3)%1;
-      const radius=phase*Math.min(W,H)*0.5;
-      const alpha=(1-phase)*0.15;
+      const phase=(now*0.4+i/3)%1;
+      const radius=phase*Math.min(W,H)*0.55;
+      const alpha=(1-phase)*0.18;
       ctx.beginPath();ctx.arc(W/2,H/2,radius,0,Math.PI*2);
       ctx.strokeStyle=`rgba(120,80,255,${alpha})`;ctx.lineWidth=2;ctx.stroke();
     }
+
+  } else if(eff==='void_collapse'){
+    // Intense pulsing + distortion rings + flickering
+    stars.forEach(s=>{
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(160,80,255,${s.a})`;ctx.fill();
+      s.a+=s.speed*.03;if(s.a>0.9||s.a<0.05)s.speed*=-1;
+    });
+    // Many fast rings
+    for(let i=0;i<5;i++){
+      const phase=(now*0.8+i/5)%1;
+      const radius=phase*Math.min(W,H)*0.6;
+      const alpha=(1-phase)*0.22;
+      ctx.beginPath();ctx.arc(W/2,H/2,radius,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(180,60,255,${alpha})`;ctx.lineWidth=2.5;ctx.stroke();
+    }
+    // Screen flicker
+    if(Math.sin(now*8)>0.85){
+      ctx.fillStyle='rgba(100,0,200,0.06)';ctx.fillRect(0,0,W,H);
+    }
+    // Corner distortion
+    const dg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.min(W,H)*0.5);
+    dg.addColorStop(0,'rgba(80,0,150,0)');dg.addColorStop(1,'rgba(80,0,150,0.12)');
+    ctx.fillStyle=dg;ctx.fillRect(0,0,W,H);
 
   } else if(eff==='neon'){
     stars.forEach(s=>{
@@ -705,87 +827,66 @@ function drawStars(){
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(${c},${s.a})`;ctx.fill();
       ctx.beginPath();ctx.arc(s.x,s.y,s.r*3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(${c},${s.a*0.1})`;ctx.fill();
+      ctx.fillStyle=`rgba(${c},${s.a*0.08})`;ctx.fill();
       s.a+=s.speed*.025;if(s.a>0.9||s.a<0.1)s.speed*=-1;
     });
-    const now2=Date.now()/1000;
     for(let i=0;i<3;i++){
-      const y=((now2*30+i*H/3)%H);
-      const grad2=ctx.createLinearGradient(0,y,W,y);
-      grad2.addColorStop(0,'rgba(255,0,255,0)');
-      grad2.addColorStop(0.5,'rgba(255,0,255,0.12)');
-      grad2.addColorStop(1,'rgba(0,255,255,0)');
-      ctx.fillStyle=grad2;ctx.fillRect(0,y-1,W,2);
+      const y=((now*30+i*H/3)%H);
+      const g2=ctx.createLinearGradient(0,y,W,y);
+      g2.addColorStop(0,'rgba(255,0,255,0)');g2.addColorStop(0.5,'rgba(255,0,255,0.1)');g2.addColorStop(1,'rgba(0,255,255,0)');
+      ctx.fillStyle=g2;ctx.fillRect(0,y-1,W,2);
     }
 
   } else if(eff==='galaxy'){
-    // Shooting stars
     stars.forEach(s=>{
-      if(!s.vy){s.vy=0;s.vx=0;}
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(200,180,255,${s.a})`;ctx.fill();
       s.a+=s.speed*.02;if(s.a>0.9||s.a<0.1)s.speed*=-1;
     });
-    // Shooting star streaks
-    const now3=Date.now()/1000;
     for(let i=0;i<2;i++){
-      const progress=((now3*0.3+i*0.5)%1);
-      const sx=W*(i*0.6+0.1);const sy=progress*H*0.6;
-      const len=60;
+      const progress=((now*0.3+i*0.5)%1);
+      const sx=W*(i*0.6+0.1);const sy=progress*H*0.6;const len=60;
       ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx+len,sy+len*0.4);
-      const grad3=ctx.createLinearGradient(sx,sy,sx+len,sy+len*0.4);
-      grad3.addColorStop(0,'rgba(255,255,255,0)');
-      grad3.addColorStop(1,'rgba(255,255,255,0.6)');
-      ctx.strokeStyle=grad3;ctx.lineWidth=1.5;ctx.stroke();
+      const g3=ctx.createLinearGradient(sx,sy,sx+len,sy+len*0.4);
+      g3.addColorStop(0,'rgba(255,255,255,0)');g3.addColorStop(1,'rgba(255,255,255,0.6)');
+      ctx.strokeStyle=g3;ctx.lineWidth=1.5;ctx.stroke();
     }
 
   } else if(eff==='ocean'){
-    // Slow drifting bubbles
     stars.forEach(s=>{
       if(!s.vy){s.vy=-(0.2+Math.random()*0.5);s.vx=(Math.random()-.5)*0.3;}
       ctx.beginPath();ctx.arc(s.x,s.y,s.r*1.3,0,Math.PI*2);
       ctx.strokeStyle=`rgba(80,180,255,${s.a*0.6})`;ctx.lineWidth=1;ctx.stroke();
-      s.y+=s.vy;s.x+=s.vx;
-      s.a+=s.speed*.015;if(s.a>0.7||s.a<0.1)s.speed*=-1;
+      s.y+=s.vy;s.x+=s.vx;s.a+=s.speed*.015;if(s.a>0.7||s.a<0.1)s.speed*=-1;
       if(s.y<-5){s.y=H+5;s.x=Math.random()*W;}
     });
-    // Caustic light shimmer at top
-    const now4=Date.now()/1000;
-    const grad4=ctx.createLinearGradient(0,0,0,H*0.3);
-    grad4.addColorStop(0,`rgba(0,100,200,${0.06+Math.sin(now4)*0.03})`);
-    grad4.addColorStop(1,'rgba(0,100,200,0)');
-    ctx.fillStyle=grad4;ctx.fillRect(0,0,W,H*0.3);
+    const og=ctx.createLinearGradient(0,0,0,H*0.3);
+    og.addColorStop(0,`rgba(0,100,200,${0.06+Math.sin(now)*0.03})`);og.addColorStop(1,'rgba(0,100,200,0)');
+    ctx.fillStyle=og;ctx.fillRect(0,0,W,H*0.3);
 
   } else if(eff==='lava'){
-    // Rising lava bubbles
     stars.forEach(s=>{
-      if(!s.vy||s.y<-10){
-        s.x=Math.random()*W;s.y=H+10;
-        s.vy=-(0.5+Math.random()*1.5);s.r=Math.random()*4+2;s.a=0.8;s.speed=0.015;
-      }
+      if(!s.vy||s.y>H+10){s.x=Math.random()*W;s.y=-10;s.vy=1+Math.random()*3;s.r=3+Math.random()*5;s.a=0.7;}
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(255,${Math.floor(s.a*60)},0,${s.a})`;ctx.fill();
       s.y+=s.vy;s.a-=0.004;
     });
-    // Lava glow at bottom
-    const grad5=ctx.createLinearGradient(0,H-60,0,H);
-    grad5.addColorStop(0,'rgba(255,40,0,0)');grad5.addColorStop(1,'rgba(255,40,0,0.2)');
-    ctx.fillStyle=grad5;ctx.fillRect(0,H-60,W,60);
+    const lavag=ctx.createLinearGradient(0,H-60,0,H);
+    lavag.addColorStop(0,'rgba(255,40,0,0)');lavag.addColorStop(1,'rgba(255,40,0,0.2)');
+    ctx.fillStyle=lavag;ctx.fillRect(0,H-60,W,60);
 
   } else if(eff==='midnight'){
-    // Slow minimal stars with occasional twinkle burst
     stars.forEach(s=>{
       ctx.beginPath();ctx.arc(s.x,s.y,s.r*0.8,0,Math.PI*2);
       ctx.fillStyle=`rgba(160,160,220,${s.a*0.6})`;ctx.fill();
       s.a+=s.speed*.01;if(s.a>0.7||s.a<0.05)s.speed*=-1;
     });
-    // Subtle moon glow top-right
-    const grad6=ctx.createRadialGradient(W*0.85,H*0.1,0,W*0.85,H*0.1,80);
-    grad6.addColorStop(0,'rgba(200,200,240,0.06)');grad6.addColorStop(1,'rgba(200,200,240,0)');
-    ctx.fillStyle=grad6;ctx.fillRect(0,0,W,H);
+    const mg=ctx.createRadialGradient(W*0.85,H*0.1,0,W*0.85,H*0.1,80);
+    mg.addColorStop(0,'rgba(200,200,240,0.06)');mg.addColorStop(1,'rgba(200,200,240,0)');
+    ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
   }
 
-  rafId=requestAnimationFrame(drawStars);
+  requestAnimationFrame(drawStars);
 }
 
 // THEME
@@ -848,12 +949,17 @@ const ACHIEVEMENTS=[
   {id:'combo20',check:()=>combo>=20,text:'🌟 Combo x20!'},
   {id:'combo50',check:()=>combo>=50,text:'👑 Combo x50! Insane!'},
   {id:'level5',check:()=>currentLevel>=5,text:'🏆 Reached Level 5!'},
-  {id:'level6',check:()=>currentLevel>=6,text:'❄️ Ice Storm unlocked!'},
+  {id:'level6',check:()=>currentLevel>=6,text:'🌠 Space Storm begins!'},
+  {id:'level11',check:()=>currentLevel>=11,text:'❄️ Ice unlocked!'},
+  {id:'level16',check:()=>currentLevel>=16,text:'🌨️ Blizzard warning!'},
   {id:'level10',check:()=>currentLevel>=10,text:'🌟 Reached Level 10!'},
-  {id:'level11',check:()=>currentLevel>=11,text:'🌋 Vulkan unlocked!'},
-  {id:'level16',check:()=>currentLevel>=16,text:'💚 Matrix unlocked!'},
-  {id:'level21',check:()=>currentLevel>=21,text:'🌀 Void unlocked!'},
-  {id:'level26',check:()=>currentLevel>=26,text:'⚡ Neon City unlocked!'},
+  {id:'level21',check:()=>currentLevel>=21,text:'🌋 Vulkan rises!'},
+  {id:'level26',check:()=>currentLevel>=26,text:'🔥 Eruption! Run!'},
+  {id:'level31',check:()=>currentLevel>=31,text:'💚 Matrix unlocked!'},
+  {id:'level36',check:()=>currentLevel>=36,text:'💥 Matrix Surge!'},
+  {id:'level41',check:()=>currentLevel>=41,text:'🌀 The Void opens!'},
+  {id:'level46',check:()=>currentLevel>=46,text:'💀 Void Collapse!'},
+  {id:'level51',check:()=>currentLevel>=51,text:'⚡ Neon City!'},
   {id:'score1000',check:()=>score>=1000,text:'💯 1000 Points!'},
   {id:'score5000',check:()=>score>=5000,text:'🚀 5000 Points!'},
   {id:'score20000',check:()=>score>=20000,text:'🏅 20,000 Points!'},
