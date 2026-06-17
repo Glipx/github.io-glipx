@@ -559,7 +559,7 @@ const THEMES={
   ice:         {bg:'#0a1828',border:'#2a4a70',star:'rgba(160,210,255,',name:'❄️ Ice',           desc:'The cold creeps in',        effect:'snow'},
   blizzard:    {bg:'#060e18',border:'#1a3a60',star:'rgba(180,220,255,',name:'🌨️ Blizzard',      desc:'You can barely see!',       effect:'blizzard'},
   vulkan:      {bg:'#1e0800',border:'#5e2a00',star:'rgba(255,140,60,', name:'🌋 Vulkan',         desc:'The heat is rising',        effect:'sparks'},
-  eruption:    {bg:'#280400',border:'#7e2000',star:'rgba(255,100,20,', name:'🔥 Eruption',       desc:'She's gonna blow!',        effect:'eruption'},
+  eruption:    {bg:'#280400',border:'#7e2000',star:'rgba(255,100,20,', name:'🔥 Eruption',       desc:'She\'s gonna blow!',        effect:'eruption'},
   matrix:      {bg:'#001800',border:'#004400',star:'rgba(80,255,100,', name:'💚 Matrix',         desc:'Follow the code',           effect:'matrix'},
   matrix_surge:{bg:'#000e00',border:'#006600',star:'rgba(100,255,80,', name:'💥 Matrix Surge',   desc:'The system is overloading', effect:'matrix_surge'},
   void:        {bg:'#050508',border:'#2a2a4e',star:'rgba(140,100,255,',name:'🌀 Void',           desc:'Beyond the known',          effect:'pulse'},
@@ -1020,32 +1020,57 @@ function startLevelTimer(){
 
 // COLORS per theme
 function getColors(){
-  // Check for active skin
   const skinColors=getSkinColors();
-  if(skinColors){
-    return skinColors.map(c=>({bg:c+'22',border:c,text:c}));
-  }
-  if(currentTheme==='ice')return[
+  if(skinColors){return skinColors.map(c=>({bg:c+'22',border:c,text:c}));}
+  // Space & Space Storm
+  if(currentTheme==='space'||currentTheme==='space_storm')return[
+    {bg:'#1e3e62',border:'#5a9ee0',text:'#c0e0ff'},
+    {bg:'#1e4232',border:'#2dbe85',text:'#9effd0'},
+    {bg:'#421e1e',border:'#e06a38',text:'#ffbba0'},
+    {bg:'#321e42',border:'#9f87ee',text:'#d4c8ff'},
+    {bg:'#423200',border:'#f5b030',text:'#ffe4a0'},
+  ];
+  // Ice & Blizzard
+  if(currentTheme==='ice'||currentTheme==='blizzard')return[
     {bg:'#0a1e38',border:'#4a90d9',text:'#a0d0ff'},
     {bg:'#0a1e2e',border:'#5DC4E8',text:'#b0e8ff'},
     {bg:'#0e1a2e',border:'#7F77DD',text:'#c4b8ff'},
     {bg:'#0a1828',border:'#378ADD',text:'#80c0ff'},
     {bg:'#0e2030',border:'#1D9E75',text:'#7ee8bb'},
   ];
-  if(currentTheme==='vulkan')return[
+  // Vulkan & Eruption
+  if(currentTheme==='vulkan'||currentTheme==='eruption')return[
     {bg:'#2e0a00',border:'#D85A30',text:'#ffaa88'},
     {bg:'#2e1000',border:'#EF9F27',text:'#ffd88a'},
     {bg:'#1e0800',border:'#cc3300',text:'#ff8866'},
     {bg:'#280e00',border:'#ff6600',text:'#ffcc88'},
     {bg:'#1a0600',border:'#ff4400',text:'#ff9966'},
   ];
-  if(currentTheme==='matrix')return[
+  // Matrix & Matrix Surge
+  if(currentTheme==='matrix'||currentTheme==='matrix_surge')return[
     {bg:'#001400',border:'#00cc44',text:'#88ffaa'},
     {bg:'#001800',border:'#00ff66',text:'#aaffcc'},
     {bg:'#001000',border:'#009933',text:'#66ee88'},
     {bg:'#001600',border:'#33ff88',text:'#99ffbb'},
     {bg:'#000e00',border:'#00ee55',text:'#77ffaa'},
   ];
+  // Void & Void Collapse
+  if(currentTheme==='void'||currentTheme==='void_collapse')return[
+    {bg:'#0d0020',border:'#8855ff',text:'#ccaaff'},
+    {bg:'#100018',border:'#aa44ee',text:'#ddaaff'},
+    {bg:'#08001a',border:'#6633cc',text:'#bb99ff'},
+    {bg:'#0e0022',border:'#9944ff',text:'#ddb0ff'},
+    {bg:'#0a0018',border:'#7722dd',text:'#cc88ff'},
+  ];
+  // Neon
+  if(currentTheme==='neon')return[
+    {bg:'#1a0030',border:'#ff00ff',text:'#ffaaff'},
+    {bg:'#001a1a',border:'#00ffff',text:'#aaffff'},
+    {bg:'#1a0018',border:'#ff50a0',text:'#ffaacc'},
+    {bg:'#0a001a',border:'#a000ff',text:'#cc88ff'},
+    {bg:'#001a08',border:'#00ff80',text:'#aaffcc'},
+  ];
+  // Default fallback
   return[
     {bg:'#1e3e62',border:'#5a9ee0',text:'#c0e0ff'},
     {bg:'#1e4232',border:'#2dbe85',text:'#9effd0'},
