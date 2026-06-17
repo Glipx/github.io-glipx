@@ -267,11 +267,13 @@
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. Appears from Level 4!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! Appears from Level 5</div></div></div>
-    <div style="margin-top:10px;margin-bottom:4px;font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em">Obstacles & Themes</div>
-    <div class="pu-info-row"><div class="pu-info-icon">🌑</div><div><div class="pu-info-name">Dark Zones</div><div class="pu-info-desc">Areas where circles are hidden. Active from Level 3</div></div></div>
+    <div style="margin-top:10px;margin-bottom:4px;font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em">Obstacles & Effects</div>
+    <div class="pu-info-row"><div class="pu-info-icon">🌑</div><div><div class="pu-info-name">Dark Zones</div><div class="pu-info-desc">Hidden areas where circles disappear. From Level 3</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 6</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 5</div></div></div>
-    <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🌋</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 8</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">🌊</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 8</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">👁️</div><div><div class="pu-info-name">Blind Mode</div><div class="pu-info-desc">Circles are invisible until 1 sec before they vanish! From Level 7</div></div></div>
+    <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🔀</div><div><div class="pu-info-name">Shuffle</div><div class="pu-info-desc">All circles suddenly teleport to new positions! From Level 9</div></div></div>
     <button class="panel-close" id="info-close">Close</button>
   </div>
 </div>
@@ -1094,6 +1096,12 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
     },30);
   }
 
+  // BLIND MODE: level 7+ — hide circle, show 1 sec before expiry
+  if(currentLevel>=7&&!isPU&&!isFake&&!isMini&&Math.random()<Math.min(0.4,(currentLevel-6)*0.08)){
+    el.style.opacity='0';
+    setTimeout(()=>{if(!hit)el.style.opacity='1';},lifeMs-1000);
+  }
+
   let hit=false;
   el.addEventListener('pointerdown',e=>{
     e.stopPropagation();
@@ -1201,6 +1209,7 @@ function quitToMenu(){
   paused=false;running=false;
   clearTimeout(spawnTimer);clearInterval(countTimer);clearInterval(moveTimer);
   clearTimeout(boostTimeout);clearTimeout(slowTimeout);
+  if(window._shuffleInterval)clearInterval(window._shuffleInterval);
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
   darkZones.forEach(z=>z.remove());darkZones=[];
   pauseScreen.style.display='none';levelBarWrap.style.display='none';pauseBtn.style.display='none';
@@ -1246,6 +1255,23 @@ function startGame(){
     startLevelTimer();
   }
   spawnTimer=setTimeout(()=>spawnTarget(),400);
+  // Shuffle mechanic level 9+
+  if(currentLevel>=9||true){
+    if(window._shuffleInterval)clearInterval(window._shuffleInterval);
+    window._shuffleInterval=setInterval(()=>{
+      if(!running||paused||currentLevel<9)return;
+      const arenaW2=arena.clientWidth,arenaH2=arena.clientHeight;
+      targets.forEach(t=>{
+        if(!t.el||!t.el.parentNode)return;
+        const sz=parseFloat(t.el.style.width)||50;
+        const nx=Math.random()*(arenaW2-sz-8)+4;
+        const ny=Math.random()*(arenaH2-sz-20)+10;
+        t.el.style.transition='left .2s,top .2s';
+        t.el.style.left=nx+'px';t.el.style.top=ny+'px';
+        setTimeout(()=>{if(t.el&&t.el.style)t.el.style.transition='';},250);
+      });
+    },8000);
+  }
 }
 
 function endGame(){
@@ -1436,14 +1462,12 @@ function watchAdAndRevive(){
 }
 
 function reviveGame(){
-  // Restore game state and continue
   running=true;paused=false;
   combo=1;comboDisp.textContent='x1';
-  // Add 5 seconds if not zen
   if(currentMode!=='zen'){
     timeLeft=15;timeDisp.textContent=timeLeft;
     clearInterval(countTimer);
-    countTimer=setInterval(()=>{if(!paused){timeLeft--;timeDisp.textContent=timeLeft;if(timeLeft<=0)endGame();}},1000);
+    countTimer=setInterval(()=>{if(!paused){timeLeft--;timeDisp.textContent=timeLeft;if(timeLeft<=0)endGameAfterRevive();}},1000);
   } else {
     livesLeft=2;updateLivesDisplay();
   }
@@ -1452,6 +1476,45 @@ function reviveGame(){
   updateLevelBar();
   spawnTimer=setTimeout(spawnTarget,400);
   showAchievement('💪 Revived! Keep going!');
+}
+
+function endGameAfterRevive(){
+  // End game after revive — go straight to GO screen, no revive option
+  running=false;paused=false;
+  clearTimeout(spawnTimer);clearInterval(countTimer);
+  clearTimeout(boostTimeout);clearTimeout(slowTimeout);
+  boostActive=false;slowActive=false;shieldActive=false;
+  boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
+  targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
+  darkZones.forEach(z=>z.remove());darkZones=[];
+  levelBarWrap.style.display='none';pauseBtn.style.display='none';
+  soundGameOver();gamesPlayed++;
+  updateRecords();
+  // Build GO screen directly
+  const go=document.createElement('div');go.id='game-over-screen';
+  go.innerHTML=`
+    <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
+    <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
+    <div class="go-score">${score}</div>
+    <div class="go-label">points</div>
+    <div class="go-stats">
+      <div class="go-stat"><div class="go-stat-label">Best Combo</div><div class="go-stat-val">x${bestCombo}</div></div>
+      <div class="go-stat"><div class="go-stat-label">Level</div><div class="go-stat-val">${currentLevel}</div></div>
+    </div>
+    <button class="play-btn" id="retry-btn2">Play again</button>
+    <button class="share-btn" id="go-share-btn2" style="margin:0 auto">📤 Share score</button>
+    <div style="display:flex;gap:12px">
+      <div class="settings-link" id="go-info2">ℹ️ Power-ups</div>
+      <div class="settings-link" id="go-menu2">↩ Menu</div>
+    </div>
+  `;
+  arena.appendChild(go);
+  document.getElementById('retry-btn2').addEventListener('click',()=>{reviveAvailable=true;startGame();});
+  document.getElementById('go-info2').addEventListener('click',openInfo);
+  document.getElementById('go-menu2').addEventListener('click',()=>{reviveAvailable=true;quitToMenu();});
+  document.getElementById('go-share-btn2').addEventListener('click',()=>{
+    openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
+  });
 }
 
 document.getElementById('revive-watch-btn').addEventListener('click',watchAdAndRevive);
