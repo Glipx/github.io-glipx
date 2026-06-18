@@ -264,7 +264,7 @@
 
   
     /* WOW EFFECTS */
-    #achievement-unlock{position:fixed;inset:0;background:#000000dd;display:none;align-items:center;justify-content:center;z-index:1002;flex-direction:column}
+    #achievement-unlock{position:fixed;inset:0;background:#000000dd;display:none;align-items:center;justify-content:center;z-index:1002;flex-direction:column;pointer-events:all}
     #au-box{background:#0f0f22;border:2px solid #FAC775;border-radius:20px;padding:32px 28px;max-width:320px;width:90%;text-align:center;position:relative;overflow:hidden}
     #au-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#FAC77511,#EF9F2711,#FAC77511);animation:au-shimmer 2s linear infinite}
     @keyframes au-shimmer{0%{opacity:0.5}50%{opacity:1}100%{opacity:0.5}}
@@ -274,7 +274,7 @@
     #au-name{font-size:24px;font-weight:700;color:#FAC775;margin-bottom:6px}
     #au-desc{font-size:13px;color:#8899cc;margin-bottom:20px;line-height:1.5}
     #au-skin-preview{display:flex;gap:6px;justify-content:center;margin-bottom:16px}
-    #au-close{background:#FAC775;color:#412402;border:none;border-radius:12px;padding:12px 0;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
+    #au-close{background:#FAC775;color:#412402;border:none;border-radius:12px;padding:12px 0;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;position:relative;z-index:1004}
     #au-confetti{position:fixed;inset:0;pointer-events:none;z-index:1001}
     .au-confetti-piece{position:absolute;width:8px;height:8px;border-radius:2px;animation:au-fall linear forwards}
     @keyframes au-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
@@ -380,8 +380,8 @@
 
 
 <div id="achievement-unlock">
-  <canvas id="au-confetti"></canvas>
-  <div id="au-box">
+  <canvas id="au-confetti" style="position:fixed;inset:0;pointer-events:none;z-index:1001"></canvas>
+  <div id="au-box" style="position:relative;z-index:1003">
     <div id="au-label">🏆 Achievement Unlocked!</div>
     <div id="au-icon">🥇</div>
     <div id="au-name">Gold Star</div>
@@ -554,8 +554,6 @@
     <div class="shop-section">Hit Effects</div>
     <div id="shop-hit-effects"></div>
 
-    <div class="shop-section">Trail Effects</div>
-    <div id="shop-trails"></div>
 
     <div class="shop-section">Sound Packs</div>
     <div id="shop-sounds"></div>
@@ -784,8 +782,35 @@ const AC=window.AudioContext||window.webkitAudioContext;
 let ac=null;
 function getAC(){if(!ac)ac=new AC();return ac;}
 function beep(freq,dur,type='sine',gain=0.18){if(!soundOn)return;try{const a=getAC();const o=a.createOscillator();const g=a.createGain();o.connect(g);g.connect(a.destination);o.type=type;o.frequency.setValueAtTime(freq,a.currentTime);g.gain.setValueAtTime(gain,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);o.start();o.stop(a.currentTime+dur);}catch{}}
-function soundHit(c){if(paused)return;const f=300+Math.min(c-1,7)*60;beep(f,.08,'sine',.15);setTimeout(()=>{if(!paused)beep(f*1.5,.06,'sine',.08);},40);}
-function soundMiss(){if(paused)return;beep(120,.15,'sawtooth',.12);}
+function soundHit(c){
+  if(paused)return;
+  const f=300+Math.min(c-1,7)*60;
+  if(activeSoundPack==='retro'){
+    // 8-bit style — square wave, higher pitch
+    beep(f*2,.06,'square',.12);
+    setTimeout(()=>{if(!paused)beep(f*3,.04,'square',.08);},30);
+  } else if(activeSoundPack==='scifi'){
+    // Laser-like — quick frequency sweep
+    try{
+      const a=getMusicAC();const o=a.createOscillator();const g=a.createGain();
+      o.connect(g);g.connect(a.destination);o.type='sawtooth';
+      o.frequency.setValueAtTime(f*4,a.currentTime);
+      o.frequency.exponentialRampToValueAtTime(f*0.5,a.currentTime+0.15);
+      g.gain.setValueAtTime(0.12,a.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+0.15);
+      o.start();o.stop(a.currentTime+0.15);
+    }catch(e){}
+  } else {
+    beep(f,.08,'sine',.15);
+    setTimeout(()=>{if(!paused)beep(f*1.5,.06,'sine',.08);},40);
+  }
+}
+function soundMiss(){
+  if(paused)return;
+  if(activeSoundPack==='retro'){beep(80,.15,'square',.15);}
+  else if(activeSoundPack==='scifi'){beep(200,.1,'sawtooth',.1);setTimeout(()=>beep(100,.15,'sawtooth',.08),60);}
+  else{beep(120,.15,'sawtooth',.12);}
+}
 function soundLevelUp(){if(paused)return;beep(440,.08);setTimeout(()=>{if(!paused)beep(550,.08);},90);setTimeout(()=>{if(!paused)beep(660,.2);},180);}
 function soundPU(t){if(paused)return;if(t==='time'){beep(440,.05);setTimeout(()=>{if(!paused)beep(660,.1);},60);}else if(t==='boost'){beep(550,.05);setTimeout(()=>{if(!paused)beep(880,.12);},60);}else if(t==='heart'){beep(523,.08);setTimeout(()=>{if(!paused)beep(659,.12);},90);}else if(t==='shield'){beep(392,.08);setTimeout(()=>{if(!paused)beep(523,.12);},90);}else if(t==='slow'){beep(300,.1,'sine',.12);}else if(t==='bomb'){beep(150,.2,'sawtooth',.2);}else{beep(330,.05);setTimeout(()=>{if(!paused)beep(990,.15);},60);}}
 function soundGameOver(){beep(440,.1,'sawtooth',.15);setTimeout(()=>beep(330,.1,'sawtooth',.15),120);setTimeout(()=>beep(220,.2,'sawtooth',.15),240);}
@@ -2237,16 +2262,25 @@ function showAchievementUnlock(ach){
 }
 
 function processAchUnlockQueue(){
-  if(achUnlockQueue.length===0){achUnlockShowing=false;return;}
+  if(achUnlockQueue.length===0){
+    achUnlockShowing=false;
+    // Resume game if it was running
+    if(running&&paused){resumeGame();}
+    return;
+  }
   achUnlockShowing=true;
+  // Pause game while showing
+  if(running&&!paused){
+    clearTimeout(spawnTimer);
+    paused=true;
+    stopMusic();stopAtmo();
+  }
   const ach=achUnlockQueue.shift();
-  // Find full data from ACHIEVEMENT_SKINS or ACHIEVEMENTS
   const skinData=ACHIEVEMENT_SKINS.find(s=>s.id===ach.skinId);
   const panel=document.getElementById('achievement-unlock');
   document.getElementById('au-icon').textContent=ach.icon||'🏆';
   document.getElementById('au-name').textContent=ach.name;
   document.getElementById('au-desc').textContent=ach.desc;
-  // Show skin color dots if it's a skin unlock
   const preview=document.getElementById('au-skin-preview');
   if(skinData){
     preview.innerHTML=skinData.colors.map(c=>`<div style="width:20px;height:20px;border-radius:50%;background:${c}33;border:2px solid ${c}"></div>`).join('');
@@ -2257,7 +2291,9 @@ function processAchUnlockQueue(){
 
 document.getElementById('au-close').addEventListener('click',()=>{
   document.getElementById('achievement-unlock').style.display='none';
-  setTimeout(processAchUnlockQueue,300);
+  setTimeout(()=>{
+    processAchUnlockQueue();
+  },300);
 });
 
 // --- Record Flash ---
@@ -2652,22 +2688,7 @@ function renderShop(){
     hitContainer.appendChild(div);
   });
 
-  // Trail effects
-  const trailContainer=document.getElementById('shop-trails');
-  trailContainer.innerHTML='';
-  const ownedTrails=d.ownedTrails||['none'];
-  TRAIL_EFFECTS.forEach(e=>{
-    const owned=ownedTrails.includes(e.id);
-    const isActive=activeTrail===e.id;
-    const div=document.createElement('div');
-    div.className='shop-item'+(owned?' owned':'')+(isActive?' active-item':'');
-    div.innerHTML=`<div class="shop-icon">${e.icon}</div><div class="shop-info"><div class="shop-name">${e.name}</div><div class="shop-desc">${e.desc}</div><div class="shop-price">${e.id==='none'?'Free':(owned?'Owned':e.price)}</div></div><button class="shop-buy-btn ${isActive?'active-btn':owned?'owned-btn':''}">${isActive?'Active':owned?'Equip':'Buy'}</button>`;
-    const btn=div.querySelector('button');
-    if(isActive)btn.disabled=true;
-    else if(owned)btn.onclick=()=>equipTrail(e.id);
-    else if(e.id!=='none')btn.onclick=()=>buyTrail(e.id,e.price);
-    trailContainer.appendChild(div);
-  });
+  // Trail effects removed — not suitable for mobile
 
   // Sound packs
   const soundContainer=document.getElementById('shop-sounds');
