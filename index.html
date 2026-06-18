@@ -265,12 +265,12 @@
     <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Heart ❤️</div><div class="pu-info-desc">Adds one life — only appears in Zen mode</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield 🛡️</div><div class="pu-info-desc">All modes: blocks one missed circle. In Normal/Blitz it also saves your combo!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. From Level 22!</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! From Level 14</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. From Level 20!</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! From Level 7</div></div></div>
     <div style="margin-top:10px;margin-bottom:4px;font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em">Obstacles & Effects</div>
-    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 20</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 16</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">🌊</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 18</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 16</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 10</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">🌊</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 13</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">👁️</div><div><div class="pu-info-name">Blind Mode</div><div class="pu-info-desc">Circles are invisible until 1 sec before they vanish! From Level 24</div></div></div>
     <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🔀</div><div><div class="pu-info-name">Shuffle</div><div class="pu-info-desc">All circles suddenly teleport to new positions! From Level 28</div></div></div>
     <button class="panel-close" id="info-close">Close</button>
@@ -987,7 +987,7 @@ function doLevelUp(){
       startLevelTimer();
     spawnTimer=setTimeout(()=>spawnTarget(),500);
     // Wave attack level 8+
-    if(currentLevel>=18)setTimeout(()=>spawnWave(),3000);
+    if(currentLevel>=13)setTimeout(()=>spawnWave(),3000);
   },1600);
 }
 
@@ -1070,7 +1070,7 @@ const PU_BASE=['time','boost','clear','shield','slow'];
 const PU_ZEN=['boost','clear','heart','shield','slow'];
 function getPUTypes(){
   const t=currentMode==='zen'?[...PU_ZEN]:[...PU_BASE];
-  if(currentLevel>=22)t.push('bomb');
+  if(currentLevel>=20)t.push('bomb');
   if(currentLevel>=5)t.push('mini');
   return t;
 }
@@ -1087,8 +1087,8 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   if(!running||paused)return;
   const puTypes=getPUTypes();
   const roll=Math.random();
-  const isFake=forceFake||(currentLevel>=20&&roll<0.07);
-  const isMini=forceMini||(!isFake&&currentLevel>=14&&roll>=0.07&&roll<0.13);
+  const isFake=forceFake||(currentLevel>=16&&roll<0.07);
+  const isMini=forceMini||(!isFake&&currentLevel>=7&&roll>=0.07&&roll<0.13);
   const isPU=!isFake&&!isMini&&roll>=0.15&&roll<0.28;
   const puType=isPU?puTypes[Math.floor(Math.random()*puTypes.length)]:null;
   const cfg=getLevelCfg(currentLevel);
@@ -1226,7 +1226,7 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
 
   // MOVING circles (level 5+)
   let moveInterval=null;
-  if(currentLevel>=16&&!isMini&&!isFake&&Math.random()<Math.min(0.4,(currentLevel-15)*0.06)){
+  if(currentLevel>=10&&!isMini&&!isFake&&Math.random()<Math.min(0.4,(currentLevel-9)*0.06)){
     let cx=x,cy=y;
     const dx=(Math.random()-0.5)*2.5,dy=(Math.random()-0.5)*2.5;
     moveInterval=setInterval(()=>{
