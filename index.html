@@ -26,9 +26,7 @@
     #arena{position:relative;flex:1;background:#10102a;border-radius:16px;border:0.5px solid #3a3a6e;overflow:hidden;cursor:crosshair;min-height:0;transition:background .8s}
     #stars-canvas{position:absolute;inset:0;pointer-events:none}
 
-    /* DARK ZONES */
-    .dark-zone{position:absolute;border-radius:50%;background:rgba(0,0,0,0.75);pointer-events:none;z-index:4;transition:opacity .5s}
-
+    
     .target{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:pop-in .1s ease-out;z-index:3;pointer-events:all}
     .target.moving{transition:left .05s linear, top .05s linear}
     .target.fake{border-style:dashed!important}
@@ -211,14 +209,16 @@
     #revive-timer-ring{transform:rotate(-90deg)}
     .revive-ad-btn{background:#EF9F27;color:#1a0e00;border:none;border-radius:12px;padding:13px 0;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:200px;display:flex;align-items:center;justify-content:center;gap:8px}
     .revive-skip-btn{background:none;color:#6677aa;border:0.5px solid #2a2a4e;border-radius:12px;padding:10px 0;font-size:13px;cursor:pointer;font-family:inherit;width:200px}
-    #revive-ad-overlay{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:16px}
-    #revive-ad-content{background:#1a1a2e;border-radius:16px;padding:32px 24px;max-width:320px;width:90%;text-align:center}
-    .ad-sim-label{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
-    .ad-sim-title{font-size:20px;font-weight:600;color:#e0e8ff;margin-bottom:8px}
-    .ad-sim-sub{font-size:13px;color:#6677aa;margin-bottom:20px;line-height:1.5}
-    #ad-sim-timer{font-size:13px;color:#EF9F27;margin-bottom:14px}
-    #ad-sim-close{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:11px 28px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;opacity:0.4}
-    #ad-sim-close:not(:disabled){opacity:1}
+    #revive-ad-overlay{position:fixed;inset:0;background:#0a0a1a;display:none;align-items:center;justify-content:center;z-index:1000;flex-direction:column}
+    #revive-ad-content{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;max-width:480px;margin:0 auto}
+    .ad-sim-label{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;border:0.5px solid #2a2a4e;border-radius:6px;padding:4px 10px}
+    .ad-sim-visual{width:100%;max-width:320px;height:200px;background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;font-size:48px}
+    .ad-sim-title{font-size:22px;font-weight:600;color:#e0e8ff;margin-bottom:8px}
+    .ad-sim-sub{font-size:14px;color:#6677aa;margin-bottom:24px;line-height:1.6;max-width:280px}
+    #ad-sim-timer{font-size:15px;color:#EF9F27;margin-bottom:16px;font-weight:500}
+    #ad-sim-close{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:14px 0;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;max-width:280px}
+    #ad-sim-close:disabled{opacity:0.35;cursor:not-allowed}
+    #ad-skip-counter{position:absolute;top:16px;right:16px;font-size:12px;color:#6677aa;background:#1a1a2e;border-radius:8px;padding:4px 10px}
 
   </style>
 </head>
@@ -265,15 +265,14 @@
     <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Heart ❤️</div><div class="pu-info-desc">Adds one life — only appears in Zen mode</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield 🛡️</div><div class="pu-info-desc">All modes: blocks one missed circle. In Normal/Blitz it also saves your combo!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. Appears from Level 4!</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! Appears from Level 5</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. From Level 22!</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! From Level 14</div></div></div>
     <div style="margin-top:10px;margin-bottom:4px;font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em">Obstacles & Effects</div>
-    <div class="pu-info-row"><div class="pu-info-icon">🌑</div><div><div class="pu-info-name">Dark Zones</div><div class="pu-info-desc">Hidden areas where circles disappear. From Level 3</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 6</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 5</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">🌊</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 8</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">👁️</div><div><div class="pu-info-name">Blind Mode</div><div class="pu-info-desc">Circles are invisible until 1 sec before they vanish! From Level 7</div></div></div>
-    <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🔀</div><div><div class="pu-info-name">Shuffle</div><div class="pu-info-desc">All circles suddenly teleport to new positions! From Level 9</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 20</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 16</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">🌊</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 18</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">👁️</div><div><div class="pu-info-name">Blind Mode</div><div class="pu-info-desc">Circles are invisible until 1 sec before they vanish! From Level 24</div></div></div>
+    <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🔀</div><div><div class="pu-info-name">Shuffle</div><div class="pu-info-desc">All circles suddenly teleport to new positions! From Level 28</div></div></div>
     <button class="panel-close" id="info-close">Close</button>
   </div>
 </div>
@@ -331,12 +330,14 @@
     </div>
 
     <div id="revive-ad-overlay">
+      <div id="ad-skip-counter" id="ad-skip-counter"></div>
       <div id="revive-ad-content">
         <div class="ad-sim-label">Advertisement</div>
-        <div class="ad-sim-title">📱 Advertisement</div>
-        <div class="ad-sim-sub">This is where a sponsored ad would appear. Thank you for supporting free apps!</div>
+        <div class="ad-sim-visual">📱</div>
+        <div class="ad-sim-title">Your ad goes here</div>
+        <div class="ad-sim-sub">This is where a real sponsored ad would appear. Thank you for supporting Glipx!</div>
         <div id="ad-sim-timer">Ad ends in 5 seconds...</div>
-        <button id="ad-sim-close" disabled>Continue playing ✓</button>
+        <button id="ad-sim-close" disabled>✓ Continue playing</button>
       </div>
     </div>
 
@@ -613,7 +614,7 @@ let score=0,combo=1,bestCombo=1,timeLeft=0,livesLeft=0;
 let running=false,paused=false,minTimePassed=true;
 let boostActive=false,slowActive=false,shieldActive=false;
 let boostTimeout=null,slowTimeout=null;
-let targets=[],darkZones=[],spawnTimer=null,countTimer=null,moveTimer=null;
+let targets=[],spawnTimer=null,countTimer=null,moveTimer=null;
 let gamesPlayed=0,currentLevel=1,levelScore=0,currentTheme='space',minTimeTimer=null;
 
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
@@ -903,20 +904,6 @@ function applyTheme(theme){
   setTimeout(()=>{themeBanner.style.display='none';},2500);
 }
 
-// DARK ZONES (level 3+)
-function updateDarkZones(){
-  darkZones.forEach(z=>z.remove());darkZones=[];
-  if(currentLevel<3)return;
-  const count=Math.min(currentLevel-2,4);
-  const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
-  for(let i=0;i<count;i++){
-    const z=document.createElement('div');z.className='dark-zone';
-    const r=40+Math.random()*50;
-    z.style.cssText=`width:${r*2}px;height:${r*2}px;left:${Math.random()*(arenaW-r*2)}px;top:${Math.random()*(arenaH-r*2)+20}px;opacity:${0.5+Math.random()*0.3}`;
-    arena.appendChild(z);darkZones.push(z);
-  }
-}
-
 // PARTICLES
 function spawnParticles(x,y,color){for(let i=0;i<6;i++){const p=document.createElement('div');p.className='particle';const a=Math.random()*Math.PI*2;const d=25+Math.random()*35;p.style.cssText=`width:5px;height:5px;border-radius:50%;background:${color};position:absolute;left:${x}px;top:${y}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;pointer-events:none;`;arena.appendChild(p);setTimeout(()=>p.remove(),520);}}
 
@@ -988,7 +975,6 @@ function doLevelUp(){
   clearTimeout(spawnTimer);clearInterval(countTimer);clearInterval(moveTimer);
   running=false;
   targets.forEach(t=>{clearTimeout(t.timeout);if(t.moveInterval)clearInterval(t.moveInterval);t.el.remove();});targets=[];
-  darkZones.forEach(z=>z.remove());darkZones=[];
   currentLevel++;levelScore=0;
   const cfg=getLevelCfg(currentLevel);
   levelupSub.textContent=`Level ${currentLevel} · ${cfg.pts} pts needed`;
@@ -997,11 +983,10 @@ function doLevelUp(){
   applyTheme(cfg.theme);
   setTimeout(()=>{
     running=true;
-    updateDarkZones();
-    startLevelTimer();
+      startLevelTimer();
     spawnTimer=setTimeout(()=>spawnTarget(),500);
     // Wave attack level 8+
-    if(currentLevel>=8)setTimeout(()=>spawnWave(),3000);
+    if(currentLevel>=18)setTimeout(()=>spawnWave(),3000);
   },1600);
 }
 
@@ -1084,7 +1069,7 @@ const PU_BASE=['time','boost','clear','shield','slow'];
 const PU_ZEN=['boost','clear','heart','shield','slow'];
 function getPUTypes(){
   const t=currentMode==='zen'?[...PU_ZEN]:[...PU_BASE];
-  if(currentLevel>=4)t.push('bomb');
+  if(currentLevel>=22)t.push('bomb');
   if(currentLevel>=5)t.push('mini');
   return t;
 }
@@ -1101,8 +1086,8 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   if(!running||paused)return;
   const puTypes=getPUTypes();
   const roll=Math.random();
-  const isFake=forceFake||(currentLevel>=6&&roll<0.08);
-  const isMini=forceMini||(!isFake&&currentLevel>=5&&roll>=0.08&&roll<0.15);
+  const isFake=forceFake||(currentLevel>=20&&roll<0.07);
+  const isMini=forceMini||(!isFake&&currentLevel>=14&&roll>=0.07&&roll<0.13);
   const isPU=!isFake&&!isMini&&roll>=0.15&&roll<0.28;
   const puType=isPU?puTypes[Math.floor(Math.random()*puTypes.length)]:null;
   const cfg=getLevelCfg(currentLevel);
@@ -1116,18 +1101,8 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   else if(isFake)size=Math.max(36,62-currentLevel*1.1);
   else size=Math.max(36,64-currentLevel*1.1);
 
-  let x,y;
-  // Level 3+: 40% chance to spawn inside a dark zone to hide the circle
-  if(currentLevel>=3&&darkZones.length>0&&Math.random()<0.4){
-    const dz=darkZones[Math.floor(Math.random()*darkZones.length)];
-    const dzX=parseFloat(dz.style.left);const dzY=parseFloat(dz.style.top);
-    const dzR=parseFloat(dz.style.width)/2;
-    x=Math.min(Math.max(dzX+dzR/2,4),arenaW-size-4);
-    y=Math.min(Math.max(dzY+dzR/2,10),arenaH-size-10);
-  } else {
-    x=Math.random()*(arenaW-size-8)+4;
-    y=Math.random()*(arenaH-size-20)+10;
-  }
+  const x=Math.random()*(arenaW-size-8)+4;
+  const y=Math.random()*(arenaH-size-20)+10;
   const c=COLORS[Math.floor(Math.random()*COLORS.length)];
   const lifeMs=Math.max(560,cfg.lifeBase*blitzMod*slowMod*(isMini?0.8:1));
 
@@ -1208,6 +1183,41 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
         style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
     </svg>`;
     el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+  } else if(skinShape==='diamond'&&!isPU&&!isFake&&!isMini){
+    // Diamond — rotated square, outer fixed + inner animated
+    const d=half*0.85;const di=half*0.58;
+    const diamondOuter=`M${half},${half-d} L${half+d},${half} L${half},${half+d} L${half-d},${half} Z`;
+    const diamondInner=`M${half},${half-di} L${half+di},${half} L${half},${half+di} L${half-di},${half} Z`;
+    const diamondPerim=Math.round(d*8);const diamondInnerPerim=Math.round(di*8);
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
+      <path d="${diamondOuter}" fill="${skinBorder}18" stroke="${skinBorder}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="${diamondInner}" fill="none" stroke="${skinBorder}" stroke-width="2.5"
+        stroke-dasharray="${diamondInnerPerim}" stroke-dashoffset="0" stroke-linecap="round"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
+    </svg>`;
+    el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+
+  } else if(skinShape==='hex'&&!isPU&&!isFake&&!isMini){
+    // Hexagon — outer fixed + inner animated
+    const hexPtsOuter=[];const hexPtsInner=[];
+    const hexRo=half*0.88;const hexRi=half*0.60;
+    for(let i=0;i<6;i++){
+      const a=(i*Math.PI/3)-(Math.PI/6);
+      hexPtsOuter.push(`${(half+hexRo*Math.cos(a)).toFixed(2)},${(half+hexRo*Math.sin(a)).toFixed(2)}`);
+      hexPtsInner.push(`${(half+hexRi*Math.cos(a)).toFixed(2)},${(half+hexRi*Math.sin(a)).toFixed(2)}`);
+    }
+    const hexOuter='M'+hexPtsOuter.join('L')+'Z';
+    const hexInner='M'+hexPtsInner.join('L')+'Z';
+    const hexOuterPerim=Math.round(hexRo*6*1.15);
+    const hexInnerPerim=Math.round(hexRi*6*1.15);
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
+      <path d="${hexOuter}" fill="${skinBorder}18" stroke="${skinBorder}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="${hexInner}" fill="none" stroke="${skinBorder}" stroke-width="2.5"
+        stroke-dasharray="${hexInnerPerim}" stroke-dashoffset="0" stroke-linecap="round"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
+    </svg>`;
+    el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+
   } else {
     shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}"><circle cx="${half}" cy="${half}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg>`;
   }
@@ -1215,7 +1225,7 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
 
   // MOVING circles (level 5+)
   let moveInterval=null;
-  if(currentLevel>=5&&!isMini&&!isFake&&Math.random()<Math.min(0.5,(currentLevel-4)*0.1)){
+  if(currentLevel>=16&&!isMini&&!isFake&&Math.random()<Math.min(0.4,(currentLevel-15)*0.06)){
     let cx=x,cy=y;
     const dx=(Math.random()-0.5)*2.5,dy=(Math.random()-0.5)*2.5;
     moveInterval=setInterval(()=>{
@@ -1228,7 +1238,7 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   }
 
   // BLIND MODE: level 7+ — hide circle, show 1 sec before expiry
-  if(currentLevel>=7&&!isPU&&!isFake&&!isMini&&Math.random()<Math.min(0.4,(currentLevel-6)*0.08)){
+  if(currentLevel>=24&&!isPU&&!isFake&&!isMini&&Math.random()<Math.min(0.35,(currentLevel-23)*0.05)){
     el.style.opacity='0';
     setTimeout(()=>{if(!hit)el.style.opacity='1';},lifeMs-1000);
   }
@@ -1342,7 +1352,6 @@ function quitToMenu(){
   clearTimeout(boostTimeout);clearTimeout(slowTimeout);
   if(window._shuffleInterval)clearInterval(window._shuffleInterval);
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
-  darkZones.forEach(z=>z.remove());darkZones=[];
   pauseScreen.style.display='none';levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   const go=document.getElementById('game-over-screen');if(go)go.remove();
@@ -1373,7 +1382,6 @@ function startGame(){
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   scoreDisp.textContent='0';comboDisp.textContent='x1';
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
-  darkZones.forEach(z=>z.remove());darkZones=[];
   const go=document.getElementById('game-over-screen');if(go)go.remove();
   startScreen.style.display='none';levelBarWrap.style.display='block';pauseBtn.style.display='block';
   currentTheme='space';arena.style.background='#0a0a1a';arena.style.borderColor='#2a2a4e';
@@ -1390,7 +1398,7 @@ function startGame(){
   if(currentLevel>=9||true){
     if(window._shuffleInterval)clearInterval(window._shuffleInterval);
     window._shuffleInterval=setInterval(()=>{
-      if(!running||paused||currentLevel<9)return;
+      if(!running||paused||currentLevel<28)return;
       const arenaW2=arena.clientWidth,arenaH2=arena.clientHeight;
       targets.forEach(t=>{
         if(!t.el||!t.el.parentNode)return;
@@ -1410,7 +1418,6 @@ function endGame(){
   clearTimeout(spawnTimer);clearInterval(countTimer);
   clearTimeout(boostTimeout);clearTimeout(slowTimeout);
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
-  darkZones.forEach(z=>z.remove());darkZones=[];
   levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   soundGameOver();gamesPlayed++;
@@ -1569,20 +1576,24 @@ function showReviveScreen(){
 function watchAdAndRevive(){
   clearInterval(reviveTimer);
   document.getElementById('revive-screen').style.display='none';
-  // Show simulated ad
   const overlay=document.getElementById('revive-ad-overlay');
   const closeBtn=document.getElementById('ad-sim-close');
   const timerEl=document.getElementById('ad-sim-timer');
+  const skipCounter=document.getElementById('ad-skip-counter');
   overlay.style.display='flex';
   closeBtn.disabled=true;
   let adSecs=5;
   timerEl.textContent=`Ad ends in ${adSecs} seconds...`;
+  skipCounter.textContent=`Skip in ${adSecs}s`;
   const adTimer=setInterval(()=>{
     adSecs--;
-    if(adSecs>0){timerEl.textContent=`Ad ends in ${adSecs} seconds...`;}
-    else{
+    if(adSecs>0){
+      timerEl.textContent=`Ad ends in ${adSecs} seconds...`;
+      skipCounter.textContent=`Skip in ${adSecs}s`;
+    } else {
       clearInterval(adTimer);
-      timerEl.textContent='Thanks for watching!';
+      timerEl.textContent='';
+      skipCounter.textContent='';
       closeBtn.disabled=false;
     }
   },1000);
@@ -1617,7 +1628,6 @@ function endGameAfterRevive(){
   boostActive=false;slowActive=false;shieldActive=false;
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
-  darkZones.forEach(z=>z.remove());darkZones=[];
   levelBarWrap.style.display='none';pauseBtn.style.display='none';
   soundGameOver();gamesPlayed++;
   updateRecords();
@@ -1652,7 +1662,31 @@ document.getElementById('revive-watch-btn').addEventListener('click',watchAdAndR
 document.getElementById('revive-skip-btn').addEventListener('click',()=>{
   clearInterval(reviveTimer);
   document.getElementById('revive-screen').style.display='none';
-  showGOScreen();
+  // Build GO screen directly without revive option
+  updateRecords();
+  gamesPlayed++;
+  const goSkip=document.createElement('div');goSkip.id='game-over-screen';
+  goSkip.innerHTML=`
+    <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
+    <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
+    <div class="go-score">${score}</div>
+    <div class="go-label">points</div>
+    <div class="go-stats">
+      <div class="go-stat"><div class="go-stat-label">Best Combo</div><div class="go-stat-val">x${bestCombo}</div></div>
+      <div class="go-stat"><div class="go-stat-label">Level</div><div class="go-stat-val">${currentLevel}</div></div>
+    </div>
+    <button class="play-btn" id="skip-retry-btn">Play again</button>
+    <button class="share-btn" id="skip-share-btn" style="margin:0 auto">📤 Share score</button>
+    <div style="display:flex;gap:12px">
+      <div class="settings-link" id="skip-info-btn">ℹ️ Power-ups</div>
+      <div class="settings-link" id="skip-menu-btn">↩ Menu</div>
+    </div>
+  `;
+  arena.appendChild(goSkip);
+  document.getElementById('skip-retry-btn').addEventListener('click',()=>{reviveAvailable=true;startGame();});
+  document.getElementById('skip-share-btn').addEventListener('click',()=>{openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});});
+  document.getElementById('skip-info-btn').addEventListener('click',openInfo);
+  document.getElementById('skip-menu-btn').addEventListener('click',()=>{reviveAvailable=true;quitToMenu();});
 });
 // ===== END REVIVE SYSTEM =====
 
@@ -1663,8 +1697,8 @@ const SHOP_SKINS=[
   {id:'default', name:'Classic Circles', desc:'The original round Glipx circles',         price:'Free',  icon:'⭕', shape:'circle', colors:['#378ADD','#1D9E75','#D85A30','#7F77DD','#EF9F27']},
   {id:'hearts',  name:'Heart Circles',   desc:'Heart-shaped targets in pink & red tones', price:'$0.99', icon:'❤️', shape:'heart',  colors:['#ff6b88','#ff4466','#ff8899','#cc2255','#ff99aa']},
   {id:'stars',   name:'Star Power',      desc:'Star-shaped targets in gold tones',         price:'$0.99', icon:'⭐', shape:'star',   colors:['#FAC775','#EF9F27','#ffd700','#ffaa00','#ffe066']},
-  {id:'neon_s',  name:'Neon Glow',       desc:'Round circles in electric neon colors',     price:'$0.99', icon:'💜', shape:'circle', colors:['#ff00ff','#00ffff','#ff50a0','#a000ff','#00ff80']},
-  {id:'ice_s',   name:'Frost',           desc:'Round circles in cool icy blue tones',      price:'$0.99', icon:'❄️', shape:'circle', colors:['#a0d8ff','#5dc4e8','#80b8ff','#c0e8ff','#378ADD']},
+  {id:'neon_s',  name:'Neon Glow',       desc:'Round circles in electric neon colors',       price:'$0.99', icon:'💜', shape:'circle',  colors:['#ff00ff','#00ffff','#ff50a0','#a000ff','#00ff80']},
+  {id:'ice_s',   name:'Frost',           desc:'Hexagon-shaped targets in icy blue tones',  price:'$0.99', icon:'🔷', shape:'hex',     colors:['#a0d8ff','#5dc4e8','#80b8ff','#c0e8ff','#378ADD']},
 ];
 
 function getShopData(){try{return JSON.parse(localStorage.getItem('glipx_shop')||'{}');}catch{return{};}}
