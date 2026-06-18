@@ -616,6 +616,7 @@ let boostActive=false,slowActive=false,shieldActive=false;
 let boostTimeout=null,slowTimeout=null;
 let targets=[],spawnTimer=null,countTimer=null,moveTimer=null;
 let gamesPlayed=0,currentLevel=1,levelScore=0,currentTheme='space',minTimeTimer=null;
+let isNewScore=false,isNewCombo=false,isNewLevel=false;
 
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
 function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium}));}catch{}}
@@ -1384,8 +1385,8 @@ function startGame(){
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
   const go=document.getElementById('game-over-screen');if(go)go.remove();
   startScreen.style.display='none';levelBarWrap.style.display='block';pauseBtn.style.display='block';
-  currentTheme='space';arena.style.background='#0a0a1a';arena.style.borderColor='#2a2a4e';
-  updateLevelBar();updateDarkZones();
+  currentTheme='space';arena.style.background='#10102a';arena.style.borderColor='#3a3a6e';
+  updateLevelBar();
   if(currentMode==='zen'){
     livesLeft=4;updateLivesDisplay();livesDisplay.style.display='flex';
     timeDisp.textContent='∞';timeBox.querySelector('.stat-label').textContent='Lives';
@@ -1421,42 +1422,12 @@ function endGame(){
   levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   soundGameOver();gamesPlayed++;
-  const{isNewScore,isNewCombo,isNewLevel}=updateRecords();
+  ({isNewScore,isNewCombo,isNewLevel}=updateRecords());
   // Check daily challenge
   if(dailyActive){
     checkDailyProgress({score,combo:bestCombo,level:currentLevel,bombsDefused:dailyBombsDefused,slowScore:dailySlowScore});
   }
-  function showGOScreen(){
-    const go=document.createElement('div');go.id='game-over-screen';
-    const badges=[];
-    if(isNewScore)badges.push('<div class="pb-badge">🏆 New Score Record!</div>');
-    if(isNewCombo)badges.push('<div class="pb-badge" style="background:#7F77DD;color:#fff">⚡ New Combo Record!</div>');
-    if(isNewLevel)badges.push('<div class="pb-badge" style="background:#1D9E75;color:#fff">🌟 New Level Record!</div>');
-    go.innerHTML=`
-      <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
-      <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
-      <div class="go-score">${score}</div>
-      <div class="go-label">points</div>
-      <div class="go-stats">
-        <div class="go-stat"><div class="go-stat-label">Best Combo</div><div class="go-stat-val">x${bestCombo}</div></div>
-        <div class="go-stat"><div class="go-stat-label">Level</div><div class="go-stat-val">${currentLevel}</div></div>
-      </div>
-      ${badges.join('')}
-      <button class="play-btn" id="retry-btn">Play again</button>
-      <button class="share-btn" id="go-share-btn" style="margin:0 auto">📤 Share score</button>
-      <div style="display:flex;gap:12px">
-        <div class="settings-link" id="go-info">ℹ️ Power-ups</div>
-        <div class="settings-link" id="go-menu">↩ Menu</div>
-      </div>
-    `;
-    arena.appendChild(go);
-    document.getElementById('retry-btn').addEventListener('click',()=>{reviveAvailable=true;if(gamesPlayed%3===0&&!isPremium){showInterstitial(startGame);}else{startGame();}});
-    document.getElementById('go-info').addEventListener('click',openInfo);
-    document.getElementById('go-menu').addEventListener('click',()=>{reviveAvailable=true;quitToMenu();});
-    document.getElementById('go-share-btn').addEventListener('click',()=>{
-      openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
-    });
-  }
+
   // Show revive screen first, then GO screen
   showReviveScreen();
 }
@@ -1544,6 +1515,38 @@ document.getElementById('share-whatsapp-btn').addEventListener('click',shareWhat
 document.getElementById('share-copy-btn').addEventListener('click',copyShareText);
 // ===== END SOCIAL SHARING =====
 
+
+function showGOScreen(){
+    const go=document.createElement('div');go.id='game-over-screen';
+    const badges=[];
+    if(isNewScore)badges.push('<div class="pb-badge">🏆 New Score Record!</div>');
+    if(isNewCombo)badges.push('<div class="pb-badge" style="background:#7F77DD;color:#fff">⚡ New Combo Record!</div>');
+    if(isNewLevel)badges.push('<div class="pb-badge" style="background:#1D9E75;color:#fff">🌟 New Level Record!</div>');
+    go.innerHTML=`
+      <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
+      <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
+      <div class="go-score">${score}</div>
+      <div class="go-label">points</div>
+      <div class="go-stats">
+        <div class="go-stat"><div class="go-stat-label">Best Combo</div><div class="go-stat-val">x${bestCombo}</div></div>
+        <div class="go-stat"><div class="go-stat-label">Level</div><div class="go-stat-val">${currentLevel}</div></div>
+      </div>
+      ${badges.join('')}
+      <button class="play-btn" id="retry-btn">Play again</button>
+      <button class="share-btn" id="go-share-btn" style="margin:0 auto">📤 Share score</button>
+      <div style="display:flex;gap:12px">
+        <div class="settings-link" id="go-info">ℹ️ Power-ups</div>
+        <div class="settings-link" id="go-menu">↩ Menu</div>
+      </div>
+    `;
+    arena.appendChild(go);
+    document.getElementById('retry-btn').addEventListener('click',()=>{reviveAvailable=true;if(gamesPlayed%3===0&&!isPremium){showInterstitial(startGame);}else{startGame();}});
+    document.getElementById('go-info').addEventListener('click',openInfo);
+    document.getElementById('go-menu').addEventListener('click',()=>{reviveAvailable=true;quitToMenu();});
+    document.getElementById('go-share-btn').addEventListener('click',()=>{
+      openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
+    });
+}
 
 // ===== REVIVE SYSTEM =====
 let reviveAvailable=true;let reviveTimer=null;let reviveCountdown=5;
