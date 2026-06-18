@@ -46,15 +46,15 @@
     .life-heart{font-size:13px;line-height:1}
     #pause-btn{position:absolute;top:6px;left:8px;background:rgba(26,26,46,.85);border:0.5px solid #2a2a4e;border-radius:8px;color:#6677aa;font-size:16px;padding:3px 7px;cursor:pointer;display:none;font-family:inherit;z-index:6;line-height:1}
     #shield-indicator{position:absolute;top:8px;right:10px;font-size:13px;display:none;z-index:5}
-    #boost-banner{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:1px solid #1D9E75;color:#7ee8bb;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:7}
-    #slow-banner{position:absolute;top:34px;left:50%;transform:translateX(-50%);background:#0a1628;border:1px solid #a0c4ff;color:#a0c4ff;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:7}
+    #boost-banner{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:1px solid #1D9E75;color:#7ee8bb;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:7}
+    #slow-banner{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);background:#0a1628;border:1px solid #a0c4ff;color:#a0c4ff;font-size:11px;font-weight:600;border-radius:8px;padding:3px 10px;display:none;white-space:nowrap;z-index:7}
     #theme-banner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#0a0a1aee;border:1px solid #378ADD;border-radius:12px;padding:10px 20px;text-align:center;display:none;z-index:12;pointer-events:none}
     #theme-banner-text{font-size:20px;font-weight:700;color:#e0e8ff}
     #theme-banner-sub{font-size:12px;color:#6677aa;margin-top:3px}
     #levelup-splash{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;display:none;text-align:center;z-index:11;width:100%}
     #levelup-splash.show{display:block;animation:levelup-anim 1.4s ease-out forwards}
-    .levelup-text{font-size:48px;font-weight:700;color:#FAC775;text-shadow:0 0 30px #FAC77588}
-    .levelup-sub{font-size:16px;color:#e0e8ff;margin-top:4px}
+    .levelup-text{font-size:52px;font-weight:700;color:#FAC775;text-shadow:0 0 40px #FAC775cc,0 0 80px #FAC77544}
+    .levelup-sub{font-size:16px;color:#e0e8ff;margin-top:6px;text-shadow:0 0 10px rgba(255,255,255,0.3)}
     #achievement-toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:0.5px solid #1D9E75;border-radius:10px;padding:6px 14px;font-size:12px;color:#7ee8bb;display:none;z-index:20;white-space:nowrap;animation:achievement-slide .3s ease-out}
 
     /* START SCREEN */
@@ -220,9 +220,106 @@
     #ad-sim-close:disabled{opacity:0.35;cursor:not-allowed}
     #ad-skip-counter{position:absolute;top:16px;right:16px;font-size:12px;color:#6677aa;background:#1a1a2e;border-radius:8px;padding:4px 10px}
 
+  
+    /* MUSIC TOGGLE */
+    .music-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid #1a1a2e}
+    #pause-music-row{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding:8px 0;border-top:0.5px solid #1a1a2e}
+    .pause-toggle-label{font-size:13px;color:#a0b0cc}
+
+  
+    #stats-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
+    .stat-section{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.08em;margin:12px 0 6px}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #1a1a2e}
+    .stat-row-label{font-size:13px;color:#a0b0cc}
+    .stat-row-val{font-size:14px;font-weight:600;color:#e0e8ff}
+    .ach-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid #1a1a2e}
+    .ach-icon{font-size:20px;width:28px;text-align:center}
+    .ach-name{font-size:13px;font-weight:500;color:#e0e8ff}
+    .ach-desc{font-size:11px;color:#6677aa;margin-top:1px}
+    .ach-locked{opacity:0.35}
+    .ach-badge{font-size:10px;background:#1D9E75;color:#fff;border-radius:6px;padding:2px 6px;margin-left:auto;flex-shrink:0}
+
+  
+    /* ONBOARDING */
+    #onboarding{position:fixed;inset:0;background:#0a0818;display:none;align-items:center;justify-content:center;z-index:1001;flex-direction:column}
+    #ob-slide{max-width:340px;width:92%;text-align:center;padding:0 20px}
+    .ob-visual{height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative}
+    .ob-circle-demo{width:70px;height:70px;border-radius:50%;border:3px solid #378ADD;background:#1e3e62;display:flex;align-items:center;justify-content:center;font-size:20px;animation:ob-pulse 1.5s ease-in-out infinite}
+    .ob-circle-demo.red{border-color:#D85A30;background:#3d1e1e;animation:ob-pulse 1.2s ease-in-out infinite}
+    .ob-circle-demo.gold{border-color:#EF9F27;background:#3d2e00}
+    @keyframes ob-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:0.85}}
+    @keyframes ob-shrink{from{stroke-dashoffset:0}to{stroke-dashoffset:200}}
+    .ob-title{font-size:22px;font-weight:700;color:#e0e8ff;margin-bottom:10px;line-height:1.3}
+    .ob-desc{font-size:14px;color:#8899cc;line-height:1.7;margin-bottom:28px}
+    .ob-dots{display:flex;gap:8px;justify-content:center;margin-bottom:24px}
+    .ob-dot{width:8px;height:8px;border-radius:50%;background:#2a2a4e;transition:all .3s}
+    .ob-dot.active{background:#378ADD;width:24px;border-radius:4px}
+    #ob-next{background:#378ADD;color:#fff;border:none;border-radius:12px;padding:14px 0;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;margin-bottom:10px}
+    #ob-skip{font-size:12px;color:#6677aa;cursor:pointer;background:none;border:none;font-family:inherit;padding:4px}
+    .ob-combo-demo{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .ob-combo-val{font-size:42px;font-weight:700;color:#FAC775}
+    .ob-combo-label{font-size:13px;color:#6677aa}
+    .ob-pu-row{display:flex;gap:12px;justify-content:center}
+    .ob-pu{width:48px;height:48px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+
+  
+    /* WOW EFFECTS */
+    #achievement-unlock{position:fixed;inset:0;background:#000000dd;display:none;align-items:center;justify-content:center;z-index:1002;flex-direction:column}
+    #au-box{background:#0f0f22;border:2px solid #FAC775;border-radius:20px;padding:32px 28px;max-width:320px;width:90%;text-align:center;position:relative;overflow:hidden}
+    #au-box::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#FAC77511,#EF9F2711,#FAC77511);animation:au-shimmer 2s linear infinite}
+    @keyframes au-shimmer{0%{opacity:0.5}50%{opacity:1}100%{opacity:0.5}}
+    #au-label{font-size:11px;color:#EF9F27;text-transform:uppercase;letter-spacing:.15em;margin-bottom:12px}
+    #au-icon{font-size:72px;margin-bottom:8px;animation:au-bounce .6s ease-out}
+    @keyframes au-bounce{0%{transform:scale(0) rotate(-10deg)}60%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0deg)}}
+    #au-name{font-size:24px;font-weight:700;color:#FAC775;margin-bottom:6px}
+    #au-desc{font-size:13px;color:#8899cc;margin-bottom:20px;line-height:1.5}
+    #au-skin-preview{display:flex;gap:6px;justify-content:center;margin-bottom:16px}
+    #au-close{background:#FAC775;color:#412402;border:none;border-radius:12px;padding:12px 0;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
+    #au-confetti{position:fixed;inset:0;pointer-events:none;z-index:1001}
+    .au-confetti-piece{position:absolute;width:8px;height:8px;border-radius:2px;animation:au-fall linear forwards}
+    @keyframes au-fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+    /* RECORD CELEBRATION */
+    #record-flash{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:14;pointer-events:none;border-radius:16px}
+    #record-flash.show{display:flex;animation:rec-flash .8s ease-out forwards}
+    @keyframes rec-flash{0%{background:rgba(250,199,117,0)}20%{background:rgba(250,199,117,0.2)}100%{background:rgba(250,199,117,0)}}
+    #record-text{font-size:36px;font-weight:700;color:#FAC775;text-shadow:0 0 40px #FAC775;animation:rec-pop .8s ease-out forwards;white-space:nowrap}
+    @keyframes rec-pop{0%{transform:scale(0.5);opacity:0}50%{transform:scale(1.15);opacity:1}80%{transform:scale(1);opacity:1}100%{transform:scale(1.05);opacity:0}}
+
+    /* COMBO MILESTONE FLASH */
+    #combo-milestone{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:12;display:none;text-align:center}
+    #combo-milestone.show{display:block;animation:cm-pop .7s ease-out forwards}
+    @keyframes cm-pop{0%{transform:translate(-50%,-50%) scale(0.3);opacity:0}40%{transform:translate(-50%,-50%) scale(1.2);opacity:1}70%{transform:translate(-50%,-50%) scale(0.95);opacity:1}100%{transform:translate(-50%,-50%) scale(1.1);opacity:0}}
+    .cm-text{font-size:32px;font-weight:700;color:#FAC775;text-shadow:0 0 20px #FAC775cc;white-space:nowrap}
+    .cm-sub{font-size:14px;color:#e0e8ff;margin-top:4px}
+
+    /* DAILY COMPLETE */
+    #daily-complete{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:1002;flex-direction:column;gap:12px}
+    #dc-box{background:#1a3d2e;border:2px solid #1D9E75;border-radius:20px;padding:28px 24px;max-width:300px;width:90%;text-align:center}
+    #dc-icon{font-size:56px;margin-bottom:8px;animation:au-bounce .5s ease-out}
+    #dc-title{font-size:20px;font-weight:700;color:#5DCAA5;margin-bottom:6px}
+    #dc-streak{font-size:14px;color:#8899cc;margin-bottom:16px}
+    #dc-close{background:#1D9E75;color:#fff;border:none;border-radius:12px;padding:11px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%}
+
   </style>
 </head>
 <body>
+
+
+<div id="onboarding">
+  <div id="ob-slide">
+    <div class="ob-visual" id="ob-visual"></div>
+    <div class="ob-title" id="ob-title"></div>
+    <div class="ob-desc" id="ob-desc"></div>
+    <div class="ob-dots">
+      <div class="ob-dot active" id="ob-dot-0"></div>
+      <div class="ob-dot" id="ob-dot-1"></div>
+      <div class="ob-dot" id="ob-dot-2"></div>
+    </div>
+    <button id="ob-next">Next →</button>
+    <button id="ob-skip">Skip tutorial</button>
+  </div>
+</div>
 
 <div id="interstitial">
   <div id="interstitial-box">
@@ -241,6 +338,10 @@
     <div class="setting-row">
       <div><div class="setting-label">Sound effects</div><div class="setting-sub">Hit, miss and power-up sounds</div></div>
       <label class="toggle"><input type="checkbox" id="sound-toggle" checked><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
+      <div><div class="setting-label">Music</div><div class="setting-sub">Background music during gameplay</div></div>
+      <label class="toggle"><input type="checkbox" id="music-toggle" checked><span class="slider"></span></label>
     </div>
     <div class="setting-row">
       <div><div class="setting-label">Ads</div><div class="setting-sub">Buy Premium to remove ads</div></div>
@@ -277,6 +378,28 @@
   </div>
 </div>
 
+
+<div id="achievement-unlock">
+  <canvas id="au-confetti"></canvas>
+  <div id="au-box">
+    <div id="au-label">🏆 Achievement Unlocked!</div>
+    <div id="au-icon">🥇</div>
+    <div id="au-name">Gold Star</div>
+    <div id="au-desc">You reached Level 50!</div>
+    <div id="au-skin-preview"></div>
+    <button id="au-close">Awesome! ✓</button>
+  </div>
+</div>
+
+<div id="daily-complete">
+  <div id="dc-box">
+    <div id="dc-icon">⭐</div>
+    <div id="dc-title">Daily Challenge Complete!</div>
+    <div id="dc-streak" id="dc-streak"></div>
+    <button id="dc-close">Let's go! 🔥</button>
+  </div>
+</div>
+
 <div id="gw">
   <div id="header">
     <div class="stat-box"><div class="stat-label">Score</div><div class="stat-value" id="score-disp">0</div></div>
@@ -295,6 +418,8 @@
     <div id="slow-banner">❄️ Slow Motion!</div>
     <div id="achievement-toast"></div>
     <div id="theme-banner"><div id="theme-banner-text"></div><div id="theme-banner-sub"></div></div>
+    <div id="record-flash"><div id="record-text">🏆 NEW RECORD!</div></div>
+    <div id="combo-milestone"><div class="cm-text" id="cm-text">🔥 COMBO x10!</div><div class="cm-sub" id="cm-sub">On fire!</div></div>
     <div id="levelup-splash"><div class="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
     <button id="pause-btn">⏸</button>
 
@@ -309,7 +434,8 @@
       <div style="display:flex;gap:12px;align-items:center">
         <button id="info-btn-start">ℹ️ Power-ups</button>
         <button id="shop-btn">🛒 Shop</button>
-        <div class="settings-link" id="settings-link">⚙️ Settings</div>
+        <button id="stats-btn" style="font-size:11px;color:#6677aa;cursor:pointer;background:none;border:0.5px solid #2a2a4e;border-radius:8px;padding:4px 10px;font-family:inherit">📊 Stats</button>
+        <button id="settings-link" style="font-size:11px;color:#6677aa;cursor:pointer;background:none;border:0.5px solid #2a2a4e;border-radius:8px;padding:4px 10px;font-family:inherit">⚙️ Settings</button>
       </div>
     </div>
 
@@ -343,9 +469,19 @@
 
     <div id="pause-screen">
       <div class="pause-title">Paused</div>
-      <div style="font-size:13px;color:#6677aa">Score: <span id="pause-score">0</span> · Level <span id="pause-level">1</span></div>
+      <div style="font-size:13px;color:#6677aa;margin-bottom:4px">Score: <span id="pause-score">0</span> · Level <span id="pause-level">1</span></div>
       <button class="pause-action-btn" id="resume-btn">▶ Resume</button>
       <button class="pause-sec-btn" id="quit-btn">↩ Menu</button>
+      <div style="display:flex;flex-direction:column;gap:6px;width:200px;margin-top:4px;background:#1a1a2e;border-radius:12px;padding:10px 14px;border:0.5px solid #2a2a4e">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;color:#a0b0cc">🎵 Music</span>
+          <label class="toggle"><input type="checkbox" id="pause-music-toggle" checked><span class="slider"></span></label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:13px;color:#a0b0cc">🔊 Sound</span>
+          <label class="toggle"><input type="checkbox" id="pause-sound-toggle" checked><span class="slider"></span></label>
+        </div>
+      </div>
     </div>
   </div>
   <div id="ad-banner">
@@ -383,6 +519,15 @@
   </div>
 </div>
 
+
+<div id="stats-panel">
+  <div id="stats-box" style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:340px;width:92%;max-height:88vh;overflow-y:auto">
+    <div style="font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:16px">📊 Statistics</div>
+    <div id="stats-content"></div>
+    <button class="panel-close" id="stats-close">Close</button>
+  </div>
+</div>
+
 <div id="shop-panel">
   <div id="shop-box">
     <div class="shop-title">🛒 Shop</div>
@@ -401,6 +546,19 @@
 
     <div class="shop-section">Circle Skins</div>
     <div id="shop-skins"></div>
+
+    <div class="shop-section">Achievement Skins 🏆</div>
+    <div style="font-size:11px;color:#6677aa;margin-bottom:8px">Earn these by playing — cannot be purchased</div>
+    <div id="shop-ach-skins"></div>
+
+    <div class="shop-section">Hit Effects</div>
+    <div id="shop-hit-effects"></div>
+
+    <div class="shop-section">Trail Effects</div>
+    <div id="shop-trails"></div>
+
+    <div class="shop-section">Sound Packs</div>
+    <div id="shop-sounds"></div>
 
     <div class="shop-section">Streak Protection</div>
     <div class="shop-item" id="shop-streak-item">
@@ -491,12 +649,12 @@ const starCanvas=document.getElementById('stars-canvas');
 // LEVEL CONFIG — 50% longer than before (time + min time)
 // pts = points needed, time = timer seconds, minTime = minimum seconds before level-up allowed
 const LEVEL_CONFIG=[
-  // 🌌 Space — calm (1-5)
-  {pts:250,  time:50, spawnBase:950, lifeBase:2000, theme:'space'},
-  {pts:380,  time:50, spawnBase:910, lifeBase:1950, theme:'space'},
-  {pts:530,  time:49, spawnBase:870, lifeBase:1900, theme:'space'},
-  {pts:700,  time:49, spawnBase:830, lifeBase:1850, theme:'space'},
-  {pts:890,  time:48, spawnBase:790, lifeBase:1800, theme:'space'},
+  // 🌌 Space — calm (1-5) — fast and rewarding early on
+  {pts:80,   time:45, spawnBase:880, lifeBase:1800, theme:'space'},
+  {pts:140,  time:46, spawnBase:860, lifeBase:1780, theme:'space'},
+  {pts:210,  time:47, spawnBase:840, lifeBase:1760, theme:'space'},
+  {pts:290,  time:48, spawnBase:820, lifeBase:1740, theme:'space'},
+  {pts:380,  time:48, spawnBase:800, lifeBase:1720, theme:'space'},
   // 🌠 Space Storm — meteor rain (6-10)
   {pts:1100, time:48, spawnBase:750, lifeBase:1720, theme:'space_storm'},
   {pts:1340, time:46, spawnBase:710, lifeBase:1640, theme:'space_storm'},
@@ -555,22 +713,21 @@ const LEVEL_CONFIG=[
 
 // THEMES
 const THEMES={
-  space:       {bg:'#10102a',border:'#3a3a6e',star:'rgba(180,200,255,',name:'🌌 Space',         desc:'The void awaits',          effect:'stars'},
-  space_storm: {bg:'#08081e',border:'#4a4a8e',star:'rgba(200,210,255,',name:'🌠 Space Storm',   desc:'Meteors incoming!',         effect:'space_storm'},
-  ice:         {bg:'#0a1828',border:'#2a4a70',star:'rgba(160,210,255,',name:'❄️ Ice',           desc:'The cold creeps in',        effect:'snow'},
-  blizzard:    {bg:'#060e18',border:'#1a3a60',star:'rgba(180,220,255,',name:'🌨️ Blizzard',      desc:'You can barely see!',       effect:'blizzard'},
-  vulkan:      {bg:'#1e0800',border:'#5e2a00',star:'rgba(255,140,60,', name:'🌋 Vulkan',         desc:'The heat is rising',        effect:'sparks'},
-  eruption:    {bg:'#280400',border:'#7e2000',star:'rgba(255,100,20,', name:'🔥 Eruption',       desc:'She\'s gonna blow!',        effect:'eruption'},
-  matrix:      {bg:'#001800',border:'#004400',star:'rgba(80,255,100,', name:'💚 Matrix',         desc:'Follow the code',           effect:'matrix'},
-  matrix_surge:{bg:'#000e00',border:'#006600',star:'rgba(100,255,80,', name:'💥 Matrix Surge',   desc:'The system is overloading', effect:'matrix_surge'},
-  void:        {bg:'#050508',border:'#2a2a4e',star:'rgba(140,100,255,',name:'🌀 Void',           desc:'Beyond the known',          effect:'pulse'},
-  void_collapse:{bg:'#020204',border:'#4a1a7e',star:'rgba(160,80,255,',name:'💀 Void Collapse',  desc:'Reality is breaking',       effect:'void_collapse'},
-  neon:        {bg:'#0a001a',border:'#3a0060',star:'rgba(255,100,255,',name:'⚡ Neon City',      desc:'Lights never sleep',        effect:'neon'},
-  // Exclusive shop themes
-  galaxy:      {bg:'#02000f',border:'#1a0a3e',star:'rgba(200,180,255,',name:'🌠 Galaxy',         desc:'Shooting stars',            effect:'galaxy'},
-  ocean:       {bg:'#000a18',border:'#003355',star:'rgba(80,180,255,', name:'🌊 Deep Ocean',      desc:'Underwater world',          effect:'ocean'},
-  lava:        {bg:'#0f0000',border:'#4a0800',star:'rgba(255,80,0,',   name:'🔥 Lava Floor',      desc:'Everything is lava',        effect:'lava'},
-  midnight:    {bg:'#050508',border:'#15153a',star:'rgba(160,160,220,',name:'🌙 Midnight',        desc:'Dark elegance',             effect:'midnight'},
+  space:        {bg:'#0a0818',border:'#4455cc',glow:'#3344aa',star:'rgba(180,200,255,',name:'🌌 Space',        desc:'The void awaits',          effect:'stars',      atmo:'space'},
+  space_storm:  {bg:'#060412',border:'#6677ff',glow:'#4455ee',star:'rgba(200,210,255,',name:'🌠 Space Storm',  desc:'Meteors incoming!',         effect:'space_storm',atmo:'space_storm'},
+  ice:          {bg:'#060e18',border:'#44aadd',glow:'#2288bb',star:'rgba(160,210,255,',name:'❄️ Ice',          desc:'The cold creeps in',        effect:'snow',       atmo:'ice'},
+  blizzard:     {bg:'#040a12',border:'#88ccff',glow:'#66aaee',star:'rgba(180,220,255,',name:'🌨️ Blizzard',     desc:'You can barely see!',       effect:'blizzard',   atmo:'blizzard'},
+  vulkan:       {bg:'#120400',border:'#cc4400',glow:'#aa2200',star:'rgba(255,140,60,', name:'🌋 Vulkan',        desc:'The heat is rising',        effect:'sparks',     atmo:'vulkan'},
+  eruption:     {bg:'#180200',border:'#ff5500',glow:'#dd2200',star:'rgba(255,100,20,', name:'🔥 Eruption',      desc:'She\'s gonna blow!',        effect:'eruption',   atmo:'eruption'},
+  matrix:       {bg:'#000c00',border:'#00bb44',glow:'#009933',star:'rgba(80,255,100,', name:'💚 Matrix',        desc:'Follow the code',           effect:'matrix',     atmo:'matrix'},
+  matrix_surge: {bg:'#000800',border:'#00ff66',glow:'#00cc44',star:'rgba(100,255,80,', name:'💥 Matrix Surge',  desc:'The system is overloading', effect:'matrix_surge',atmo:'matrix_surge'},
+  void:         {bg:'#060410',border:'#7744cc',glow:'#5522aa',star:'rgba(140,100,255,',name:'🌀 Void',          desc:'Beyond the known',          effect:'pulse',      atmo:'void'},
+  void_collapse:{bg:'#040210',border:'#cc44ff',glow:'#aa22ee',star:'rgba(160,80,255,', name:'💀 Void Collapse', desc:'Reality is breaking',       effect:'void_collapse',atmo:'void_collapse'},
+  neon:         {bg:'#08001a',border:'#ff00cc',glow:'#cc0099',star:'rgba(255,100,255,',name:'⚡ Neon City',     desc:'Lights never sleep',        effect:'neon',       atmo:'neon'},
+  galaxy:       {bg:'#02000f',border:'#8844ff',glow:'#6622ee',star:'rgba(200,180,255,',name:'🌠 Galaxy',        desc:'Shooting stars',            effect:'galaxy',     atmo:'space'},
+  ocean:        {bg:'#000a18',border:'#0088cc',glow:'#006699',star:'rgba(80,180,255,', name:'🌊 Deep Ocean',    desc:'Underwater world',          effect:'ocean',      atmo:'ice'},
+  lava:         {bg:'#0f0000',border:'#ff3300',glow:'#cc1100',star:'rgba(255,80,0,',   name:'🔥 Lava Floor',   desc:'Everything is lava',        effect:'lava',       atmo:'vulkan'},
+  midnight:     {bg:'#050508',border:'#6666aa',glow:'#4444aa',star:'rgba(160,160,220,',name:'🌙 Midnight',      desc:'Dark elegance',             effect:'midnight',   atmo:'void'},
 };
 
 function getLevelCfg(lvl){
@@ -618,8 +775,8 @@ let targets=[],spawnTimer=null,countTimer=null,moveTimer=null;
 let gamesPlayed=0,currentLevel=1,levelScore=0,currentTheme='space',minTimeTimer=null;
 let isNewScore=false,isNewCombo=false,isNewLevel=false;
 
-function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;}catch{}applyPrefs();}
-function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium}));}catch{}}
+function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;musicOn=p.musicOn??true;}catch{}applyPrefs();}
+function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium,musicOn}));}catch{}}
 function applyPrefs(){soundToggle.checked=soundOn;adBanner.style.display=isPremium?'none':'flex';premiumBtn.style.display=isPremium?'none':'block';premiumActive.style.display=isPremium?'block':'none';}
 
 // SOUND
@@ -898,10 +1055,14 @@ function applyTheme(theme){
   const t=THEMES[theme];
   arena.style.background=t.bg;
   arena.style.borderColor=t.border;
+  arena.style.borderWidth='2px';
+  arena.style.boxShadow=`0 0 20px ${t.glow}88, inset 0 0 30px ${t.glow}22`;
   themeBannerText.textContent=t.name;
   themeBannerSub.textContent=t.desc;
   themeBanner.style.display='block';
   initStars();
+  // Start atmospheric sound for new theme
+  playAtmoSound(t.atmo);
   setTimeout(()=>{themeBanner.style.display='none';},2500);
 }
 
@@ -932,30 +1093,53 @@ function loadStartRecords(mode){
 
 // ACHIEVEMENTS
 const ACHIEVEMENTS=[
-  {id:'combo5',check:()=>combo>=5,text:'🔥 Combo x5!'},
-  {id:'combo10',check:()=>combo>=10,text:'⚡ Combo x10!'},
-  {id:'combo20',check:()=>combo>=20,text:'🌟 Combo x20!'},
-  {id:'combo50',check:()=>combo>=50,text:'👑 Combo x50! Insane!'},
-  {id:'level5',check:()=>currentLevel>=5,text:'🏆 Reached Level 5!'},
-  {id:'level6',check:()=>currentLevel>=6,text:'🌠 Space Storm begins!'},
-  {id:'level11',check:()=>currentLevel>=11,text:'❄️ Ice unlocked!'},
-  {id:'level16',check:()=>currentLevel>=16,text:'🌨️ Blizzard warning!'},
-  {id:'level10',check:()=>currentLevel>=10,text:'🌟 Reached Level 10!'},
-  {id:'level21',check:()=>currentLevel>=21,text:'🌋 Vulkan rises!'},
-  {id:'level26',check:()=>currentLevel>=26,text:'🔥 Eruption! Run!'},
-  {id:'level31',check:()=>currentLevel>=31,text:'💚 Matrix unlocked!'},
-  {id:'level36',check:()=>currentLevel>=36,text:'💥 Matrix Surge!'},
-  {id:'level41',check:()=>currentLevel>=41,text:'🌀 The Void opens!'},
-  {id:'level46',check:()=>currentLevel>=46,text:'💀 Void Collapse!'},
-  {id:'level51',check:()=>currentLevel>=51,text:'⚡ Neon City!'},
-  {id:'score1000',check:()=>score>=1000,text:'💯 1000 Points!'},
-  {id:'score5000',check:()=>score>=5000,text:'🚀 5000 Points!'},
-  {id:'score20000',check:()=>score>=20000,text:'🏅 20,000 Points!'},
+  {id:'combo5',   icon:'🔥', name:'On Fire',        desc:'Reach a x5 combo',            check:()=>combo>=5,    text:'🔥 Combo x5!'},
+  {id:'combo10',  icon:'⚡', name:'Electric',        desc:'Reach a x10 combo',           check:()=>combo>=10,   text:'⚡ Combo x10!'},
+  {id:'combo20',  icon:'🌟', name:'Unstoppable',     desc:'Reach a x20 combo',           check:()=>combo>=20,   text:'🌟 Combo x20!'},
+  {id:'combo50',  icon:'👑', name:'Combo King',      desc:'Reach a x50 combo',           check:()=>combo>=50,   text:'👑 Combo x50! Insane!'},
+  {id:'level5',   icon:'🏆', name:'Getting Serious', desc:'Reach Level 5',               check:()=>currentLevel>=5,  text:'🏆 Reached Level 5!'},
+  {id:'level6',   icon:'🌠', name:'Space Storm',     desc:'Reach Level 6',               check:()=>currentLevel>=6,  text:'🌠 Space Storm begins!'},
+  {id:'level10',  icon:'🎯', name:'Double Digits',   desc:'Reach Level 10',              check:()=>currentLevel>=10, text:'🎯 Level 10!'},
+  {id:'level11',  icon:'❄️', name:'Ice Age',          desc:'Reach Level 11',              check:()=>currentLevel>=11, text:'❄️ Ice Storm unlocked!'},
+  {id:'level16',  icon:'🌨️', name:'Blizzard',        desc:'Reach Level 16',              check:()=>currentLevel>=16, text:'🌨️ Blizzard warning!'},
+  {id:'level20',  icon:'🎖️', name:'Veteran',         desc:'Reach Level 20',              check:()=>currentLevel>=20, text:'🎖️ Level 20 Veteran!'},
+  {id:'level21',  icon:'🌋', name:'Eruption',        desc:'Reach Level 21',              check:()=>currentLevel>=21, text:'🌋 Vulkan rises!'},
+  {id:'level26',  icon:'🔥', name:'Into the Fire',   desc:'Reach Level 26',              check:()=>currentLevel>=26, text:'🔥 Eruption!'},
+  {id:'level31',  icon:'💚', name:'In the Matrix',   desc:'Reach Level 31',              check:()=>currentLevel>=31, text:'💚 Matrix unlocked!'},
+  {id:'level50',  icon:'💀', name:'Legend',           desc:'Reach Level 50',              check:()=>currentLevel>=50, text:'💀 Level 50 Legend!'},
+  {id:'score500', icon:'💫', name:'Warming Up',      desc:'Score 500 points',            check:()=>score>=500,   text:'💫 500 Points!'},
+  {id:'score1000',icon:'💯', name:'Four Figures',    desc:'Score 1,000 points',          check:()=>score>=1000,  text:'💯 1000 Points!'},
+  {id:'score5000',icon:'🚀', name:'Rocket',          desc:'Score 5,000 points',          check:()=>score>=5000,  text:'🚀 5000 Points!'},
+  {id:'score20000',icon:'🏅',name:'Elite',           desc:'Score 20,000 points',         check:()=>score>=20000, text:'🏅 20,000 Points!'},
+  {id:'daily3',   icon:'📅', name:'Habit',           desc:'3 day daily streak',          check:()=>(getDailyState().streak||0)>=3,  text:'📅 3 day streak!'},
+  {id:'daily7',   icon:'🗓️', name:'Week Warrior',   desc:'7 day daily streak',           check:()=>(getDailyState().streak||0)>=7,  text:'🗓️ 7 day streak!'},
+  {id:'daily30',  icon:'🌙', name:'Dedicated',       desc:'30 day daily streak',         check:()=>(getDailyState().streak||0)>=30, text:'🌙 30 day streak!'},
 ];
 let unlockedAch=new Set();
 function loadAch(){try{unlockedAch=new Set(JSON.parse(localStorage.getItem('glipx_ach')||'[]'));}catch{}}
 function saveAch(){try{localStorage.setItem('glipx_ach',JSON.stringify([...unlockedAch]));}catch{}}
-function checkAch(){ACHIEVEMENTS.forEach(a=>{if(!unlockedAch.has(a.id)&&a.check()){unlockedAch.add(a.id);saveAch();setTimeout(()=>showAchievement(a.text),400);}});}
+function checkAch(){
+  ACHIEVEMENTS.forEach(a=>{
+    if(!unlockedAch.has(a.id)&&a.check()){
+      unlockedAch.add(a.id);saveAch();
+      setTimeout(()=>showAchievement(a.text),400);
+    }
+  });
+  // Check achievement skins
+  const stats=getStats();
+  ACHIEVEMENT_SKINS.forEach(s=>{
+    const d=getShopData();
+    const ownedAchSkins=d.ownedAchSkins||[];
+    if(!ownedAchSkins.includes(s.id)&&s.check(stats)){
+      ownedAchSkins.push(s.id);d.ownedAchSkins=ownedAchSkins;saveShopData(d);
+      setTimeout(()=>showAchievementUnlock({
+        icon:s.icon,name:s.name+' Skin Unlocked!',
+        desc:`You can now equip the ${s.name} skin in the Shop!`,
+        skinId:s.id
+      }),600);
+    }
+  });
+}
 
 // LEVEL BAR + MIN TIME
 function updateLevelBar(){
@@ -980,6 +1164,19 @@ function doLevelUp(){
   const cfg=getLevelCfg(currentLevel);
   levelupSub.textContent=`Level ${currentLevel} · ${cfg.pts} pts needed`;
   levelupSplash.classList.remove('show');void levelupSplash.offsetWidth;levelupSplash.classList.add('show');
+  // Celebration particles burst
+  const aW=arena.clientWidth,aH=arena.clientHeight;
+  for(let i=0;i<20;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div');p.className='particle';
+      const colors=['#FAC775','#378ADD','#1D9E75','#7F77DD','#D85A30'];
+      const col=colors[Math.floor(Math.random()*colors.length)];
+      const sx=Math.random()*aW;const sy=Math.random()*aH;
+      const a=Math.random()*Math.PI*2;const d=40+Math.random()*80;
+      p.style.cssText=`width:8px;height:8px;border-radius:50%;background:${col};position:absolute;left:${sx}px;top:${sy}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
+      arena.appendChild(p);setTimeout(()=>p.remove(),520);
+    },i*40);
+  }
   updateLevelBar();checkAch();
   applyTheme(cfg.theme);
   setTimeout(()=>{
@@ -1219,6 +1416,51 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
     </svg>`;
     el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
 
+  } else if(skinShape==='flower'&&!isPU&&!isFake&&!isMini){
+    // 5-petal flower — outer fixed + inner animated
+    const petalR=half*0.38;const centerR=half*0.28;
+    let outerPts='',innerPts='';
+    for(let i=0;i<5;i++){
+      const a=(i*Math.PI*2/5)-(Math.PI/2);
+      const cx=half+half*0.5*Math.cos(a);const cy=half+half*0.5*Math.sin(a);
+      const ir=petalR*0.65;const icx=half+half*0.35*Math.cos(a);const icy=half+half*0.35*Math.sin(a);
+      outerPts+=`${i===0?'M':''}${(cx+petalR*Math.cos(a-0.5)).toFixed(2)},${(cy+petalR*Math.sin(a-0.5)).toFixed(2)} A${petalR},${petalR} 0 1,1 ${(cx+petalR*Math.cos(a+0.5)).toFixed(2)},${(cy+petalR*Math.sin(a+0.5)).toFixed(2)} `;
+      innerPts+=`${i===0?'M':''}${(icx+ir*Math.cos(a-0.5)).toFixed(2)},${(icy+ir*Math.sin(a-0.5)).toFixed(2)} A${ir},${ir} 0 1,1 ${(icx+ir*Math.cos(a+0.5)).toFixed(2)},${(icy+ir*Math.sin(a+0.5)).toFixed(2)} `;
+    }
+    const flowerPerim=Math.round(3.5*size);const flowerInnerPerim=Math.round(2.2*size);
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
+      <circle cx="${half}" cy="${half}" r="${centerR}" fill="${skinBorder}30" stroke="${skinBorder}" stroke-width="1.5"/>
+      <path d="${outerPts}Z" fill="${skinBorder}18" stroke="${skinBorder}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="${innerPts}Z" fill="none" stroke="${skinBorder}" stroke-width="2.5"
+        stroke-dasharray="${flowerInnerPerim}" stroke-dashoffset="0" stroke-linecap="round"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
+    </svg>`;
+    el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+
+  } else if(skinShape==='flame'&&!isPU&&!isFake&&!isMini){
+    // Flame circle — jagged irregular outer ring + smooth inner animated ring
+    // Outer: spiky flame-like polygon with random jagged peaks
+    const flamePoints=[];const flameInnerPoints=[];
+    const spikes=16;
+    const seedArr=[0.85,0.95,0.78,1.0,0.82,0.92,0.75,0.98,0.80,0.88,0.76,0.96,0.83,0.91,0.77,0.94];
+    for(let i=0;i<spikes;i++){
+      const angle=(i/spikes)*Math.PI*2-(Math.PI/2);
+      const outerR=half*(0.72+seedArr[i]*0.22);
+      const innerR2=half*0.58;
+      flamePoints.push(`${(half+outerR*Math.cos(angle)).toFixed(2)},${(half+outerR*Math.sin(angle)).toFixed(2)}`);
+      flameInnerPoints.push(`${(half+innerR2*Math.cos(angle)).toFixed(2)},${(half+innerR2*Math.sin(angle)).toFixed(2)}`);
+    }
+    const flameOuter='M'+flamePoints.join('L')+'Z';
+    const flameInner='M'+flameInnerPoints.join('L')+'Z';
+    const flameInnerPerim=Math.round(2.0*size);
+    shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}">
+      <path d="${flameOuter}" fill="${skinBorder}22" stroke="${skinBorder}" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="${flameInner}" fill="none" stroke="${skinBorder}" stroke-width="2.5"
+        stroke-dasharray="${flameInnerPerim}" stroke-dashoffset="0" stroke-linejoin="round"
+        style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:${half}px ${half}px"/>
+    </svg>`;
+    el.style.borderRadius='0';el.style.border='none';el.style.background='transparent';
+
   } else {
     shapesvg=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}"><circle cx="${half}" cy="${half}" r="${r}" fill="none" stroke="${borderColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring ${lifeMs}ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg>`;
   }
@@ -1269,10 +1511,24 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
         combo=combo+1;
         if(combo>bestCombo)bestCombo=combo;
         comboDisp.textContent='x'+combo;
+        checkComboMilestone(combo);
         soundHit(combo);
         if(dailyActive&&slowActive)dailySlowScore+=pts;
-        spawnParticles(x+size/2,y+size/2,c.border);
-        showPop(x+size/2-16,y-6,boostActive?'#FAC775':(isMini?'#FAC775':'#5DCAA5'),`+${pts}${isMini?' ×2':''}`);
+        // More particles at high combo
+        const particleCount=combo>=10?12:combo>=5?9:6;
+        for(let _p=0;_p<particleCount;_p++){
+          const a=Math.random()*Math.PI*2;const d=20+Math.random()*50;
+          const p=document.createElement('div');p.className='particle';
+          let pColor=c.border;let pSize=combo>=10?8:6;let pShape='border-radius:50%';
+          if(activeHitEffect==='lightning'){pColor='#ffff00';pShape='border-radius:2px';pSize=Math.random()<0.5?2:8;}
+          else if(activeHitEffect==='fire'){pColor=`hsl(${20+Math.random()*30},100%,${50+Math.random()*20}%)`;}
+          else if(activeHitEffect==='crystal'){pColor='#a0e8ff';pShape='border-radius:3px;transform:rotate(45deg)';}
+          p.style.cssText=`width:${pSize}px;height:${pSize}px;${pShape};background:${pColor};position:absolute;left:${x+size/2}px;top:${y+size/2}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
+          arena.appendChild(p);setTimeout(()=>p.remove(),520);
+        }
+        const bigPop=combo>=5;
+        const popColor=combo>=10?'#FAC775':boostActive?'#FAC775':isMini?'#FAC775':'#5DCAA5';
+        showPop(x+size/2-16,y-6,popColor,`+${pts}${isMini?' ×2':''}${combo>=10?' 🔥':''}`,bigPop);
         updateLevelBar();checkAch();
         tryLevelUp();
       }
@@ -1342,21 +1598,43 @@ function handlePU(type,x,y,size){
   }
 }
 
-function showPop(x,y,color,text){const pop=document.createElement('div');pop.className='combo-pop';pop.style.cssText=`left:${Math.min(Math.max(x,5),arena.clientWidth-90)}px;top:${Math.max(y,10)}px;color:${color};font-size:13px`;pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),700);}
+function showPop(x,y,color,text,big=false){
+  const pop=document.createElement('div');pop.className='combo-pop';
+  const fs=big?20:13;
+  pop.style.cssText=`left:${Math.min(Math.max(x,5),arena.clientWidth-90)}px;top:${Math.max(y,10)}px;color:${color};font-size:${fs}px;font-weight:${big?700:500};text-shadow:${big?`0 0 10px ${color}`:'none'}`;
+  pop.textContent=text;arena.appendChild(pop);setTimeout(()=>pop.remove(),big?900:700);
+}
 function updateLivesDisplay(){livesDisplay.innerHTML='';for(let i=0;i<=livesLeft;i++){const h=document.createElement('div');h.className='life-heart';h.textContent='❤️';livesDisplay.appendChild(h);}}
 
-function pauseGame(){if(!running||paused)return;paused=true;clearTimeout(spawnTimer);document.getElementById('pause-score').textContent=score;document.getElementById('pause-level').textContent=currentLevel;pauseScreen.style.display='flex';}
-function resumeGame(){paused=false;pauseScreen.style.display='none';if(running)spawnTimer=setTimeout(()=>spawnTarget(),300);}
+function pauseGame(){
+  if(!running||paused)return;
+  stopMusic();stopAtmo();
+  paused=true;
+  clearTimeout(spawnTimer);
+  document.getElementById('pause-score').textContent=score;
+  document.getElementById('pause-level').textContent=currentLevel;
+  document.getElementById('pause-music-toggle').checked=musicOn;
+  document.getElementById('pause-sound-toggle').checked=soundOn;
+  pauseScreen.style.display='flex';
+}
+function resumeGame(){paused=false;pauseScreen.style.display='none';if(running){resumeMusic();playAtmoSound(THEMES[currentTheme].atmo);spawnTimer=setTimeout(()=>spawnTarget(),300);}}
 function quitToMenu(){
   paused=false;running=false;
   clearTimeout(spawnTimer);clearInterval(countTimer);clearInterval(moveTimer);
   clearTimeout(boostTimeout);clearTimeout(slowTimeout);
   if(window._shuffleInterval)clearInterval(window._shuffleInterval);
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
+  stopMusic();
+  stopAtmo();
   pauseScreen.style.display='none';levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   const go=document.getElementById('game-over-screen');if(go)go.remove();
-  currentTheme='space';arena.style.background='#10102a';arena.style.borderColor='#3a3a6e';
+  currentTheme='space';
+  const t0=THEMES.space;
+  arena.style.background=t0.bg;
+  arena.style.borderColor=t0.border;
+  arena.style.borderWidth='2px';
+  arena.style.boxShadow=`0 0 20px ${t0.glow}88, inset 0 0 30px ${t0.glow}22`;
   initStars();
   startScreen.style.display='flex';
   loadStartRecords(currentMode);
@@ -1373,13 +1651,14 @@ document.getElementById('settings-close').addEventListener('click',()=>settingsP
 document.getElementById('info-close').addEventListener('click',()=>infoPanel.style.display='none');
 document.getElementById('settings-link').addEventListener('click',openSettings);
 document.getElementById('info-btn-start').addEventListener('click',openInfo);
-soundToggle.addEventListener('change',()=>{soundOn=soundToggle.checked;savePrefs();});
+soundToggle.addEventListener('change',()=>setSoundOn(soundToggle.checked));
 premiumBtn.addEventListener('click',()=>{isPremium=true;applyPrefs();savePrefs();alert('Thank you for Glipx Premium! Ads removed.');settingsPanel.style.display='none';});
 document.getElementById('ad-cta-btn').addEventListener('click',openSettings);
 
 function startGame(){
   score=0;combo=1;bestCombo=1;running=true;paused=false;currentLevel=1;levelScore=0;
   boostActive=false;slowActive=false;shieldActive=false;reviveAvailable=true;
+  shownMilestones=new Set();
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   scoreDisp.textContent='0';comboDisp.textContent='x1';
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
@@ -1394,7 +1673,42 @@ function startGame(){
     livesDisplay.innerHTML='';timeBox.querySelector('.stat-label').textContent='Time';
     startLevelTimer();
   }
+  startMusic();
+  playAtmoSound(THEMES[currentTheme].atmo||'space');
   spawnTimer=setTimeout(()=>spawnTarget(),400);
+  // Guarantee first power-up within 15 seconds for new players
+  if(currentLevel===1){
+    setTimeout(()=>{
+      if(running&&!paused&&currentLevel===1){
+        // Force spawn a helpful power-up (time, boost or clear)
+        const earlyPUs=['time','boost','clear'];
+        const puType=earlyPUs[Math.floor(Math.random()*earlyPUs.length)];
+        const arenaW=arena.clientWidth,arenaH=arena.clientHeight;
+        const size=52;
+        const x=Math.random()*(arenaW-size-20)+10;
+        const y=Math.random()*(arenaH-size-40)+20;
+        const puColors={time:'#378ADD',boost:'#FAC775',clear:'#5DCAA5'};
+        const puColor=puColors[puType];
+        const el=document.createElement('div');
+        el.className='target pu-'+puType;
+        el.style.cssText=`width:${size}px;height:${size}px;left:${x}px;top:${y}px;background:#0a0a1a;border:2.5px solid ${puColor};`;
+        const r=(size/2)-3;const circ=2*Math.PI*r;
+        const icons={time:'T',boost:'2x',clear:'✦'};
+        el.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${puColor}" stroke-width="2.5" stroke-dasharray="${circ}" stroke-dashoffset="0" style="animation:shrink-ring 3000ms linear forwards;transform-origin:center;transform:rotate(-90deg)"/></svg><span style="font-size:14px;position:relative;z-index:1;color:#e0e8ff;font-weight:500">${icons[puType]}</span>`;
+        let hit=false;
+        el.addEventListener('pointerdown',e=>{
+          e.stopPropagation();
+          if(!hit&&running&&!paused){
+            hit=true;handlePU(puType,x,y,size);
+            el.remove();targets=targets.filter(t=>t.el!==el);
+          }
+        });
+        const timeout=setTimeout(()=>{el.remove();targets=targets.filter(t=>t.el!==el);},3000);
+        arena.appendChild(el);
+        targets.push({el,timeout,moveInterval:null});
+      }
+    },12000);
+  }
   // Shuffle mechanic level 9+
   if(currentLevel>=9||true){
     if(window._shuffleInterval)clearInterval(window._shuffleInterval);
@@ -1421,7 +1735,7 @@ function endGame(){
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
   levelBarWrap.style.display='none';pauseBtn.style.display='none';
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
-  soundGameOver();gamesPlayed++;
+  stopMusic();stopAtmo();soundGameOver();gamesPlayed++;updateStats();
   ({isNewScore,isNewCombo,isNewLevel}=updateRecords());
   // Check daily challenge
   if(dailyActive){
@@ -1632,7 +1946,7 @@ function endGameAfterRevive(){
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
   levelBarWrap.style.display='none';pauseBtn.style.display='none';
-  soundGameOver();gamesPlayed++;
+  stopMusic();stopAtmo();soundGameOver();gamesPlayed++;updateStats();
   updateRecords();
   // Build GO screen directly
   const go=document.createElement('div');go.id='game-over-screen';
@@ -1693,6 +2007,492 @@ document.getElementById('revive-skip-btn').addEventListener('click',()=>{
 });
 // ===== END REVIVE SYSTEM =====
 
+
+// ===== MUSIC SYSTEM =====
+let musicOn=true,musicAC=null,musicGain=null,musicPlaying=false,musicStep=0,musicTimer=null;
+
+function getMusicAC(){
+  if(!musicAC){
+    musicAC=new (window.AudioContext||window.webkitAudioContext)();
+    musicGain=musicAC.createGain();
+    musicGain.gain.setValueAtTime(0.7,musicAC.currentTime);
+    musicGain.connect(musicAC.destination);
+  }
+  return musicAC;
+}
+
+// Energetic game music — arpeggiated synth
+const MUSIC_NOTES=[
+  261.63,329.63,392.00,523.25, // C E G C (upbeat)
+  293.66,369.99,440.00,587.33, // D F# A D
+  261.63,311.13,392.00,523.25, // C Eb G C (minor feel)
+  246.94,311.13,369.99,493.88, // B Eb F# B
+];
+const MUSIC_BASS=[130.81,146.83,130.81,123.47];
+
+function playMusicNote(){
+  if(!musicPlaying||!musicOn||paused)return;
+  try{
+    const ac=getMusicAC();
+    if(ac.state==='suspended')return;
+    const bar=Math.floor(musicStep/4)%4;
+    const beat=musicStep%4;
+    const freq=MUSIC_NOTES[bar*4+beat];
+    const bpm=138;const beatLen=60/bpm;
+
+    // Synth lead
+    const osc=ac.createOscillator();
+    const env=ac.createGain();
+    osc.connect(env);env.connect(musicGain);
+    osc.type='square';
+    osc.frequency.setValueAtTime(freq,ac.currentTime);
+    env.gain.setValueAtTime(0,ac.currentTime);
+    env.gain.linearRampToValueAtTime(0.08,ac.currentTime+0.01);
+    env.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+beatLen*0.8);
+    osc.start(ac.currentTime);osc.stop(ac.currentTime+beatLen*0.8);
+
+    // Bass on beat 1
+    if(beat===0){
+      const bass=ac.createOscillator();
+      const bassEnv=ac.createGain();
+      bass.connect(bassEnv);bassEnv.connect(musicGain);
+      bass.type='triangle';
+      bass.frequency.setValueAtTime(MUSIC_BASS[bar],ac.currentTime);
+      bassEnv.gain.setValueAtTime(0,ac.currentTime);
+      bassEnv.gain.linearRampToValueAtTime(0.12,ac.currentTime+0.02);
+      bassEnv.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+beatLen*2);
+      bass.start(ac.currentTime);bass.stop(ac.currentTime+beatLen*2);
+    }
+
+    // Hi-hat pulse on every beat
+    const buf=ac.createBuffer(1,ac.sampleRate*0.05,ac.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.exp(-i/500);
+    const noise=ac.createBufferSource();
+    const noiseEnv=ac.createGain();
+    const hiFilter=ac.createBiquadFilter();
+    hiFilter.type='highpass';hiFilter.frequency.value=8000;
+    noise.buffer=buf;noise.connect(hiFilter);hiFilter.connect(noiseEnv);noiseEnv.connect(musicGain);
+    noiseEnv.gain.setValueAtTime(0.04,ac.currentTime);
+    noiseEnv.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.05);
+    noise.start(ac.currentTime);
+
+    musicStep++;
+    musicTimer=setTimeout(playMusicNote,beatLen*1000);
+  }catch(e){}
+}
+
+function startMusic(){
+  if(!musicOn||musicPlaying)return;
+  musicPlaying=true;
+  playMusicNote();
+}
+
+function stopMusic(){
+  musicPlaying=false;
+  clearTimeout(musicTimer);
+  try{
+    if(musicGain)musicGain.gain.setValueAtTime(0,musicAC.currentTime);
+    if(musicAC&&musicAC.state==='running')musicAC.suspend();
+  }catch(e){}
+}
+
+function resumeMusic(){
+  if(!musicOn||!running||paused)return;
+  musicPlaying=true;
+  try{
+    if(musicAC&&musicAC.state==='suspended'){
+      musicAC.resume().then(()=>{
+        if(musicGain)musicGain.gain.setValueAtTime(0.7,musicAC.currentTime);
+        playMusicNote();
+      });
+    } else {
+      if(musicGain)musicGain.gain.setValueAtTime(0.7,musicAC.currentTime);
+      playMusicNote();
+    }
+  }catch(e){}
+}
+
+function setMusicOn(val){
+  musicOn=val;savePrefs();
+  if(musicOn&&running&&!paused){resumeMusic();}
+  else if(!musicOn){stopMusic();}
+  const mt=document.getElementById('music-toggle');
+  const pmt=document.getElementById('pause-music-toggle');
+  if(mt)mt.checked=val;
+  if(pmt)pmt.checked=val;
+}
+
+function setSoundOn(val){
+  soundOn=val;
+  savePrefs();
+  const st=document.getElementById('sound-toggle');
+  const pst=document.getElementById('pause-sound-toggle');
+  if(st)st.checked=val;
+  if(pst)pst.checked=val;
+}
+
+document.getElementById('music-toggle').addEventListener('change',e=>setMusicOn(e.target.checked));
+document.getElementById('pause-music-toggle').addEventListener('change',e=>setMusicOn(e.target.checked));
+document.getElementById('pause-sound-toggle').addEventListener('change',e=>setSoundOn(e.target.checked));
+// ===== END MUSIC SYSTEM =====
+
+// ===== STATISTICS SYSTEM =====
+function getStats(){try{return JSON.parse(localStorage.getItem('glipx_stats')||'{}');}catch{return{};}}
+function saveStats(s){try{localStorage.setItem('glipx_stats',JSON.stringify(s));}catch{}}
+
+function updateStats(){
+  const s=getStats();
+  s.gamesPlayed=(s.gamesPlayed||0)+1;
+  s.totalScore=(s.totalScore||0)+score;
+  s.highestLevel=Math.max(s.highestLevel||0,currentLevel);
+  s.highestCombo=Math.max(s.highestCombo||0,bestCombo);
+  s.totalCirclesTapped=(s.totalCirclesTapped||0)+(score/10|0);
+  saveStats(s);
+}
+
+function openStats(){
+  const s=getStats();
+  const all=getAllRecords();
+  const bestScore=Math.max(...Object.values(all).map(r=>r.score||0),0);
+  const bestLevel=Math.max(...Object.values(all).map(r=>r.level||0),0);
+  const bestComboStat=Math.max(...Object.values(all).map(r=>r.combo||0),0);
+  const streak=getDailyState().streak||0;
+
+  const content=document.getElementById('stats-content');
+  content.innerHTML=`
+    <div class="stat-section">Gameplay</div>
+    <div class="stat-row"><span class="stat-row-label">Games played</span><span class="stat-row-val">${s.gamesPlayed||0}</span></div>
+    <div class="stat-row"><span class="stat-row-label">Total score</span><span class="stat-row-val">${(s.totalScore||0).toLocaleString()}</span></div>
+    <div class="stat-row"><span class="stat-row-label">Circles tapped</span><span class="stat-row-val">${(s.totalCirclesTapped||0).toLocaleString()}</span></div>
+    <div class="stat-section">Records</div>
+    <div class="stat-row"><span class="stat-row-label">Best score</span><span class="stat-row-val">${bestScore.toLocaleString()}</span></div>
+    <div class="stat-row"><span class="stat-row-label">Highest level</span><span class="stat-row-val">${bestLevel}</span></div>
+    <div class="stat-row"><span class="stat-row-label">Best combo</span><span class="stat-row-val">x${bestComboStat}</span></div>
+    <div class="stat-row"><span class="stat-row-label">Daily streak</span><span class="stat-row-val">🔥 ${streak} days</span></div>
+    <div class="stat-section">Achievements (${unlockedAch.size}/${ACHIEVEMENTS.length})</div>
+    ${ACHIEVEMENTS.map(a=>{
+      const unlocked=unlockedAch.has(a.id);
+      return `<div class="ach-row ${unlocked?'':'ach-locked'}">
+        <div class="ach-icon">${a.icon}</div>
+        <div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>
+        ${unlocked?'<div class="ach-badge">✓</div>':''}
+      </div>`;
+    }).join('')}
+  `;
+  document.getElementById('stats-panel').style.display='flex';
+}
+
+document.getElementById('stats-btn').addEventListener('click',openStats);
+document.getElementById('stats-close').addEventListener('click',()=>document.getElementById('stats-panel').style.display='none');
+// ===== END STATISTICS SYSTEM =====
+
+
+
+
+
+// ===== WOW EFFECTS =====
+
+// --- Confetti ---
+function launchConfetti(colors=['#FAC775','#378ADD','#1D9E75','#D85A30','#7F77DD']){
+  const canvas=document.getElementById('au-confetti');
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:1001';
+  const ctx=canvas.getContext('2d');
+  const pieces=[];
+  for(let i=0;i<120;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,y:-20-Math.random()*100,
+      w:6+Math.random()*8,h:6+Math.random()*8,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      rot:Math.random()*360,rotSpeed:(Math.random()-0.5)*8,
+      vy:3+Math.random()*5,vx:(Math.random()-0.5)*4,
+      alpha:1
+    });
+  }
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      p.y+=p.vy;p.x+=p.vx;p.rot+=p.rotSpeed;
+      if(frame>80)p.alpha=Math.max(0,p.alpha-0.015);
+      ctx.save();ctx.globalAlpha=p.alpha;
+      ctx.translate(p.x+p.w/2,p.y+p.h/2);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.color;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    frame++;
+    if(frame<140)requestAnimationFrame(draw);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+  draw();
+}
+
+// --- Achievement Unlock ---
+let achUnlockQueue=[];let achUnlockShowing=false;
+
+function showAchievementUnlock(ach){
+  achUnlockQueue.push(ach);
+  if(!achUnlockShowing)processAchUnlockQueue();
+}
+
+function processAchUnlockQueue(){
+  if(achUnlockQueue.length===0){achUnlockShowing=false;return;}
+  achUnlockShowing=true;
+  const ach=achUnlockQueue.shift();
+  // Find full data from ACHIEVEMENT_SKINS or ACHIEVEMENTS
+  const skinData=ACHIEVEMENT_SKINS.find(s=>s.id===ach.skinId);
+  const panel=document.getElementById('achievement-unlock');
+  document.getElementById('au-icon').textContent=ach.icon||'🏆';
+  document.getElementById('au-name').textContent=ach.name;
+  document.getElementById('au-desc').textContent=ach.desc;
+  // Show skin color dots if it's a skin unlock
+  const preview=document.getElementById('au-skin-preview');
+  if(skinData){
+    preview.innerHTML=skinData.colors.map(c=>`<div style="width:20px;height:20px;border-radius:50%;background:${c}33;border:2px solid ${c}"></div>`).join('');
+  } else {preview.innerHTML='';}
+  panel.style.display='flex';
+  launchConfetti();
+}
+
+document.getElementById('au-close').addEventListener('click',()=>{
+  document.getElementById('achievement-unlock').style.display='none';
+  setTimeout(processAchUnlockQueue,300);
+});
+
+// --- Record Flash ---
+function showRecordFlash(){
+  const rf=document.getElementById('record-flash');
+  const rt=document.getElementById('record-text');
+  rt.textContent='🏆 NEW RECORD!';
+  rf.classList.remove('show');void rf.offsetWidth;rf.classList.add('show');
+  // Extra particles
+  for(let i=0;i<15;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div');p.className='particle';
+      const a=Math.random()*Math.PI*2;const d=50+Math.random()*80;
+      const aW=arena.clientWidth,aH=arena.clientHeight;
+      const sx=aW/2;const sy=aH/2;
+      p.style.cssText=`width:8px;height:8px;border-radius:50%;background:#FAC775;position:absolute;left:${sx}px;top:${sy}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
+      arena.appendChild(p);setTimeout(()=>p.remove(),520);
+    },i*30);
+  }
+  setTimeout(()=>rf.classList.remove('show'),900);
+}
+
+// --- Combo Milestone ---
+const COMBO_MILESTONES={5:{text:'🔥 COMBO x5!',sub:'Getting hot!'},10:{text:'⚡ COMBO x10!',sub:'Unstoppable!'},20:{text:'🌟 COMBO x20!',sub:'Legendary!'},50:{text:'👑 COMBO x50!',sub:'INSANE!!'}};
+let shownMilestones=new Set();
+
+function checkComboMilestone(c){
+  if(COMBO_MILESTONES[c]&&!shownMilestones.has(c)){
+    shownMilestones.add(c);
+    const m=COMBO_MILESTONES[c];
+    const el=document.getElementById('combo-milestone');
+    document.getElementById('cm-text').textContent=m.text;
+    document.getElementById('cm-sub').textContent=m.sub;
+    el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
+    setTimeout(()=>el.classList.remove('show'),750);
+    // Particles burst
+    for(let i=0;i<10;i++){
+      setTimeout(()=>{
+        const p=document.createElement('div');p.className='particle';
+        const a=Math.random()*Math.PI*2;const d=40+Math.random()*60;
+        p.style.cssText=`width:7px;height:7px;border-radius:50%;background:#FAC775;position:absolute;left:${arena.clientWidth/2}px;top:${arena.clientHeight*0.4}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
+        arena.appendChild(p);setTimeout(()=>p.remove(),520);
+      },i*25);
+    }
+  }
+}
+
+// --- Daily Complete Celebration ---
+function showDailyComplete(streak){
+  const panel=document.getElementById('daily-complete');
+  document.getElementById('dc-streak').textContent=streak>1?`🔥 ${streak} day streak! Keep it up!`:'First daily challenge complete!';
+  panel.style.display='flex';
+  launchConfetti(['#1D9E75','#5DCAA5','#FAC775','#378ADD','#7ee8bb']);
+}
+document.getElementById('dc-close').addEventListener('click',()=>{
+  document.getElementById('daily-complete').style.display='none';
+});
+
+// ===== END WOW EFFECTS =====
+
+// ===== ONBOARDING =====
+const OB_SLIDES=[
+  {
+    title:"Tap circles before they vanish!",
+    desc:"Circles appear and disappear quickly. Tap them before the ring runs out — the faster you tap, the more you score!",
+    visual:`<svg width="140" height="140" viewBox="0 0 140 140">
+      <circle cx="70" cy="70" r="38" fill="#1e3e62" stroke="#378ADD" stroke-width="3"/>
+      <circle cx="70" cy="70" r="28" fill="none" stroke="#378ADD" stroke-width="2.5"
+        stroke-dasharray="176" stroke-dashoffset="0"
+        style="animation:ob-shrink 2s linear infinite;transform-origin:center;transform:rotate(-90deg)"/>
+      <text x="70" y="76" text-anchor="middle" font-size="22" fill="#a0d0ff" font-family="sans-serif">👆</text>
+    </svg>`
+  },
+  {
+    title:"Build combos for massive points!",
+    desc:"Every circle you tap without missing increases your combo multiplier. Miss one and it resets. Aim for big combos to dominate the leaderboard!",
+    visual:`<div class="ob-combo-demo">
+      <div class="ob-combo-val">x7</div>
+      <div class="ob-combo-label">combo multiplier</div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        ${[1,2,3,4,5,6,7].map((n,i)=>`<div style="width:10px;height:10px;border-radius:50%;background:${i<6?'#FAC775':'#2a2a4e'}"></div>`).join('')}
+      </div>
+    </div>`
+  },
+  {
+    title:"Grab power-ups for advantages!",
+    desc:"Special circles appear during gameplay. Each one gives you a different boost — extra time, double points, shields and more!",
+    visual:`<div class="ob-pu-row">
+      <div class="ob-pu" style="border-color:#378ADD;background:#1a3a5c;color:#a0d0ff">T</div>
+      <div class="ob-pu" style="border-color:#FAC775;background:#3d2e00;color:#ffd88a">2x</div>
+      <div class="ob-pu" style="border-color:#5DCAA5;background:#1a3d2e;color:#7ee8bb">✦</div>
+      <div class="ob-pu" style="border-color:#7F77DD;background:#2d1a3d;color:#c4b8ff">🛡</div>
+      <div class="ob-pu" style="border-color:#a0c4ff;background:#0a1628;color:#a0c4ff">❄</div>
+    </div>`
+  }
+];
+
+let obStep=0;
+
+function showOBSlide(i){
+  const s=OB_SLIDES[i];
+  document.getElementById('ob-visual').innerHTML=s.visual;
+  document.getElementById('ob-title').textContent=s.title;
+  document.getElementById('ob-desc').textContent=s.desc;
+  // Dots
+  OB_SLIDES.forEach((_,j)=>{
+    const d=document.getElementById(`ob-dot-${j}`);
+    if(d){d.className='ob-dot'+(j===i?' active':'');}
+  });
+  // Button text
+  document.getElementById('ob-next').textContent=i===OB_SLIDES.length-1?"Let's Play! 🚀":"Next →";
+}
+
+function nextOBSlide(){
+  if(obStep<OB_SLIDES.length-1){
+    obStep++;showOBSlide(obStep);
+  } else {
+    closeOnboarding();
+  }
+}
+
+function closeOnboarding(){
+  document.getElementById('onboarding').style.display='none';
+  localStorage.setItem('glipx_onboarded','1');
+}
+
+function checkOnboarding(){
+  if(!localStorage.getItem('glipx_onboarded')){
+    obStep=0;
+    showOBSlide(0);
+    document.getElementById('onboarding').style.display='flex';
+  }
+}
+
+document.getElementById('ob-next').addEventListener('click',nextOBSlide);
+document.getElementById('ob-skip').addEventListener('click',closeOnboarding);
+// ===== END ONBOARDING =====
+
+// ===== ATMOSPHERIC SOUNDS =====
+let atmoNode=null,atmoGainNode=null,atmoTimer=null;
+
+function stopAtmo(){
+  if(atmoTimer)clearTimeout(atmoTimer);
+  try{if(atmoGainNode){atmoGainNode.gain.setValueAtTime(atmoGainNode.gain.value,musicAC.currentTime);atmoGainNode.gain.linearRampToValueAtTime(0,musicAC.currentTime+1);}}catch(e){}
+  atmoNode=null;atmoGainNode=null;
+}
+
+function playAtmoSound(type){
+  if(!soundOn||paused)return;
+  stopAtmo();
+  try{
+    const ac=getMusicAC();
+    atmoGainNode=ac.createGain();
+    atmoGainNode.gain.setValueAtTime(0,ac.currentTime);
+    atmoGainNode.gain.linearRampToValueAtTime(0.06,ac.currentTime+2);
+    atmoGainNode.connect(ac.destination);
+
+    if(type==='ice'||type==='blizzard'){
+      // Wind howl — filtered noise
+      const buf=ac.createBuffer(1,ac.sampleRate*3,ac.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
+      const src=ac.createBufferSource();src.buffer=buf;src.loop=true;
+      const f=ac.createBiquadFilter();f.type='bandpass';
+      f.frequency.setValueAtTime(800,ac.currentTime);
+      f.frequency.linearRampToValueAtTime(400,ac.currentTime+3);
+      f.Q.value=0.5;
+      src.connect(f);f.connect(atmoGainNode);
+      src.start();atmoNode=src;
+      if(type==='blizzard')atmoGainNode.gain.linearRampToValueAtTime(0.12,ac.currentTime+2);
+
+    } else if(type==='vulkan'||type==='eruption'){
+      // Low rumble
+      const osc=ac.createOscillator();osc.type='sawtooth';
+      osc.frequency.setValueAtTime(40,ac.currentTime);
+      osc.frequency.linearRampToValueAtTime(55,ac.currentTime+4);
+      const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=120;
+      osc.connect(f);f.connect(atmoGainNode);
+      osc.start();atmoNode=osc;
+      if(type==='eruption')atmoGainNode.gain.linearRampToValueAtTime(0.1,ac.currentTime+2);
+
+    } else if(type==='matrix'||type==='matrix_surge'){
+      // Digital pulse hum
+      const osc=ac.createOscillator();osc.type='square';
+      osc.frequency.setValueAtTime(60,ac.currentTime);
+      const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=200;f.Q.value=2;
+      osc.connect(f);f.connect(atmoGainNode);
+      osc.start();atmoNode=osc;
+      if(type==='matrix_surge')atmoGainNode.gain.linearRampToValueAtTime(0.09,ac.currentTime+2);
+
+    } else if(type==='void'||type==='void_collapse'){
+      // Deep drone
+      const osc=ac.createOscillator();osc.type='sine';
+      osc.frequency.setValueAtTime(55,ac.currentTime);
+      osc.frequency.linearRampToValueAtTime(45,ac.currentTime+5);
+      osc.connect(atmoGainNode);
+      osc.start();atmoNode=osc;
+      if(type==='void_collapse')atmoGainNode.gain.linearRampToValueAtTime(0.1,ac.currentTime+2);
+
+    } else if(type==='neon'){
+      // Electric buzz
+      const osc=ac.createOscillator();osc.type='sawtooth';
+      osc.frequency.setValueAtTime(120,ac.currentTime);
+      const f=ac.createBiquadFilter();f.type='highpass';f.frequency.value=1000;
+      osc.connect(f);f.connect(atmoGainNode);
+      osc.start();atmoNode=osc;
+
+    } else if(type==='space'||type==='space_storm'){
+      // Subtle cosmic hum
+      const osc=ac.createOscillator();osc.type='sine';
+      osc.frequency.setValueAtTime(80,ac.currentTime);
+      osc.connect(atmoGainNode);
+      osc.start();atmoNode=osc;
+      atmoGainNode.gain.linearRampToValueAtTime(0.03,ac.currentTime+2);
+    }
+  }catch(e){}
+}
+// ===== END ATMOSPHERIC SOUNDS =====
+
+// ===== TRAIL EFFECT =====
+let trailActive=false;
+arena.addEventListener('pointermove',(e)=>{
+  if(!running||paused||activeTrail==='none')return;
+  const rect=arena.getBoundingClientRect();
+  const tx=e.clientX-rect.left;const ty=e.clientY-rect.top;
+  const dot=document.createElement('div');
+  let trailStyle='';
+  if(activeTrail==='neon'){trailStyle=`width:8px;height:8px;border-radius:50%;background:#00ffff;box-shadow:0 0 8px #00ffff;opacity:0.8;`;}
+  else if(activeTrail==='fire_t'){const h=Math.floor(Math.random()*40+10);trailStyle=`width:8px;height:8px;border-radius:50%;background:hsl(${h},100%,55%);opacity:0.8;`;}
+  else if(activeTrail==='electric'){trailStyle=`width:4px;height:12px;border-radius:2px;background:#ffff44;opacity:0.9;transform:rotate(${Math.random()*60-30}deg);`;}
+  dot.style.cssText=`position:absolute;left:${tx-4}px;top:${ty-4}px;pointer-events:none;z-index:9;transition:opacity .3s;${trailStyle}`;
+  arena.appendChild(dot);
+  setTimeout(()=>{dot.style.opacity='0';setTimeout(()=>dot.remove(),300);},50);
+});
+// ===== END TRAIL EFFECT =====
 // ===== SHOP SYSTEM =====
 // No themes in shop — themes unlock via level progression
 
@@ -1704,6 +2504,43 @@ const SHOP_SKINS=[
   {id:'ice_s',   name:'Frost',           desc:'Hexagon-shaped targets in icy blue tones',  price:'$0.99', icon:'🔷', shape:'hex',     colors:['#a0d8ff','#5dc4e8','#80b8ff','#c0e8ff','#378ADD']},
 ];
 
+// Achievement-only skins
+const ACHIEVEMENT_SKINS=[
+  {id:'gold',     name:'Gold Star',  desc:'Reach Level 50',                    icon:'🥇', shape:'star',   colors:['#ffd700','#FAC775','#ffaa00','#ffe066','#f0c020'], req:'Reach Level 50',              check:(s)=>Math.max(...Object.values(getAllRecords()).map(r=>r.level||0),0)>=50},
+  {id:'diamond',  name:'Diamond',   desc:'Score 20,000 points',               icon:'💎', shape:'diamond',colors:['#a0e8ff','#60c8ff','#c0f0ff','#80d8ff','#40b8ff'], req:'Score 20,000 points',         check:(s)=>Math.max(...Object.values(getAllRecords()).map(r=>r.score||0),0)>=20000},
+  {id:'founder',  name:'Founder',   desc:'30 day daily streak',               icon:'🌙', shape:'circle', colors:['#e0e8ff','#c0c8ff','#a0b0e0','#d0d8ff','#f0f4ff'], req:'30 day streak',               check:(s)=>(getDailyState().streak||0)>=30},
+  {id:'inferno',  name:'Inferno',   desc:'Reach combo x50 in one game',       icon:'🔥', shape:'flame',  colors:['#ff4400','#ff6600','#ff2200','#ff8800','#cc2200'], req:'Combo x50 in one game',       check:(s)=>s.highestCombo>=50},
+  {id:'legend',   name:'Legend',    desc:'Reach Level 30',                    icon:'👑', shape:'hex',    colors:['#9966ff','#FFD700','#bb88ff','#ccaa00','#aa55ff'], req:'Reach Level 30',              check:(s)=>Math.max(...Object.values(getAllRecords()).map(r=>r.level||0),0)>=30},
+  {id:'thunder',  name:'Thunder',   desc:'Reach combo x25 in one game',       icon:'⚡', shape:'circle', colors:['#ffff00','#ffe000','#ffffff','#ffcc00','#ffffa0'], req:'Combo x25 in one game',       check:(s)=>s.highestCombo>=25},
+  {id:'nature',   name:'Nature',    desc:'7 day daily streak',                icon:'🌸', shape:'flower', colors:['#44dd88','#22cc66','#88ffaa','#00aa44','#66ee99'], req:'7 day streak',                check:(s)=>(getDailyState().streak||0)>=7},
+  {id:'mystic',   name:'Mystic',    desc:'Score 5,000 points',                icon:'🔮', shape:'diamond',colors:['#cc44ff','#ff44cc','#aa22ee','#ee66ff','#dd88ff'], req:'Score 5,000 points',          check:(s)=>Math.max(...Object.values(getAllRecords()).map(r=>r.score||0),0)>=5000},
+  {id:'champion', name:'Champion',  desc:'Complete 10 daily challenges',      icon:'🏆', shape:'hex',    colors:['#FFD700','#ff4444','#ffaa00','#cc0000','#ff8800'], req:'Complete 10 daily challenges', check:(s)=>(getDailyState().totalCompleted||0)>=10},
+  {id:'stellar',  name:'Stellar',   desc:'Play 50 games',                     icon:'🌟', shape:'star',   colors:['#ffffff','#a0c8ff','#e0f0ff','#80b8ff','#c0e8ff'], req:'Play 50 games',               check:(s)=>(s.gamesPlayed||0)>=50},
+];
+
+const HIT_EFFECTS=[
+  {id:'default',  name:'Classic',   desc:'Simple colored particles',  price:'Free',  icon:'✨'},
+  {id:'lightning',name:'Lightning', desc:'Electric yellow sparks',    price:'$0.99', icon:'⚡'},
+  {id:'fire',     name:'Fire',      desc:'Bursting orange flames',    price:'$0.99', icon:'🔥'},
+  {id:'crystal',  name:'Crystal',   desc:'Blue crystal shards',       price:'$0.99', icon:'💎'},
+];
+
+const TRAIL_EFFECTS=[
+  {id:'none',    name:'None',      desc:'No trail effect',           price:'Free',  icon:'○'},
+  {id:'neon',    name:'Neon',      desc:'Glowing neon line',         price:'$0.99', icon:'🌟'},
+  {id:'fire_t',  name:'Fire',      desc:'Burning fire trail',        price:'$0.99', icon:'🔥'},
+  {id:'electric',name:'Electric',  desc:'Electric zap trail',        price:'$0.99', icon:'⚡'},
+];
+
+const SOUND_PACKS=[
+  {id:'default', name:'Classic',   desc:'Original Glipx sounds',    price:'Free',  icon:'🔊'},
+  {id:'retro',   name:'Retro',     desc:'8-bit arcade sounds',      price:'$0.99', icon:'🎮'},
+  {id:'scifi',   name:'Sci-Fi',    desc:'Futuristic laser sounds',  price:'$0.99', icon:'🚀'},
+];
+
+let activeHitEffect='default';let activeTrail='none';let activeSoundPack='default';
+
+
 function getShopData(){try{return JSON.parse(localStorage.getItem('glipx_shop')||'{}');}catch{return{};}}
 function saveShopData(d){try{localStorage.setItem('glipx_shop',JSON.stringify(d));}catch{}}
 
@@ -1712,15 +2549,30 @@ let activeSkin='default';
 function loadShopState(){
   const d=getShopData();
   activeSkin=d.activeSkin||'default';
+  activeHitEffect=d.activeHitEffect||'default';
+  activeTrail=d.activeTrail||'none';
+  activeSoundPack=d.activeSoundPack||'default';
+  // Validate activeSkin still valid
+  if(activeSkin!=='default'){
+    const inShop=SHOP_SKINS.find(s=>s.id===activeSkin);
+    const inAch=ACHIEVEMENT_SKINS.find(s=>s.id===activeSkin);
+    if(!inShop&&!inAch)activeSkin='default';
+  }
 }
 
+
 function getActiveSkin(){
+  if(!activeSkin||activeSkin==='default')return null;
+  // Check regular shop skins first
   const d=getShopData();
-  const owned=d.ownedSkins||['default'];
-  if(!owned.includes(activeSkin))return null;
-  const skin=SHOP_SKINS.find(s=>s.id===activeSkin);
-  if(!skin||activeSkin==='default')return null;
-  return skin;
+  const ownedSkins=d.ownedSkins||['default'];
+  const shopSkin=SHOP_SKINS.find(s=>s.id===activeSkin);
+  if(shopSkin&&ownedSkins.includes(activeSkin))return shopSkin;
+  // Check achievement skins
+  const stats=getStats();
+  const achSkin=ACHIEVEMENT_SKINS.find(s=>s.id===activeSkin);
+  if(achSkin&&(achSkin.check(stats)||(d.ownedAchSkins||[]).includes(activeSkin)))return achSkin;
+  return null;
 }
 // Legacy alias
 function getSkinColors(){const s=getActiveSkin();return s?s.colors:null;}
@@ -1746,7 +2598,7 @@ function renderShop(){
 
 
 
-  // Skins
+  // Regular skins
   const skinContainer=document.getElementById('shop-skins');
   skinContainer.innerHTML='';
   SHOP_SKINS.forEach(s=>{
@@ -1761,6 +2613,77 @@ function renderShop(){
     else if(owned){btn.onclick=()=>equipSkin(s.id);}
     else if(s.id!=='default'){btn.onclick=()=>buySkin(s.id,s.price);}
     skinContainer.appendChild(div);
+  });
+
+  // Achievement skins
+  const achSkinContainer=document.getElementById('shop-ach-skins');
+  achSkinContainer.innerHTML='';
+  const stats=getStats();
+  ACHIEVEMENT_SKINS.forEach(s=>{
+    const d=getShopData();
+    const ownedAch=d.ownedAchSkins||[];
+    const unlocked=s.check(stats)||ownedAch.includes(s.id);
+    const isActive=activeSkin===s.id;
+    const dots=s.colors.map(c=>`<div class="skin-dot" style="background:${c}33;border-color:${c}"></div>`).join('');
+    const div=document.createElement('div');
+    div.className='shop-item'+(unlocked?' owned':'')+(isActive?' active-item':'');
+    div.innerHTML=`<div class="shop-icon">${s.icon}</div><div class="shop-info"><div class="shop-name">${s.name}</div><div class="shop-desc">${s.req}</div><div class="skin-preview">${dots}</div><div style="font-size:10px;color:${unlocked?'#5DCAA5':'#6677aa'};margin-top:3px">${unlocked?'✓ Unlocked!':'🔒 Locked'}</div></div><button class="shop-buy-btn ${isActive?'active-btn':unlocked?'owned-btn':''}">${isActive?'Active':unlocked?'Equip':'Locked'}</button>`;
+    const btn=div.querySelector('button');
+    if(isActive){btn.disabled=true;}
+    else if(unlocked){btn.disabled=false;btn.onclick=()=>equipAchSkin(s.id);}
+    else{btn.disabled=true;}
+    achSkinContainer.appendChild(div);
+  });
+
+  // Hit effects
+  const hitContainer=document.getElementById('shop-hit-effects');
+  hitContainer.innerHTML='';
+  const ownedHits=d.ownedHitEffects||['default'];
+  HIT_EFFECTS.forEach(e=>{
+    const owned=ownedHits.includes(e.id);
+    const isActive=activeHitEffect===e.id;
+    const div=document.createElement('div');
+    div.className='shop-item'+(owned?' owned':'')+(isActive?' active-item':'');
+    div.innerHTML=`<div class="shop-icon">${e.icon}</div><div class="shop-info"><div class="shop-name">${e.name}</div><div class="shop-desc">${e.desc}</div><div class="shop-price">${e.id==='default'?'Free':(owned?'Owned':e.price)}</div></div><button class="shop-buy-btn ${isActive?'active-btn':owned?'owned-btn':''}">${isActive?'Active':owned?'Equip':'Buy'}</button>`;
+    const btn=div.querySelector('button');
+    if(isActive)btn.disabled=true;
+    else if(owned)btn.onclick=()=>equipHitEffect(e.id);
+    else if(e.id!=='default')btn.onclick=()=>buyHitEffect(e.id,e.price);
+    hitContainer.appendChild(div);
+  });
+
+  // Trail effects
+  const trailContainer=document.getElementById('shop-trails');
+  trailContainer.innerHTML='';
+  const ownedTrails=d.ownedTrails||['none'];
+  TRAIL_EFFECTS.forEach(e=>{
+    const owned=ownedTrails.includes(e.id);
+    const isActive=activeTrail===e.id;
+    const div=document.createElement('div');
+    div.className='shop-item'+(owned?' owned':'')+(isActive?' active-item':'');
+    div.innerHTML=`<div class="shop-icon">${e.icon}</div><div class="shop-info"><div class="shop-name">${e.name}</div><div class="shop-desc">${e.desc}</div><div class="shop-price">${e.id==='none'?'Free':(owned?'Owned':e.price)}</div></div><button class="shop-buy-btn ${isActive?'active-btn':owned?'owned-btn':''}">${isActive?'Active':owned?'Equip':'Buy'}</button>`;
+    const btn=div.querySelector('button');
+    if(isActive)btn.disabled=true;
+    else if(owned)btn.onclick=()=>equipTrail(e.id);
+    else if(e.id!=='none')btn.onclick=()=>buyTrail(e.id,e.price);
+    trailContainer.appendChild(div);
+  });
+
+  // Sound packs
+  const soundContainer=document.getElementById('shop-sounds');
+  soundContainer.innerHTML='';
+  const ownedSounds=d.ownedSoundPacks||['default'];
+  SOUND_PACKS.forEach(e=>{
+    const owned=ownedSounds.includes(e.id);
+    const isActive=activeSoundPack===e.id;
+    const div=document.createElement('div');
+    div.className='shop-item'+(owned?' owned':'')+(isActive?' active-item':'');
+    div.innerHTML=`<div class="shop-icon">${e.icon}</div><div class="shop-info"><div class="shop-name">${e.name}</div><div class="shop-desc">${e.desc}</div><div class="shop-price">${e.id==='default'?'Free':(owned?'Owned':e.price)}</div></div><button class="shop-buy-btn ${isActive?'active-btn':owned?'owned-btn':''}">${isActive?'Active':owned?'Equip':'Buy'}</button>`;
+    const btn=div.querySelector('button');
+    if(isActive)btn.disabled=true;
+    else if(owned)btn.onclick=()=>equipSoundPack(e.id);
+    else if(e.id!=='default')btn.onclick=()=>buySoundPack(e.id,e.price);
+    soundContainer.appendChild(div);
   });
 
   // Streak shield
@@ -1791,11 +2714,46 @@ function buySkin(id,price){
 }
 
 function equipSkin(id){
-  const d=getShopData();
-  const owned=d.ownedSkins||['default'];
+  const d=getShopData();const owned=d.ownedSkins||['default'];
   if(!owned.includes(id))return;
+  activeSkin=id;d.activeSkin=id;saveShopData(d);renderShop();
+}
+function equipAchSkin(id){
+  const d=getShopData();
+  d.ownedAchSkins=d.ownedAchSkins||[];
+  if(!d.ownedAchSkins.includes(id))d.ownedAchSkins.push(id);
   activeSkin=id;d.activeSkin=id;saveShopData(d);
   renderShop();
+}
+function buyHitEffect(id,price){
+  if(confirm(`Purchase ${HIT_EFFECTS.find(e=>e.id===id).name} hit effect for ${price}?`)){
+    const d=getShopData();d.ownedHitEffects=d.ownedHitEffects||['default'];
+    if(!d.ownedHitEffects.includes(id))d.ownedHitEffects.push(id);
+    saveShopData(d);equipHitEffect(id);
+  }
+}
+function equipHitEffect(id){
+  activeHitEffect=id;const d=getShopData();d.activeHitEffect=id;saveShopData(d);renderShop();
+}
+function buyTrail(id,price){
+  if(confirm(`Purchase ${TRAIL_EFFECTS.find(e=>e.id===id).name} trail for ${price}?`)){
+    const d=getShopData();d.ownedTrails=d.ownedTrails||['none'];
+    if(!d.ownedTrails.includes(id))d.ownedTrails.push(id);
+    saveShopData(d);equipTrail(id);
+  }
+}
+function equipTrail(id){
+  activeTrail=id;const d=getShopData();d.activeTrail=id;saveShopData(d);renderShop();
+}
+function buySoundPack(id,price){
+  if(confirm(`Purchase ${SOUND_PACKS.find(e=>e.id===id).name} sound pack for ${price}?`)){
+    const d=getShopData();d.ownedSoundPacks=d.ownedSoundPacks||['default'];
+    if(!d.ownedSoundPacks.includes(id))d.ownedSoundPacks.push(id);
+    saveShopData(d);equipSoundPack(id);
+  }
+}
+function equipSoundPack(id){
+  activeSoundPack=id;const d=getShopData();d.activeSoundPack=id;saveShopData(d);renderShop();
 }
 
 function buyStreakShield(){
@@ -1947,6 +2905,8 @@ function checkDailyProgress(data){
       setTimeout(()=>showAchievement('🛡️ Streak Shield used — streak saved!'),800);
     } else {streak=1;}
     s.streak=streak;s.lastCompleted=today;s.todayProgress=ch.goal;
+    s.totalCompleted=(s.totalCompleted||0)+1;
+    setTimeout(()=>showDailyComplete(streak),500);
     saveDailyState(s);
     updateDailyBtn();
     // Show achievement
@@ -1960,7 +2920,7 @@ document.getElementById('play-daily-btn').addEventListener('click',startDailyCha
 // ===== END DAILY CHALLENGE =====
 
 startBtn.addEventListener('click',()=>{dailyActive=false;startGame();});
-loadPrefs();loadAch();loadShopState();updateDailyBtn();
+loadPrefs();loadAch();loadShopState();updateDailyBtn();checkOnboarding();
 initStars();drawStars();
 loadStartRecords('normal');
 })();
