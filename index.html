@@ -239,6 +239,11 @@
     .ach-desc{font-size:11px;color:#6677aa;margin-top:1px}
     .ach-locked{opacity:0.35}
     .ach-badge{font-size:10px;background:#1D9E75;color:#fff;border-radius:6px;padding:2px 6px;margin-left:auto;flex-shrink:0}
+    .ach-tier{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:5px;margin-left:8px;flex-shrink:0}
+    .tier-bronze{background:#5a3a1e;color:#e8a878}
+    .tier-silver{background:#4a4a58;color:#d8d8e8}
+    .tier-gold{background:#5a4a10;color:#ffd866}
+    .tier-legendary{background:#4a1a5a;color:#e088ff;box-shadow:0 0 8px #c060ff66}
 
   
     /* ONBOARDING */
@@ -786,6 +791,7 @@ let boostTimeout=null,slowTimeout=null;
 let targets=[],spawnTimer=null,countTimer=null,moveTimer=null;
 let gamesPlayed=0,currentLevel=1,levelScore=0,currentTheme='jungle',minTimeTimer=null;
 let isNewScore=false,isNewCombo=false,isNewLevel=false;
+let gameStartTime=0,pausedAt=0,totalPausedMs=0;
 
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('glipx_prefs')||'{}');soundOn=p.soundOn??true;isPremium=p.isPremium??false;musicOn=p.musicOn??true;}catch{}applyPrefs();}
 function savePrefs(){try{localStorage.setItem('glipx_prefs',JSON.stringify({soundOn,isPremium,musicOn}));}catch{}}
@@ -1238,29 +1244,42 @@ function loadStartRecords(mode){
   recordLine.innerHTML=`<span style="color:${m.color};font-weight:500">${m.label}</span> &nbsp;Best: <span style="color:#e0e8ff;font-weight:500">${r.score} pts</span>${r.scoreLvl?` · Lvl ${r.scoreLvl}`:''}${r.combo?` · Combo <span style="color:#e0e8ff">x${r.combo}</span>`:''}`;
 }
 
-// ACHIEVEMENTS
+// ACHIEVEMENTS — tiers: bronze, silver, gold, legendary
 const ACHIEVEMENTS=[
-  {id:'combo5',   icon:'🔥', name:'On Fire',        desc:'Reach a x5 combo',            check:()=>combo>=5,    text:'🔥 Combo x5!'},
-  {id:'combo10',  icon:'⚡', name:'Electric',        desc:'Reach a x10 combo',           check:()=>combo>=10,   text:'⚡ Combo x10!'},
-  {id:'combo20',  icon:'🌟', name:'Unstoppable',     desc:'Reach a x20 combo',           check:()=>combo>=20,   text:'🌟 Combo x20!'},
-  {id:'combo50',  icon:'👑', name:'Combo King',      desc:'Reach a x50 combo',           check:()=>combo>=50,   text:'👑 Combo x50! Insane!'},
-  {id:'level5',   icon:'🏆', name:'Getting Serious', desc:'Reach Level 5',               check:()=>currentLevel>=5,  text:'🏆 Reached Level 5!'},
-  {id:'level6',   icon:'🌧️', name:'Storm Warning',    desc:'Reach Level 6',               check:()=>currentLevel>=6,  text:'🌧️ Monsoon begins!'},
-  {id:'level10',  icon:'🎯', name:'Double Digits',   desc:'Reach Level 10',              check:()=>currentLevel>=10, text:'🎯 Level 10!'},
-  {id:'level11',  icon:'🌊', name:'Diver',           desc:'Reach Level 11',              check:()=>currentLevel>=11, text:'🌊 Ocean unlocked!'},
-  {id:'level16',  icon:'🐋', name:'Deep Diver',      desc:'Reach Level 16',              check:()=>currentLevel>=16, text:'🐋 Deep Sea ahead!'},
-  {id:'level20',  icon:'🎖️', name:'Veteran',         desc:'Reach Level 20',              check:()=>currentLevel>=20, text:'🎖️ Level 20 Veteran!'},
-  {id:'level21',  icon:'🏙️', name:'City Lights',     desc:'Reach Level 21',              check:()=>currentLevel>=21, text:'🏙️ Neon City unlocked!'},
-  {id:'level26',  icon:'🌃', name:'Future Shock',    desc:'Reach Level 26',              check:()=>currentLevel>=26, text:'🌃 Cyberpunk activated!'},
-  {id:'level31',  icon:'🏜️', name:'Desert Walker',   desc:'Reach Level 31',              check:()=>currentLevel>=31, text:'🏜️ Desert unlocked!'},
-  {id:'level50',  icon:'💀', name:'Legend',           desc:'Reach Level 50',              check:()=>currentLevel>=50, text:'💀 Level 50 Legend!'},
-  {id:'score500', icon:'💫', name:'Warming Up',      desc:'Score 500 points',            check:()=>score>=500,   text:'💫 500 Points!'},
-  {id:'score1000',icon:'💯', name:'Four Figures',    desc:'Score 1,000 points',          check:()=>score>=1000,  text:'💯 1000 Points!'},
-  {id:'score5000',icon:'🚀', name:'Rocket',          desc:'Score 5,000 points',          check:()=>score>=5000,  text:'🚀 5000 Points!'},
-  {id:'score20000',icon:'🏅',name:'Elite',           desc:'Score 20,000 points',         check:()=>score>=20000, text:'🏅 20,000 Points!'},
-  {id:'daily3',   icon:'📅', name:'Habit',           desc:'3 day daily streak',          check:()=>(getDailyState().streak||0)>=3,  text:'📅 3 day streak!'},
-  {id:'daily7',   icon:'🗓️', name:'Week Warrior',   desc:'7 day daily streak',           check:()=>(getDailyState().streak||0)>=7,  text:'🗓️ 7 day streak!'},
-  {id:'daily30',  icon:'🌙', name:'Dedicated',       desc:'30 day daily streak',         check:()=>(getDailyState().streak||0)>=30, text:'🌙 30 day streak!'},
+  // Combo achievements
+  {id:'combo5',   icon:'🔥', name:'On Fire',        desc:'Reach a x5 combo',            tier:'bronze',    check:()=>combo>=5,    text:'🔥 Combo x5!'},
+  {id:'combo10',  icon:'⚡', name:'Electric',        desc:'Reach a x10 combo',           tier:'silver',    check:()=>combo>=10,   text:'⚡ Combo x10!'},
+  {id:'combo20',  icon:'🌟', name:'Unstoppable',     desc:'Reach a x20 combo',           tier:'gold',      check:()=>combo>=20,   text:'🌟 Combo x20!'},
+  {id:'combo50',  icon:'👑', name:'Combo King',      desc:'Reach a x50 combo',           tier:'legendary', check:()=>combo>=50,   text:'👑 Combo x50! Insane!'},
+  // Level achievements
+  {id:'level5',   icon:'🏆', name:'Getting Serious', desc:'Reach Level 5',               tier:'bronze',    check:()=>currentLevel>=5,  text:'🏆 Reached Level 5!'},
+  {id:'level6',   icon:'🌧️', name:'Storm Warning',   desc:'Reach Level 6',               tier:'bronze',    check:()=>currentLevel>=6,  text:'🌧️ Monsoon begins!'},
+  {id:'level10',  icon:'🎯', name:'Double Digits',   desc:'Reach Level 10',              tier:'silver',    check:()=>currentLevel>=10, text:'🎯 Level 10!'},
+  {id:'level11',  icon:'🌊', name:'Diver',           desc:'Reach Level 11',              tier:'silver',    check:()=>currentLevel>=11, text:'🌊 Ocean unlocked!'},
+  {id:'level16',  icon:'🐋', name:'Deep Diver',      desc:'Reach Level 16',              tier:'silver',    check:()=>currentLevel>=16, text:'🐋 Deep Sea ahead!'},
+  {id:'level20',  icon:'🎖️', name:'Veteran',         desc:'Reach Level 20',              tier:'gold',      check:()=>currentLevel>=20, text:'🎖️ Level 20 Veteran!'},
+  {id:'level21',  icon:'🏙️', name:'City Lights',     desc:'Reach Level 21',              tier:'gold',      check:()=>currentLevel>=21, text:'🏙️ Neon City unlocked!'},
+  {id:'level26',  icon:'🌃', name:'Future Shock',    desc:'Reach Level 26',              tier:'gold',      check:()=>currentLevel>=26, text:'🌃 Cyberpunk activated!'},
+  {id:'level31',  icon:'🏜️', name:'Desert Walker',   desc:'Reach Level 31',              tier:'gold',      check:()=>currentLevel>=31, text:'🏜️ Desert unlocked!'},
+  {id:'level50',  icon:'💀', name:'Legend',          desc:'Reach Level 50',              tier:'legendary', check:()=>currentLevel>=50, text:'💀 Level 50 Legend!'},
+  // Score achievements
+  {id:'score500', icon:'💫', name:'Warming Up',      desc:'Score 500 points',            tier:'bronze',    check:()=>score>=500,   text:'💫 500 Points!'},
+  {id:'score1000',icon:'💯', name:'Four Figures',    desc:'Score 1,000 points',          tier:'bronze',    check:()=>score>=1000,  text:'💯 1000 Points!'},
+  {id:'score5000',icon:'🚀', name:'Rocket',          desc:'Score 5,000 points',          tier:'silver',    check:()=>score>=5000,  text:'🚀 5000 Points!'},
+  {id:'score20000',icon:'🏅',name:'Elite',           desc:'Score 20,000 points',         tier:'gold',      check:()=>score>=20000, text:'🏅 20,000 Points!'},
+  {id:'score50000',icon:'💎',name:'Score Master',    desc:'Score 50,000 points',         tier:'legendary', check:()=>score>=50000, text:'💎 50,000 Points!'},
+  // Daily streak achievements
+  {id:'daily3',   icon:'📅', name:'Habit',           desc:'3 day daily streak',          tier:'bronze',    check:()=>(getDailyState().streak||0)>=3,  text:'📅 3 day streak!'},
+  {id:'daily7',   icon:'🗓️', name:'Week Warrior',    desc:'7 day daily streak',           tier:'silver',    check:()=>(getDailyState().streak||0)>=7,  text:'🗓️ 7 day streak!'},
+  {id:'daily30',  icon:'🌙', name:'Dedicated',       desc:'30 day daily streak',          tier:'legendary', check:()=>(getDailyState().streak||0)>=30, text:'🌙 30 day streak!'},
+  // Volume / dedication achievements
+  {id:'games10',  icon:'🎮', name:'Regular',         desc:'Play 10 games',               tier:'bronze',    check:()=>(getStats().gamesPlayed||0)>=10,  text:'🎮 10 games played!'},
+  {id:'games50',  icon:'🕹️', name:'Dedicated Player',desc:'Play 50 games',               tier:'silver',    check:()=>(getStats().gamesPlayed||0)>=50,  text:'🕹️ 50 games played!'},
+  {id:'games100', icon:'🏟️', name:'Centurion',       desc:'Play 100 games',              tier:'gold',      check:()=>(getStats().gamesPlayed||0)>=100, text:'🏟️ 100 games played!'},
+  {id:'taps1000', icon:'👆', name:'Quick Fingers',   desc:'Tap 1,000 circles total',     tier:'silver',    check:()=>(getStats().totalCirclesTapped||0)>=1000, text:'👆 1,000 circles tapped!'},
+  {id:'taps10000',icon:'🤲', name:'Tap Master',      desc:'Tap 10,000 circles total',     tier:'gold',      check:()=>(getStats().totalCirclesTapped||0)>=10000, text:'🤲 10,000 circles tapped!'},
+  {id:'time1h',   icon:'⏱️', name:'Time Invested',   desc:'Play for 1 hour total',        tier:'bronze',    check:()=>(getStats().totalPlaytimeMs||0)>=3600000, text:'⏱️ 1 hour played!'},
+  {id:'time10h',  icon:'⏳', name:'True Fan',        desc:'Play for 10 hours total',      tier:'gold',      check:()=>(getStats().totalPlaytimeMs||0)>=36000000, text:'⏳ 10 hours played!'},
 ];
 let unlockedAch=new Set();
 function loadAch(){try{unlockedAch=new Set(JSON.parse(localStorage.getItem('glipx_ach')||'[]'));}catch{}}
@@ -1719,6 +1738,7 @@ function pauseGame(){
   if(!running||paused)return;
   stopMusic();stopAtmo();
   paused=true;
+  pausedAt=Date.now();
   clearTimeout(spawnTimer);
   // Freeze all active circles — compute remaining lifetime, pause visuals
   targets.forEach(t=>{
@@ -1743,6 +1763,7 @@ function pauseGame(){
 }
 function resumeGame(){
   paused=false;pauseScreen.style.display='none';
+  if(pausedAt){totalPausedMs+=Date.now()-pausedAt;pausedAt=0;}
   if(running){
     resumeMusic();
     if(soundOn)playAtmoSound(THEMES[currentTheme].atmo);
@@ -1806,6 +1827,7 @@ function startGame(){
   score=0;combo=1;bestCombo=1;running=true;paused=false;currentLevel=1;levelScore=0;
   boostActive=false;slowActive=false;shieldActive=false;reviveAvailable=true;
   shownMilestones=new Set();
+  gameStartTime=Date.now();totalPausedMs=0;pausedAt=0;
   boostBanner.style.display='none';slowBanner.style.display='none';shieldIndicator.style.display='none';
   scoreDisp.textContent='0';comboDisp.textContent='x1';
   targets.forEach(t=>{if(t.moveInterval)clearInterval(t.moveInterval);clearTimeout(t.timeout);t.el.remove();});targets=[];
@@ -2354,7 +2376,21 @@ function updateStats(){
   s.highestLevel=Math.max(s.highestLevel||0,currentLevel);
   s.highestCombo=Math.max(s.highestCombo||0,bestCombo);
   s.totalCirclesTapped=(s.totalCirclesTapped||0)+(score/10|0);
+  // Track total playtime (excludes paused time)
+  if(gameStartTime){
+    const sessionMs=Math.max(0,Date.now()-gameStartTime-totalPausedMs);
+    s.totalPlaytimeMs=(s.totalPlaytimeMs||0)+sessionMs;
+  }
   saveStats(s);
+}
+
+function formatPlaytime(ms){
+  const totalSeconds=Math.floor(ms/1000);
+  const hours=Math.floor(totalSeconds/3600);
+  const minutes=Math.floor((totalSeconds%3600)/60);
+  if(hours>0)return `${hours}h ${minutes}m`;
+  if(minutes>0)return `${minutes}m`;
+  return `${totalSeconds}s`;
 }
 
 function openStats(){
@@ -2371,6 +2407,7 @@ function openStats(){
     <div class="stat-row"><span class="stat-row-label">Games played</span><span class="stat-row-val">${s.gamesPlayed||0}</span></div>
     <div class="stat-row"><span class="stat-row-label">Total score</span><span class="stat-row-val">${(s.totalScore||0).toLocaleString()}</span></div>
     <div class="stat-row"><span class="stat-row-label">Circles tapped</span><span class="stat-row-val">${(s.totalCirclesTapped||0).toLocaleString()}</span></div>
+    <div class="stat-row"><span class="stat-row-label">Total playtime</span><span class="stat-row-val">${formatPlaytime(s.totalPlaytimeMs||0)}</span></div>
     <div class="stat-section">Records</div>
     <div class="stat-row"><span class="stat-row-label">Best score</span><span class="stat-row-val">${bestScore.toLocaleString()}</span></div>
     <div class="stat-row"><span class="stat-row-label">Highest level</span><span class="stat-row-val">${bestLevel}</span></div>
@@ -2382,6 +2419,7 @@ function openStats(){
       return `<div class="ach-row ${unlocked?'':'ach-locked'}">
         <div class="ach-icon">${a.icon}</div>
         <div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>
+        <div class="ach-tier tier-${a.tier}">${a.tier}</div>
         ${unlocked?'<div class="ach-badge">✓</div>':''}
       </div>`;
     }).join('')}
