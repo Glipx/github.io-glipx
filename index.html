@@ -1813,7 +1813,11 @@ quitBtn.addEventListener('click',quitToMenu);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused)pauseGame();});
 
 function showInterstitial(onDone){if(isPremium){onDone();return;}interstitial.style.display='flex';interCloseBtn.disabled=true;interSkip.style.display='none';let secs=5;interCountdown.textContent=`You can skip in ${secs} seconds...`;const t=setInterval(()=>{secs--;if(secs>0){interCountdown.textContent=`You can skip in ${secs} seconds...`;}else{clearInterval(t);interCountdown.textContent='';interCloseBtn.disabled=false;interSkip.style.display='block';}},1000);interCloseBtn.onclick=()=>{interstitial.style.display='none';onDone();};interSkip.onclick=()=>{interstitial.style.display='none';openSettings();};}
-function openSettings(){settingsPanel.style.display='flex';}
+function openSettings(){
+  document.getElementById('music-toggle').checked=musicOn;
+  document.getElementById('sound-toggle').checked=soundOn;
+  settingsPanel.style.display='flex';
+}
 function openInfo(){infoPanel.style.display='flex';}
 document.getElementById('settings-close').addEventListener('click',()=>settingsPanel.style.display='none');
 document.getElementById('info-close').addEventListener('click',()=>infoPanel.style.display='none');
