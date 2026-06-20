@@ -1,8 +1,8 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "io.github.glipx.twa",
-        "sha256_cert_fingerprints": ["81:85:2A:F8:B7:0A:46:82:79:6D:B8:8C:BB:5A:4A:BC:18:AF:B9:3E:C4:F9:8A:BC:F2:C7:4F:D7:34:30:AB:0C"]
-      }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.glipx.twa",
+    "sha256_cert_fingerprints": ["66:51:35:13:2A:0A:72:20:FB:19:23:75:55:62:78:3E:8C:2F:EA:B7:56:AC:85:6B:21:39:6B:02:DE:2E:66:9B"]
+  }
+}]
