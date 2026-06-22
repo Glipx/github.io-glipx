@@ -97,6 +97,10 @@
     #settings-panel,#info-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
     #settings-box,#info-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:320px;width:90%;max-height:85vh;overflow-y:auto}
     .panel-title{font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:16px}
+    .panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .panel-header .panel-title{margin-bottom:0}
+    .panel-x-close{background:none;border:none;color:#6677aa;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;font-family:inherit}
+    .panel-x-close:hover{color:#a0b0cc}
     .setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid #1a1a2e}
     .setting-label{font-size:14px;color:#a0b0cc}
     .setting-sub{font-size:11px;color:#6677aa;margin-top:2px}
@@ -340,7 +344,7 @@
 
 <div id="settings-panel">
   <div id="settings-box">
-    <div class="panel-title">⚙️ Settings</div>
+    <div class="panel-header"><div class="panel-title">⚙️ Settings</div><button class="panel-x-close" id="settings-x-close">✕</button></div>
     <div class="setting-row">
       <div><div class="setting-label">Sound effects</div><div class="setting-sub">Hit, miss and power-up sounds</div></div>
       <label class="toggle"><input type="checkbox" id="sound-toggle" checked><span class="slider"></span></label>
@@ -365,7 +369,7 @@
 
 <div id="info-panel">
   <div id="info-box">
-    <div class="panel-title">ℹ️ Power-ups & Obstacles</div>
+    <div class="panel-header"><div class="panel-title">ℹ️ Power-ups & Obstacles</div><button class="panel-x-close" id="info-x-close">✕</button></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#378ADD;font-weight:700">T</div><div><div class="pu-info-name">+5 Seconds</div><div class="pu-info-desc">Adds 5 seconds to your timer</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-weight:700">2x</div><div><div class="pu-info-name">Score Boost</div><div class="pu-info-desc">Doubles all points for 6 seconds</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#5DCAA5;font-weight:700;font-size:18px">✦</div><div><div class="pu-info-name">Clear</div><div class="pu-info-desc">Removes all circles and gives bonus points</div></div></div>
@@ -502,7 +506,7 @@
 
 <div id="share-panel">
   <div id="share-box">
-    <div class="share-title">📤 Share your score</div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="share-title">📤 Share your score</div><button class="panel-x-close" id="share-x-close">✕</button></div>
     <div class="share-sub">Challenge your friends to beat this!</div>
     <div id="share-card">
       <div class="share-card-logo">GLIP<span>X</span></div>
@@ -529,7 +533,7 @@
 
 <div id="stats-panel">
   <div id="stats-box" style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:340px;width:92%;max-height:88vh;overflow-y:auto">
-    <div style="font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:16px">📊 Statistics</div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:16px">📊 Statistics</div><button class="panel-x-close" id="stats-x-close">✕</button></div>
     <div id="stats-content"></div>
     <button class="panel-close" id="stats-close">Close</button>
   </div>
@@ -537,7 +541,7 @@
 
 <div id="shop-panel">
   <div id="shop-box">
-    <div class="shop-title">🛒 Shop</div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="shop-title">🛒 Shop</div><button class="panel-x-close" id="shop-x-close">✕</button></div>
     <div class="shop-sub">Customize your experience</div>
 
     <div class="shop-section">Remove Ads</div>
@@ -583,7 +587,7 @@
 
 <div id="daily-panel">
   <div id="daily-box">
-    <div class="daily-title">⭐ Daily Challenge</div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="daily-title">⭐ Daily Challenge</div><button class="panel-x-close" id="daily-x-close">✕</button></div>
     <div class="daily-date" id="daily-date"></div>
     <div class="streak-display">
       <div class="streak-flame">🔥</div>
@@ -1595,7 +1599,7 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
       el.style.left=moveCx+'px';el.style.top=moveCy+'px';
     },30);
   }
-  if(currentLevel>=10&&!isMini&&!isFake&&Math.random()<Math.min(0.4,(currentLevel-9)*0.06)){
+  if(currentLevel>=10&&!isMini&&!isFake&&Math.random()<Math.min(0.35,(currentLevel-9)*0.035)){
     isMoving=true;
     moveDx=(Math.random()-0.5)*2.5;moveDy=(Math.random()-0.5)*2.5;
     moveInterval=startMoveFn();
@@ -1820,7 +1824,9 @@ function openSettings(){
 }
 function openInfo(){infoPanel.style.display='flex';}
 document.getElementById('settings-close').addEventListener('click',()=>settingsPanel.style.display='none');
+document.getElementById('settings-x-close').addEventListener('click',()=>settingsPanel.style.display='none');
 document.getElementById('info-close').addEventListener('click',()=>infoPanel.style.display='none');
+document.getElementById('info-x-close').addEventListener('click',()=>infoPanel.style.display='none');
 document.getElementById('settings-link').addEventListener('click',openSettings);
 document.getElementById('info-btn-start').addEventListener('click',openInfo);
 soundToggle.addEventListener('change',()=>setSoundOn(soundToggle.checked));
@@ -2004,6 +2010,7 @@ function shareWhatsApp(){
 }
 
 document.getElementById('share-close').addEventListener('click',()=>document.getElementById('share-panel').style.display='none');
+document.getElementById('share-x-close').addEventListener('click',()=>document.getElementById('share-panel').style.display='none');
 document.getElementById('share-text-box').addEventListener('click',copyShareText);
 document.getElementById('share-native-btn').addEventListener('click',shareNative);
 document.getElementById('share-whatsapp-btn').addEventListener('click',shareWhatsApp);
@@ -2435,6 +2442,7 @@ function openStats(){
 
 document.getElementById('stats-btn').addEventListener('click',openStats);
 document.getElementById('stats-close').addEventListener('click',()=>document.getElementById('stats-panel').style.display='none');
+document.getElementById('stats-x-close').addEventListener('click',()=>document.getElementById('stats-panel').style.display='none');
 // ===== END STATISTICS SYSTEM =====
 
 
@@ -2699,7 +2707,7 @@ function playAtmoSound(type){
       f.Q.value=0.6;
       src.connect(f);f.connect(atmoGainNode);
       src.start();atmoNode=src;
-      if(type==='monsoon')atmoGainNode.gain.linearRampToValueAtTime(0.13,ac.currentTime+2);
+      if(type==='monsoon')atmoGainNode.gain.linearRampToValueAtTime(0.08,ac.currentTime+2);
 
     } else if(type==='ocean'||type==='deepsea'){
       // Underwater rumble
@@ -2709,7 +2717,7 @@ function playAtmoSound(type){
       const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=200;
       osc.connect(f);f.connect(atmoGainNode);
       osc.start();atmoNode=osc;
-      if(type==='deepsea')atmoGainNode.gain.linearRampToValueAtTime(0.08,ac.currentTime+2);
+      atmoGainNode.gain.linearRampToValueAtTime(type==='deepsea'?0.10:0.09,ac.currentTime+2);
 
     } else if(type==='city'||type==='cyberpunk'){
       // City hum / cyberpunk electric buzz
@@ -3022,6 +3030,7 @@ function buyStreakShield(){
 function openShop(){renderShop();document.getElementById('shop-panel').style.display='flex';}
 document.getElementById('shop-btn').addEventListener('click',openShop);
 document.getElementById('shop-close').addEventListener('click',()=>document.getElementById('shop-panel').style.display='none');
+document.getElementById('shop-x-close').addEventListener('click',()=>document.getElementById('shop-panel').style.display='none');
 document.getElementById('shop-premium-btn').addEventListener('click',buyPremium);
 // ===== END SHOP SYSTEM =====
 
@@ -3170,6 +3179,7 @@ function checkDailyProgress(data){
 
 document.getElementById('daily-btn').addEventListener('click',openDailyPanel);
 document.getElementById('daily-close').addEventListener('click',()=>document.getElementById('daily-panel').style.display='none');
+document.getElementById('daily-x-close').addEventListener('click',()=>document.getElementById('daily-panel').style.display='none');
 document.getElementById('play-daily-btn').addEventListener('click',startDailyChallenge);
 // ===== END DAILY CHALLENGE =====
 
