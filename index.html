@@ -116,6 +116,17 @@
     .premium-btn{background:#EF9F27;color:#1a0e00;border:none;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;width:100%}
     .premium-active{font-size:12px;color:#5DCAA5;text-align:center;margin-top:6px}
     .panel-close{margin-top:14px;width:100%;padding:10px;background:none;border:0.5px solid #2a2a4e;border-radius:12px;color:#6677aa;font-size:13px;cursor:pointer;font-family:inherit}
+    .lb-mode-tab{flex:1;background:#1a1a2e;border:0.5px solid #2a2a4e;color:#6677aa;border-radius:8px;padding:7px 0;font-size:12px;cursor:pointer;font-family:inherit}
+    .lb-mode-tab.active{background:#1e3a5c;border-color:#378ADD;color:#a0c4ff}
+    .lb-row{display:flex;align-items:center;gap:10px;background:#1a1a2e;border-radius:10px;padding:8px 12px;border:0.5px solid #2a2a4e}
+    .lb-row.lb-me{border-color:#EF9F27;background:#2a2008}
+    .lb-rank{font-size:13px;font-weight:700;color:#6677aa;width:26px;text-align:center;flex-shrink:0}
+    .lb-rank-1{color:#FFD700}
+    .lb-rank-2{color:#C0C0C0}
+    .lb-rank-3{color:#CD7F32}
+    .lb-name{flex:1;font-size:13px;color:#e0e8ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lb-score{font-size:13px;font-weight:600;color:#FAC775;flex-shrink:0}
+    .lb-meta{font-size:10px;color:#6677aa;flex-shrink:0}
     .pu-info-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid #1a1a2e}
     .pu-info-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0}
     .pu-info-name{font-size:13px;font-weight:600;color:#e0e8ff}
@@ -312,6 +323,68 @@
     #dc-close{background:#1D9E75;color:#fff;border:none;border-radius:12px;padding:11px 0;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;width:100%}
 
   </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, query, orderBy, limit, getDocs, doc, setDoc, getDoc
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAXG_uMqwyAohmBvMr0h8RHq4fe5TdW-ws",
+      authDomain: "glipx-gane.firebaseapp.com",
+      projectId: "glipx-gane",
+      storageBucket: "glipx-gane.firebasestorage.app",
+      messagingSenderId: "505656589241",
+      appId: "1:505656589241:web:0121619be4c84b38145468"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const db = getFirestore(fbApp);
+
+    // Expose a small bridge so the main game script (non-module) can use Firestore
+    window.GlipxLeaderboard = {
+      async submitScore(mode, name, score, level, combo){
+        try{
+          const playerId = window.GlipxLeaderboard._getPlayerId();
+          const ref = doc(db, 'leaderboard_'+mode, playerId);
+          const existing = await getDoc(ref);
+          if(existing.exists() && existing.data().score >= score){
+            return {ok:true, improved:false};
+          }
+          await setDoc(ref, {
+            name: name || 'Player',
+            score, level, combo,
+            updatedAt: Date.now()
+          });
+          return {ok:true, improved:true};
+        }catch(e){
+          console.error('submitScore error', e);
+          return {ok:false, error:e.message};
+        }
+      },
+      async getTop(mode, max=50){
+        try{
+          const q = query(collection(db, 'leaderboard_'+mode), orderBy('score','desc'), limit(max));
+          const snap = await getDocs(q);
+          const results = [];
+          snap.forEach(d => results.push({id:d.id, ...d.data()}));
+          return {ok:true, data:results};
+        }catch(e){
+          console.error('getTop error', e);
+          return {ok:false, error:e.message, data:[]};
+        }
+      },
+      _getPlayerId(){
+        let id = localStorage.getItem('glipx_player_id');
+        if(!id){
+          id = 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,10);
+          localStorage.setItem('glipx_player_id', id);
+        }
+        return id;
+      }
+    };
+    window.dispatchEvent(new Event('glipx-firebase-ready'));
+  </script>
 </head>
 <body>
 
@@ -442,6 +515,7 @@
       <button class="play-btn" id="start-btn">Play</button>
       <button id="daily-btn">⭐ Daily Challenge</button>
       <div id="daily-streak"></div>
+      <button id="leaderboard-btn" style="font-size:12px;color:#FAC775;cursor:pointer;background:none;border:0.5px solid #EF9F27;border-radius:8px;padding:5px 12px;font-family:inherit">🏆 Leaderboard</button>
       <div style="display:flex;gap:12px;align-items:center">
         <button id="info-btn-start">ℹ️ Power-ups</button>
         <button id="shop-btn">🛒 Shop</button>
@@ -530,6 +604,28 @@
   </div>
 </div>
 
+
+<div id="leaderboard-panel" style="position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998">
+  <div style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:360px;width:92%;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:16px;font-weight:600;color:#e0e8ff">🏆 Global Leaderboard</div>
+      <button class="panel-x-close" id="leaderboard-x-close">✕</button>
+    </div>
+    <div style="display:flex;gap:6px;margin:14px 0 10px">
+      <button class="lb-mode-tab active" data-lbmode="normal" id="lb-tab-normal">Normal</button>
+      <button class="lb-mode-tab" data-lbmode="blitz" id="lb-tab-blitz">Blitz</button>
+      <button class="lb-mode-tab" data-lbmode="zen" id="lb-tab-zen">Zen</button>
+    </div>
+    <div id="lb-name-row" style="display:flex;gap:8px;margin-bottom:12px">
+      <input id="lb-name-input" placeholder="Your name" maxlength="16" style="flex:1;background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:8px;padding:8px 10px;color:#e0e8ff;font-family:inherit;font-size:13px;outline:none">
+      <button id="lb-save-name" style="background:#378ADD;color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;cursor:pointer;font-family:inherit">Save</button>
+    </div>
+    <div id="lb-list" style="display:flex;flex-direction:column;gap:6px;min-height:120px"></div>
+    <div id="lb-loading" style="text-align:center;color:#6677aa;font-size:12px;padding:20px;display:none">Loading...</div>
+    <div id="lb-error" style="text-align:center;color:#D85A30;font-size:12px;padding:12px;display:none">Could not load leaderboard. Check your connection.</div>
+    <button class="panel-close" id="leaderboard-close">Close</button>
+  </div>
+</div>
 
 <div id="stats-panel">
   <div id="stats-box" style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:340px;width:92%;max-height:88vh;overflow-y:auto">
@@ -1240,6 +1336,7 @@ function updateRecords(){
   if(isNewScore){r.score=score;r.scoreLvl=currentLevel;}
   if(isNewCombo)r.combo=bestCombo;if(isNewLevel)r.level=currentLevel;
   all[currentMode]=r;saveAllRecords(all);
+  if(isNewScore)submitScoreToLeaderboard(currentMode,score,currentLevel,bestCombo);
   return{isNewScore,isNewCombo,isNewLevel};
 }
 function loadStartRecords(mode){
@@ -2024,6 +2121,16 @@ function showGOScreen(){
     if(isNewScore)badges.push('<div class="pb-badge">🏆 New Score Record!</div>');
     if(isNewCombo)badges.push('<div class="pb-badge" style="background:#7F77DD;color:#fff">⚡ New Combo Record!</div>');
     if(isNewLevel)badges.push('<div class="pb-badge" style="background:#1D9E75;color:#fff">🌟 New Level Record!</div>');
+    const showNamePrompt=isNewScore&&!getPlayerName();
+    const namePromptHtml=showNamePrompt?`
+      <div style="background:#1a1a2e;border:0.5px solid #EF9F27;border-radius:10px;padding:10px;width:100%;max-width:280px;margin-top:4px">
+        <div style="font-size:11px;color:#FAC775;margin-bottom:6px">🏆 Join the global leaderboard!</div>
+        <div style="display:flex;gap:6px">
+          <input id="go-lb-name" placeholder="Your name" maxlength="16" style="flex:1;background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:6px;padding:6px 8px;color:#e0e8ff;font-family:inherit;font-size:12px;outline:none">
+          <button id="go-lb-save" style="background:#378ADD;color:#fff;border:none;border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit">Join</button>
+        </div>
+      </div>
+    `:'';
     go.innerHTML=`
       <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
       <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
@@ -2034,6 +2141,7 @@ function showGOScreen(){
         <div class="go-stat"><div class="go-stat-label">Level</div><div class="go-stat-val">${currentLevel}</div></div>
       </div>
       ${badges.join('')}
+      ${namePromptHtml}
       <button class="play-btn" id="retry-btn">Play again</button>
       <button class="share-btn" id="go-share-btn" style="margin:0 auto">📤 Share score</button>
       <div style="display:flex;gap:12px">
@@ -2048,6 +2156,16 @@ function showGOScreen(){
     document.getElementById('go-share-btn').addEventListener('click',()=>{
       openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
     });
+    if(showNamePrompt){
+      document.getElementById('go-lb-save').addEventListener('click',()=>{
+        const val=document.getElementById('go-lb-name').value.trim();
+        if(val){
+          savePlayerName(val);
+          submitScoreToLeaderboard(currentMode,score,currentLevel,bestCombo);
+          document.getElementById('go-lb-name').parentElement.parentElement.innerHTML='<div style="font-size:12px;color:#5DCAA5;text-align:center">✓ Added to leaderboard!</div>';
+        }
+      });
+    }
 }
 
 // ===== REVIVE SYSTEM =====
@@ -2377,6 +2495,106 @@ document.getElementById('music-toggle').addEventListener('change',e=>setMusicOn(
 document.getElementById('pause-music-toggle').addEventListener('change',e=>setMusicOn(e.target.checked));
 document.getElementById('pause-sound-toggle').addEventListener('change',e=>setSoundOn(e.target.checked));
 // ===== END MUSIC SYSTEM =====
+
+// ===== LEADERBOARD SYSTEM =====
+let firebaseReady=false;
+let lbCurrentMode='normal';
+
+window.addEventListener('glipx-firebase-ready',()=>{firebaseReady=true;});
+// In case the event already fired before this script ran
+if(window.GlipxLeaderboard)firebaseReady=true;
+
+function getPlayerName(){return localStorage.getItem('glipx_player_name')||'';}
+function savePlayerName(n){localStorage.setItem('glipx_player_name',n);}
+
+async function submitScoreToLeaderboard(mode,score,level,combo){
+  if(!firebaseReady||!window.GlipxLeaderboard)return;
+  const name=getPlayerName();
+  if(!name)return; // don't submit anonymously; ask next time they open leaderboard
+  try{
+    await window.GlipxLeaderboard.submitScore(mode,name,score,level,combo);
+  }catch(e){console.error('Leaderboard submit failed',e);}
+}
+
+async function renderLeaderboard(mode){
+  const list=document.getElementById('lb-list');
+  const loading=document.getElementById('lb-loading');
+  const errorEl=document.getElementById('lb-error');
+  list.innerHTML='';
+  errorEl.style.display='none';
+  loading.style.display='block';
+
+  if(!window.GlipxLeaderboard){
+    loading.style.display='none';
+    errorEl.style.display='block';
+    return;
+  }
+
+  const res=await window.GlipxLeaderboard.getTop(mode,50);
+  loading.style.display='none';
+
+  if(!res.ok){
+    errorEl.style.display='block';
+    return;
+  }
+
+  if(res.data.length===0){
+    list.innerHTML='<div style="text-align:center;color:#6677aa;font-size:12px;padding:20px">No scores yet — be the first! 🏆</div>';
+    return;
+  }
+
+  const myId=window.GlipxLeaderboard._getPlayerId();
+  res.data.forEach((entry,i)=>{
+    const rank=i+1;
+    const isMe=entry.id===myId;
+    const rankClass=rank===1?'lb-rank-1':rank===2?'lb-rank-2':rank===3?'lb-rank-3':'';
+    const row=document.createElement('div');
+    row.className='lb-row'+(isMe?' lb-me':'');
+    row.innerHTML=`
+      <div class="lb-rank ${rankClass}">${rank}</div>
+      <div class="lb-name">${isMe?'⭐ ':''}${escapeHtml(entry.name||'Player')}</div>
+      <div class="lb-meta">Lvl ${entry.level||1}</div>
+      <div class="lb-score">${(entry.score||0).toLocaleString()}</div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function escapeHtml(str){
+  const d=document.createElement('div');d.textContent=str;return d.innerHTML;
+}
+
+function openLeaderboard(){
+  document.getElementById('leaderboard-panel').style.display='flex';
+  document.getElementById('lb-name-input').value=getPlayerName();
+  renderLeaderboard(lbCurrentMode);
+}
+
+document.getElementById('leaderboard-btn').addEventListener('click',openLeaderboard);
+document.getElementById('leaderboard-close').addEventListener('click',()=>document.getElementById('leaderboard-panel').style.display='none');
+document.getElementById('leaderboard-x-close').addEventListener('click',()=>document.getElementById('leaderboard-panel').style.display='none');
+
+document.getElementById('lb-save-name').addEventListener('click',()=>{
+  const val=document.getElementById('lb-name-input').value.trim();
+  if(val){
+    savePlayerName(val);
+    // Re-submit current best score under the new name so it appears
+    const all=getAllRecords();
+    const rec=all[lbCurrentMode];
+    if(rec&&rec.score>0)submitScoreToLeaderboard(lbCurrentMode,rec.score,rec.level||1,rec.combo||1);
+    renderLeaderboard(lbCurrentMode);
+  }
+});
+
+['normal','blitz','zen'].forEach(m=>{
+  document.getElementById('lb-tab-'+m).addEventListener('click',()=>{
+    lbCurrentMode=m;
+    document.querySelectorAll('.lb-mode-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('lb-tab-'+m).classList.add('active');
+    renderLeaderboard(m);
+  });
+});
+// ===== END LEADERBOARD SYSTEM =====
 
 // ===== STATISTICS SYSTEM =====
 function getStats(){try{return JSON.parse(localStorage.getItem('glipx_stats')||'{}');}catch{return{};}}
