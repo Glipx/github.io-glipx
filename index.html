@@ -95,9 +95,10 @@
     .inter-skip{font-size:12px;color:#6677aa;cursor:pointer;text-decoration:underline}
     #inter-countdown{font-size:11px;color:#6677aa;margin-bottom:8px}
     #settings-panel,#info-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
-    #settings-box,#info-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:320px;width:90%;max-height:85vh;overflow-y:auto}
+    #settings-box,#info-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:0;max-width:320px;width:90%;max-height:85vh;overflow-y:auto}
+    .panel-inner{padding:24px}
     .panel-title{font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:16px}
-    .panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .panel-header{display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0f0f22;z-index:5;padding:20px 20px 14px;border-bottom:0.5px solid #2a2a4e;border-radius:16px 16px 0 0}
     .panel-header .panel-title{margin-bottom:0}
     .panel-x-close{background:none;border:none;color:#6677aa;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;font-family:inherit}
     .panel-x-close:hover{color:#a0b0cc}
@@ -141,7 +142,7 @@
     #daily-btn.done{border-color:#1D9E75;color:#5DCAA5}
     #daily-streak{font-size:11px;color:#6677aa;text-align:center}
     #daily-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
-    #daily-box{background:#0f0f22;border:0.5px solid #EF9F27;border-radius:16px;padding:24px;max-width:320px;width:90%}
+    #daily-box{background:#0f0f22;border:0.5px solid #EF9F27;border-radius:16px;padding:0;max-width:320px;width:90%}
     .daily-title{font-size:11px;color:#EF9F27;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
     .daily-date{font-size:12px;color:#6677aa;margin-bottom:14px}
     .daily-challenge-box{background:#1a1a2e;border-radius:12px;padding:16px;margin-bottom:14px;text-align:center}
@@ -167,7 +168,7 @@
     /* SHOP */
     #shop-btn{font-size:11px;color:#6677aa;cursor:pointer;background:none;border:0.5px solid #2a2a4e;border-radius:8px;padding:4px 10px;font-family:inherit}
     #shop-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998}
-    #shop-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:20px;max-width:340px;width:92%;max-height:88vh;overflow-y:auto}
+    #shop-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:0;max-width:340px;width:92%;max-height:88vh;overflow-y:auto}
     .shop-title{font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:4px}
     .shop-sub{font-size:11px;color:#6677aa;margin-bottom:14px}
     .shop-section{font-size:10px;color:#6677aa;text-transform:uppercase;letter-spacing:.08em;margin:14px 0 8px}
@@ -194,7 +195,7 @@
     .share-btn{background:#1a1a2e;border:0.5px solid #2a2a4e;border-radius:10px;padding:8px 14px;color:#a0b0cc;font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .15s}
     .share-btn:hover{border-color:#378ADD;color:#a0c4ff}
     #share-panel{position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:999}
-    #share-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:320px;width:92%}
+    #share-box{background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:0;max-width:320px;width:92%}
     .share-title{font-size:15px;font-weight:600;color:#e0e8ff;margin-bottom:4px}
     .share-sub{font-size:11px;color:#6677aa;margin-bottom:16px}
     #share-card{background:#0a0a1a;border:0.5px solid #2a2a4e;border-radius:12px;padding:16px;margin-bottom:16px;text-align:center}
@@ -418,6 +419,7 @@
 <div id="settings-panel">
   <div id="settings-box">
     <div class="panel-header"><div class="panel-title">⚙️ Settings</div><button class="panel-x-close" id="settings-x-close">✕</button></div>
+    <div class="panel-inner">
     <div class="setting-row">
       <div><div class="setting-label">Sound effects</div><div class="setting-sub">Hit, miss and power-up sounds</div></div>
       <label class="toggle"><input type="checkbox" id="sound-toggle" checked><span class="slider"></span></label>
@@ -441,12 +443,14 @@
       <div class="premium-active" id="premium-active" style="display:none">✓ You have Premium — no ads!</div>
     </div>
     <button class="panel-close" id="settings-close">Close</button>
+    </div>
   </div>
 </div>
 
 <div id="info-panel">
   <div id="info-box">
     <div class="panel-header"><div class="panel-title">ℹ️ Power-ups & Obstacles</div><button class="panel-x-close" id="info-x-close">✕</button></div>
+    <div class="panel-inner">
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#378ADD;font-weight:700">T</div><div><div class="pu-info-name">+5 Seconds</div><div class="pu-info-desc">Adds 5 seconds to your timer</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-weight:700">2x</div><div><div class="pu-info-name">Score Boost</div><div class="pu-info-desc">Doubles all points for 6 seconds</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#5DCAA5;font-weight:700;font-size:18px">✦</div><div><div class="pu-info-name">Clear</div><div class="pu-info-desc">Removes all circles and gives bonus points</div></div></div>
@@ -462,6 +466,7 @@
     <div class="pu-info-row"><div class="pu-info-icon">👁️</div><div><div class="pu-info-name">Blind Mode</div><div class="pu-info-desc">Circles are invisible until 1 sec before they vanish! From Level 24</div></div></div>
     <div class="pu-info-row" style="border:none"><div class="pu-info-icon">🔀</div><div><div class="pu-info-name">Shuffle</div><div class="pu-info-desc">All circles suddenly teleport to new positions! From Level 28</div></div></div>
     <button class="panel-close" id="info-close">Close</button>
+    </div>
   </div>
 </div>
 
@@ -584,7 +589,8 @@
 
 <div id="share-panel">
   <div id="share-box">
-    <div style="display:flex;justify-content:space-between;align-items:center"><div class="share-title">📤 Share your score</div><button class="panel-x-close" id="share-x-close">✕</button></div>
+    <div class="panel-header"><div class="share-title">📤 Share your score</div><button class="panel-x-close" id="share-x-close">✕</button></div>
+    <div class="panel-inner">
     <div class="share-sub">Challenge your friends to beat this!</div>
     <div id="share-card">
       <div class="share-card-logo">GLIP<span>X</span></div>
@@ -605,16 +611,18 @@
       <button class="share-option-btn" id="share-copy-btn"><span class="share-option-icon">📋</span>Copy to clipboard</button>
     </div>
     <button class="panel-close" id="share-close" style="margin-top:12px">Close</button>
+    </div>
   </div>
 </div>
 
 
 <div id="leaderboard-panel" style="position:fixed;inset:0;background:#000000cc;display:none;align-items:center;justify-content:center;z-index:998">
-  <div style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:360px;width:92%;max-height:85vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center">
+  <div style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:0;max-width:360px;width:92%;max-height:85vh;overflow-y:auto">
+    <div class="panel-header">
       <div style="font-size:16px;font-weight:600;color:#e0e8ff">🏆 Global Leaderboard</div>
       <button class="panel-x-close" id="leaderboard-x-close">✕</button>
     </div>
+    <div class="panel-inner">
     <div style="display:flex;gap:6px;margin:14px 0 10px">
       <button class="lb-mode-tab active" data-lbmode="normal" id="lb-tab-normal">Normal</button>
       <button class="lb-mode-tab" data-lbmode="blitz" id="lb-tab-blitz">Blitz</button>
@@ -628,20 +636,24 @@
     <div id="lb-loading" style="text-align:center;color:#6677aa;font-size:12px;padding:20px;display:none">Loading...</div>
     <div id="lb-error" style="text-align:center;color:#D85A30;font-size:12px;padding:12px;display:none">Could not load leaderboard. Check your connection.</div>
     <button class="panel-close" id="leaderboard-close">Close</button>
+    </div>
   </div>
 </div>
 
 <div id="stats-panel">
-  <div id="stats-box" style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:24px;max-width:340px;width:92%;max-height:88vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:16px;font-weight:600;color:#e0e8ff;margin-bottom:16px">📊 Statistics</div><button class="panel-x-close" id="stats-x-close">✕</button></div>
+  <div id="stats-box" style="background:#0f0f22;border:0.5px solid #2a2a4e;border-radius:16px;padding:0;max-width:340px;width:92%;max-height:88vh;overflow-y:auto">
+    <div class="panel-header"><div style="font-size:16px;font-weight:600;color:#e0e8ff">📊 Statistics</div><button class="panel-x-close" id="stats-x-close">✕</button></div>
+    <div class="panel-inner">
     <div id="stats-content"></div>
     <button class="panel-close" id="stats-close">Close</button>
+    </div>
   </div>
 </div>
 
 <div id="shop-panel">
   <div id="shop-box">
-    <div style="display:flex;justify-content:space-between;align-items:center"><div class="shop-title">🛒 Shop</div><button class="panel-x-close" id="shop-x-close">✕</button></div>
+    <div class="panel-header"><div class="shop-title" style="margin-bottom:0">🛒 Shop</div><button class="panel-x-close" id="shop-x-close">✕</button></div>
+    <div class="panel-inner">
     <div class="shop-sub">Customize your experience</div>
 
     <div class="shop-section">Remove Ads</div>
@@ -682,12 +694,14 @@
     </div>
 
     <button class="panel-close" id="shop-close">Close</button>
+    </div>
   </div>
 </div>
 
 <div id="daily-panel">
   <div id="daily-box">
-    <div style="display:flex;justify-content:space-between;align-items:center"><div class="daily-title">⭐ Daily Challenge</div><button class="panel-x-close" id="daily-x-close">✕</button></div>
+    <div class="panel-header"><div class="daily-title" style="margin-bottom:0">⭐ Daily Challenge</div><button class="panel-x-close" id="daily-x-close">✕</button></div>
+    <div class="panel-inner">
     <div class="daily-date" id="daily-date"></div>
     <div class="streak-display">
       <div class="streak-flame">🔥</div>
@@ -710,6 +724,7 @@
     </div>
     <button id="play-daily-btn">Play Challenge</button>
     <button class="panel-close" id="daily-close">Close</button>
+    </div>
   </div>
 </div>
 
