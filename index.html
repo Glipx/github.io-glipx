@@ -427,6 +427,10 @@
       <label class="toggle"><input type="checkbox" id="music-toggle" checked><span class="slider"></span></label>
     </div>
     <div class="setting-row">
+      <div><div class="setting-label">Reminders</div><div class="setting-sub" id="notif-sub">Streak &amp; daily challenge alerts</div></div>
+      <label class="toggle"><input type="checkbox" id="notif-toggle"><span class="slider"></span></label>
+    </div>
+    <div class="setting-row">
       <div><div class="setting-label">Ads</div><div class="setting-sub">Buy Premium to remove ads</div></div>
       <label class="toggle"><input type="checkbox" checked disabled><span class="slider" style="opacity:.4;cursor:not-allowed"></span></label>
     </div>
@@ -2495,6 +2499,120 @@ document.getElementById('music-toggle').addEventListener('change',e=>setMusicOn(
 document.getElementById('pause-music-toggle').addEventListener('change',e=>setMusicOn(e.target.checked));
 document.getElementById('pause-sound-toggle').addEventListener('change',e=>setSoundOn(e.target.checked));
 // ===== END MUSIC SYSTEM =====
+
+// ===== LOCAL NOTIFICATIONS SYSTEM =====
+// Lightweight, Spark-tier friendly: no server, no Cloud Functions.
+// Shows a browser/Android notification when the player has the app open
+// (or just brought it to foreground) and their streak or daily challenge needs attention.
+
+function getNotifPref(){return localStorage.getItem('glipx_notif_on')==='1';}
+function setNotifPref(val){localStorage.setItem('glipx_notif_on', val?'1':'0');}
+
+function updateNotifSubtext(){
+  const sub=document.getElementById('notif-sub');
+  if(!sub)return;
+  if(!('Notification' in window)){
+    sub.textContent='Not supported on this browser';
+  } else if(Notification.permission==='denied'){
+    sub.textContent='Blocked — enable in browser settings';
+  } else {
+    sub.textContent='Streak & daily challenge alerts';
+  }
+}
+
+async function requestNotifPermission(){
+  if(!('Notification' in window))return false;
+  if(Notification.permission==='granted')return true;
+  if(Notification.permission==='denied')return false;
+  try{
+    const result=await Notification.requestPermission();
+    return result==='granted';
+  }catch(e){return false;}
+}
+
+function showLocalNotification(title,body,tag){
+  if(!('Notification' in window))return;
+  if(Notification.permission!=='granted')return;
+  try{
+    if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration){
+      navigator.serviceWorker.getRegistration().then(reg=>{
+        if(reg){
+          reg.showNotification(title,{body,tag,icon:'icon-192.png',badge:'icon-192.png'});
+        } else {
+          new Notification(title,{body,tag,icon:'icon-192.png'});
+        }
+      }).catch(()=>{ new Notification(title,{body,tag,icon:'icon-192.png'}); });
+    } else {
+      new Notification(title,{body,tag,icon:'icon-192.png'});
+    }
+  }catch(e){console.error('Notification error',e);}
+}
+
+// Check streak/daily status and show a relevant reminder if needed.
+// Called once per app open (not spammy — uses a per-day guard).
+function checkAndShowReminders(){
+  if(!getNotifPref())return;
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+
+  const today=getTodayStr();
+  const lastShownKey='glipx_notif_last_shown';
+  const lastShown=localStorage.getItem(lastShownKey);
+  if(lastShown===today)return; // already reminded today, don't spam
+
+  const s=getDailyState();
+  const doneToday=s.lastCompleted===today;
+  const streak=s.streak||0;
+
+  if(!doneToday){
+    if(streak>0){
+      showLocalNotification(
+        '🔥 Don\'t lose your streak!',
+        `You have a ${streak}-day streak. Play today's challenge to keep it alive!`,
+        'glipx-streak'
+      );
+    } else {
+      showLocalNotification(
+        '⭐ Daily Challenge waiting!',
+        'A new challenge is ready — come build your streak!',
+        'glipx-daily'
+      );
+    }
+    localStorage.setItem(lastShownKey,today);
+  }
+}
+
+function initNotifToggle(){
+  const toggle=document.getElementById('notif-toggle');
+  if(!toggle)return;
+  toggle.checked=getNotifPref()&&('Notification' in window)&&Notification.permission==='granted';
+  updateNotifSubtext();
+
+  toggle.addEventListener('change',async()=>{
+    if(toggle.checked){
+      const granted=await requestNotifPermission();
+      if(granted){
+        setNotifPref(true);
+        showLocalNotification('🎮 Reminders on!','We\'ll nudge you about your streak and daily challenges.','glipx-welcome');
+      } else {
+        toggle.checked=false;
+        setNotifPref(false);
+      }
+    } else {
+      setNotifPref(false);
+    }
+    updateNotifSubtext();
+  });
+}
+
+// Run reminder check shortly after load, and whenever the app regains focus
+window.addEventListener('load',()=>{
+  initNotifToggle();
+  setTimeout(checkAndShowReminders,1500);
+});
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden)checkAndShowReminders();
+});
+// ===== END LOCAL NOTIFICATIONS SYSTEM =====
 
 // ===== LEADERBOARD SYSTEM =====
 let firebaseReady=false;
