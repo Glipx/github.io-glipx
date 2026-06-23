@@ -3158,14 +3158,15 @@ function playAtmoSound(type){
       if(type==='monsoon')atmoGainNode.gain.linearRampToValueAtTime(0.08,ac.currentTime+2);
 
     } else if(type==='ocean'||type==='deepsea'){
-      // Underwater rumble
+      // Underwater rumble — raised from 35-50Hz to 90-130Hz since most
+      // phone speakers can't reproduce sub-100Hz frequencies audibly.
       const osc=ac.createOscillator();osc.type='sine';
-      osc.frequency.setValueAtTime(type==='deepsea'?35:50,ac.currentTime);
-      osc.frequency.linearRampToValueAtTime(type==='deepsea'?30:45,ac.currentTime+4);
-      const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=200;
+      osc.frequency.setValueAtTime(type==='deepsea'?90:130,ac.currentTime);
+      osc.frequency.linearRampToValueAtTime(type==='deepsea'?75:110,ac.currentTime+4);
+      const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=400;
       osc.connect(f);f.connect(atmoGainNode);
       osc.start();atmoNode=osc;
-      atmoGainNode.gain.linearRampToValueAtTime(type==='deepsea'?0.10:0.09,ac.currentTime+2);
+      atmoGainNode.gain.linearRampToValueAtTime(type==='deepsea'?0.11:0.10,ac.currentTime+2);
 
     } else if(type==='city'||type==='cyberpunk'){
       // City hum / cyberpunk electric buzz
