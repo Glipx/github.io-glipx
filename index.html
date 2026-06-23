@@ -349,12 +349,17 @@
           const playerId = window.GlipxLeaderboard._getPlayerId();
           const ref = doc(db, 'leaderboard_'+mode, playerId);
           const existing = await getDoc(ref);
-          if(existing.exists() && existing.data().score >= score){
+          const nameChanged = existing.exists() && existing.data().name !== name;
+          if(existing.exists() && existing.data().score > score && !nameChanged){
             return {ok:true, improved:false};
           }
+          // Keep the higher of the two scores, but always update the name
+          const finalScore = existing.exists() ? Math.max(existing.data().score, score) : score;
+          const finalLevel = existing.exists() ? Math.max(existing.data().level||1, level) : level;
+          const finalCombo = existing.exists() ? Math.max(existing.data().combo||1, combo) : combo;
           await setDoc(ref, {
             name: name || 'Player',
-            score, level, combo,
+            score: finalScore, level: finalLevel, combo: finalCombo,
             updatedAt: Date.now()
           });
           return {ok:true, improved:true};
@@ -457,10 +462,10 @@
     <div class="pu-info-row"><div class="pu-info-icon">❤️</div><div><div class="pu-info-name">Heart ❤️</div><div class="pu-info-desc">Adds one life — only appears in Zen mode</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">🛡️</div><div><div class="pu-info-name">Shield 🛡️</div><div class="pu-info-desc">All modes: blocks one missed circle. In Normal/Blitz it also saves your combo!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">❄️</div><div><div class="pu-info-name">Slow Motion</div><div class="pu-info-desc">Slows all circles for 5 seconds</div></div></div>
-    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Tap it = -30 pts. Let it expire = -30 pts & level goes back. From Level 20!</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">💣</div><div><div class="pu-info-name">Bomb</div><div class="pu-info-desc">Don't tap it! Tapping costs -30 pts and resets your combo. Leave it alone — no penalty. From Level 20!</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon" style="color:#FAC775;font-size:11px;font-weight:700">●</div><div><div class="pu-info-name">Mini Circle</div><div class="pu-info-desc">Tiny but worth double points! From Level 7</div></div></div>
     <div style="margin-top:10px;margin-bottom:4px;font-size:11px;color:#6677aa;text-transform:uppercase;letter-spacing:.05em">Obstacles & Effects</div>
-    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts. From Level 16</div></div></div>
+    <div class="pu-info-row"><div class="pu-info-icon">👻</div><div><div class="pu-info-name">Fake Circles</div><div class="pu-info-desc">Dashed border = TRAP! Tapping costs -20 pts and resets your combo. Leave it alone — no penalty. From Level 16</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">💫</div><div><div class="pu-info-name">Moving Circles</div><div class="pu-info-desc">Circles drift across the screen. From Level 10</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">🌊</div><div><div class="pu-info-name">Wave Attack</div><div class="pu-info-desc">Multiple circles spawn at once! From Level 13</div></div></div>
     <div class="pu-info-row"><div class="pu-info-icon">👁️</div><div><div class="pu-info-name">Blind Mode</div><div class="pu-info-desc">Circles are invisible until 1 sec before they vanish! From Level 24</div></div></div>
@@ -1734,10 +1739,11 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
       hit=true;
       if(moveInterval)clearInterval(moveInterval);
       if(isFake){
-        // FAKE: penalty
+        // FAKE: penalty + combo reset (only when actually tapped)
         const penalty=Math.min(score,20);
         score=Math.max(0,score-penalty);
         scoreDisp.textContent=score;
+        combo=1;comboDisp.textContent='x1';
         soundMiss();
         showPop(x+size/2-16,y-6,'#ff4444',`-${penalty} fake!`);
         const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
@@ -1780,16 +1786,12 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
   function expireFn(){
     if(moveInterval)clearInterval(moveInterval);
     if(!hit&&running&&!paused){
-      combo=1;comboDisp.textContent='x1';
       if(isPU&&puType==='bomb'){
-        const penalty=Math.min(score,30);
-        score=Math.max(0,score-penalty);
-        levelScore=Math.max(0,levelScore-penalty);
-        scoreDisp.textContent=score;
-        soundPU('bomb');updateLevelBar();
-        showPop(x,y-6,'#ff4444',`-${penalty}`);
-        const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
-      } else if(!isPU&&!isFake){
+        // Bomb left untouched: no penalty, no combo reset
+      } else if(isFake){
+        // Fake circle left untouched (correctly ignored): no penalty, no combo reset
+      } else if(!isPU){
+        combo=1;comboDisp.textContent='x1';
         soundMiss();
         const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
         if(shieldActive){
@@ -1798,8 +1800,6 @@ function spawnTarget(forceFake=false,forceMini=false,fromWave=false){
           showPop(arenaW/2-20,arenaH/2,'#7F77DD','🛡 blocked!');
         } else if(currentMode==='zen'){
           livesLeft--;updateLivesDisplay();if(livesLeft<0)endGame();
-        } else {
-          combo=1;comboDisp.textContent='x1';
         }
       }
     }
@@ -1830,10 +1830,11 @@ function handlePU(type,x,y,size){
   else if(type==='shield'){shieldActive=true;shieldIndicator.style.display='block';showPop(x,y-6,'#7F77DD','🛡 Shield!');}
   else if(type==='slow'){slowActive=true;slowBanner.style.display='block';clearTimeout(slowTimeout);slowTimeout=setTimeout(()=>{slowActive=false;slowBanner.style.display='none';},5000);showPop(x,y-6,'#a0c4ff','❄ Slow!');}
   else if(type==='bomb'){
-    // Bomb tapped = penalty
+    // Bomb tapped = penalty + combo reset
     const penalty=Math.min(score,30);
     score=Math.max(0,score-penalty);
     scoreDisp.textContent=score;
+    combo=1;comboDisp.textContent='x1';
     soundPU('bomb');
     showPop(x,y-6,'#ff4444',`-${penalty} oops!`);
     const flash=document.createElement('div');flash.className='miss-flash';arena.appendChild(flash);setTimeout(()=>flash.remove(),280);
