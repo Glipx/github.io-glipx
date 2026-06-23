@@ -2712,10 +2712,13 @@ document.getElementById('lb-save-name').addEventListener('click',()=>{
   const val=document.getElementById('lb-name-input').value.trim();
   if(val){
     savePlayerName(val);
-    // Re-submit current best score under the new name so it appears
+    // Re-submit best score under the new name for ALL modes, so the name
+    // updates everywhere the player has an existing leaderboard entry.
     const all=getAllRecords();
-    const rec=all[lbCurrentMode];
-    if(rec&&rec.score>0)submitScoreToLeaderboard(lbCurrentMode,rec.score,rec.level||1,rec.combo||1);
+    ['normal','blitz','zen'].forEach(m=>{
+      const rec=all[m];
+      if(rec&&rec.score>0)submitScoreToLeaderboard(m,rec.score,rec.level||1,rec.combo||1);
+    });
     renderLeaderboard(lbCurrentMode);
   }
 });
