@@ -2708,17 +2708,21 @@ document.getElementById('leaderboard-btn').addEventListener('click',openLeaderbo
 document.getElementById('leaderboard-close').addEventListener('click',()=>document.getElementById('leaderboard-panel').style.display='none');
 document.getElementById('leaderboard-x-close').addEventListener('click',()=>document.getElementById('leaderboard-panel').style.display='none');
 
-document.getElementById('lb-save-name').addEventListener('click',()=>{
+document.getElementById('lb-save-name').addEventListener('click',async()=>{
   const val=document.getElementById('lb-name-input').value.trim();
   if(val){
     savePlayerName(val);
     // Re-submit best score under the new name for ALL modes, so the name
     // updates everywhere the player has an existing leaderboard entry.
+    // We WAIT for all submissions to finish before re-rendering, otherwise
+    // the leaderboard refreshes with stale data from before the name change.
     const all=getAllRecords();
-    ['normal','blitz','zen'].forEach(m=>{
+    const submissions=['normal','blitz','zen'].map(m=>{
       const rec=all[m];
-      if(rec&&rec.score>0)submitScoreToLeaderboard(m,rec.score,rec.level||1,rec.combo||1);
+      if(rec&&rec.score>0)return submitScoreToLeaderboard(m,rec.score,rec.level||1,rec.combo||1);
+      return Promise.resolve();
     });
+    await Promise.all(submissions);
     renderLeaderboard(lbCurrentMode);
   }
 });
