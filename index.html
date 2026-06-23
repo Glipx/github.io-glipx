@@ -344,6 +344,35 @@
 
     // Expose a small bridge so the main game script (non-module) can use Firestore
     window.GlipxLeaderboard = {
+      // Check if a name is already taken by a DIFFERENT player.
+      // Names are checked case-insensitively to avoid "Anna" vs "anna" duplicates.
+      async isNameTaken(name){
+        try{
+          const playerId = window.GlipxLeaderboard._getPlayerId();
+          const nameKey = name.toLowerCase().trim();
+          const ref = doc(db, 'usernames', nameKey);
+          const existing = await getDoc(ref);
+          if(!existing.exists())return false;
+          // Taken only if it belongs to someone else
+          return existing.data().playerId !== playerId;
+        }catch(e){
+          console.error('isNameTaken error', e);
+          return false; // fail open — don't block the player on a network hiccup
+        }
+      },
+      // Reserve a name for this player. Releases their previous name reservation if any.
+      async reserveName(name){
+        try{
+          const playerId = window.GlipxLeaderboard._getPlayerId();
+          const nameKey = name.toLowerCase().trim();
+          const ref = doc(db, 'usernames', nameKey);
+          await setDoc(ref, { playerId, displayName: name, updatedAt: Date.now() });
+          return true;
+        }catch(e){
+          console.error('reserveName error', e);
+          return false;
+        }
+      },
       async submitScore(mode, name, score, level, combo){
         try{
           const playerId = window.GlipxLeaderboard._getPlayerId();
@@ -2101,8 +2130,11 @@ function shareNative(){
   if(navigator.share){
     navigator.share({
       title:'GLIPX — Beat my score!',
-      text:text,
-      url:'https://glipx.github.io/github.io-glipx/'
+      text:text
+      // Note: no separate "url" field — the link is already included
+      // at the end of buildShareText(), and most share targets (Messenger,
+      // SMS, Notes, etc.) append url AND text separately, causing the
+      // link to appear twice in the shared message.
     }).then(()=>{}).catch((err)=>{
       if(err.name!=='AbortError'){copyShareText();}
     });
@@ -2177,13 +2209,30 @@ function showGOScreen(){
       openSharePanel({score,level:currentLevel,combo:bestCombo,mode:MODES[currentMode].label});
     });
     if(showNamePrompt){
-      document.getElementById('go-lb-save').addEventListener('click',()=>{
+      document.getElementById('go-lb-save').addEventListener('click',async()=>{
         const val=document.getElementById('go-lb-name').value.trim();
-        if(val){
-          savePlayerName(val);
-          submitScoreToLeaderboard(currentMode,score,currentLevel,bestCombo);
-          document.getElementById('go-lb-name').parentElement.parentElement.innerHTML='<div style="font-size:12px;color:#5DCAA5;text-align:center">✓ Added to leaderboard!</div>';
+        if(!val)return;
+        const btn=document.getElementById('go-lb-save');
+        const input=document.getElementById('go-lb-name');
+        btn.disabled=true;btn.textContent='...';
+        const taken=window.GlipxLeaderboard?await window.GlipxLeaderboard.isNameTaken(val):false;
+        if(taken){
+          btn.disabled=false;btn.textContent='Join';
+          input.style.borderColor='#ff4444';
+          let errEl=input.parentElement.querySelector('.name-taken-err');
+          if(!errEl){
+            errEl=document.createElement('div');
+            errEl.className='name-taken-err';
+            errEl.style.cssText='font-size:11px;color:#ff6666;margin-top:4px;width:100%';
+            input.parentElement.appendChild(errEl);
+          }
+          errEl.textContent='That name is already taken — try another';
+          return;
         }
+        savePlayerName(val);
+        if(window.GlipxLeaderboard)await window.GlipxLeaderboard.reserveName(val);
+        submitScoreToLeaderboard(currentMode,score,currentLevel,bestCombo);
+        document.getElementById('go-lb-name').parentElement.parentElement.innerHTML='<div style="font-size:12px;color:#5DCAA5;text-align:center">✓ Added to leaderboard!</div>';
       });
     }
 }
@@ -2635,13 +2684,24 @@ let firebaseReady=false;
 let lbCurrentMode='normal';
 
 window.addEventListener('glipx-firebase-ready',()=>{firebaseReady=true;});
-// In case the event already fired before this script ran
-if(window.GlipxLeaderboard)firebaseReady=true;
+
+// Robustly detect Firebase readiness even if the ready-event fired before
+// this script attached its listener, or if the module is still loading.
+// We poll briefly instead of relying on a single check at parse time.
+function checkFirebaseReadyLoop(attemptsLeft=20){
+  if(window.GlipxLeaderboard){firebaseReady=true;return;}
+  if(attemptsLeft<=0)return;
+  setTimeout(()=>checkFirebaseReadyLoop(attemptsLeft-1),150);
+}
+checkFirebaseReadyLoop();
 
 function getPlayerName(){return localStorage.getItem('glipx_player_name')||'';}
 function savePlayerName(n){localStorage.setItem('glipx_player_name',n);}
 
 async function submitScoreToLeaderboard(mode,score,level,combo){
+  // If Firebase isn't marked ready yet, do one more direct check before
+  // giving up — covers the case where it became ready between polls.
+  if(!firebaseReady&&window.GlipxLeaderboard)firebaseReady=true;
   if(!firebaseReady||!window.GlipxLeaderboard)return;
   const name=getPlayerName();
   if(!name)return; // don't submit anonymously; ask next time they open leaderboard
@@ -2710,21 +2770,50 @@ document.getElementById('leaderboard-x-close').addEventListener('click',()=>docu
 
 document.getElementById('lb-save-name').addEventListener('click',async()=>{
   const val=document.getElementById('lb-name-input').value.trim();
-  if(val){
-    savePlayerName(val);
-    // Re-submit best score under the new name for ALL modes, so the name
-    // updates everywhere the player has an existing leaderboard entry.
-    // We WAIT for all submissions to finish before re-rendering, otherwise
-    // the leaderboard refreshes with stale data from before the name change.
-    const all=getAllRecords();
-    const submissions=['normal','blitz','zen'].map(m=>{
-      const rec=all[m];
-      if(rec&&rec.score>0)return submitScoreToLeaderboard(m,rec.score,rec.level||1,rec.combo||1);
-      return Promise.resolve();
-    });
-    await Promise.all(submissions);
-    renderLeaderboard(lbCurrentMode);
+  if(!val)return;
+  const btn=document.getElementById('lb-save-name');
+  const input=document.getElementById('lb-name-input');
+  const oldName=getPlayerName();
+  btn.disabled=true;btn.textContent='...';
+
+  // Only check uniqueness if the name actually changed — re-saving your
+  // own existing name should always succeed.
+  let taken=false;
+  if(val.toLowerCase()!==oldName.toLowerCase()&&window.GlipxLeaderboard){
+    taken=await window.GlipxLeaderboard.isNameTaken(val);
   }
+  if(taken){
+    btn.disabled=false;btn.textContent='Save';
+    input.style.borderColor='#ff4444';
+    let errEl=document.getElementById('lb-name-err');
+    if(!errEl){
+      errEl=document.createElement('div');
+      errEl.id='lb-name-err';
+      errEl.style.cssText='font-size:11px;color:#ff6666;margin:-4px 0 8px';
+      document.getElementById('lb-name-row').insertAdjacentElement('afterend',errEl);
+    }
+    errEl.textContent='That name is already taken — try another';
+    return;
+  }
+  input.style.borderColor='#2a2a4e';
+  const oldErrEl=document.getElementById('lb-name-err');
+  if(oldErrEl)oldErrEl.remove();
+
+  savePlayerName(val);
+  if(window.GlipxLeaderboard)await window.GlipxLeaderboard.reserveName(val);
+  // Re-submit best score under the new name for ALL modes, so the name
+  // updates everywhere the player has an existing leaderboard entry.
+  // We WAIT for all submissions to finish before re-rendering, otherwise
+  // the leaderboard refreshes with stale data from before the name change.
+  const all=getAllRecords();
+  const submissions=['normal','blitz','zen'].map(m=>{
+    const rec=all[m];
+    if(rec&&rec.score>0)return submitScoreToLeaderboard(m,rec.score,rec.level||1,rec.combo||1);
+    return Promise.resolve();
+  });
+  await Promise.all(submissions);
+  btn.disabled=false;btn.textContent='Save';
+  renderLeaderboard(lbCurrentMode);
 });
 
 ['normal','blitz','zen'].forEach(m=>{
