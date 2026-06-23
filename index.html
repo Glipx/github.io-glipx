@@ -3401,8 +3401,8 @@ const DAILY_CHALLENGES=[
    getGoal:(seed)=>5+Math.floor(seed%8),check:(data,goal)=>data.combo>=goal,getProgress:(data)=>data.combo},
   {id:'level',icon:'🏆',name:'Level Runner',desc:'Reach the target level in one game',goalLabel:'level',modes:['normal'],
    getGoal:(seed)=>2+Math.floor(seed%4),check:(data,goal)=>data.level>=goal,getProgress:(data)=>data.level},
-  {id:'bomb',icon:'💣',name:'Bomb Defuser',desc:'Tap bombs before they explode (reach level 4 first!)',goalLabel:'bombs defused',modes:['normal'],
-   getGoal:(seed)=>3+Math.floor(seed%5),check:(data,goal)=>data.bombsDefused>=goal,getProgress:(data)=>data.bombsDefused||0},
+  {id:'bomb',icon:'💣',name:'Bomb Defuser',desc:'Tap bombs before they explode (reach level 20 first!)',goalLabel:'bombs defused',modes:['normal'],minLevelReq:20,
+   getGoal:(seed)=>2+Math.floor(seed%4),check:(data,goal)=>data.bombsDefused>=goal,getProgress:(data)=>data.bombsDefused||0},
   {id:'survive',icon:'⏱️',name:'Survivor',desc:'Survive as long as possible — reach the target level without losing',goalLabel:'level in Zen',modes:['zen'],
    getGoal:(seed)=>2+Math.floor(seed%3),check:(data,goal)=>data.level>=goal,getProgress:(data)=>data.level},
   {id:'slow',icon:'❄️',name:'Slow & Steady',desc:'Score points while Slow Motion is active',goalLabel:'points with slow',modes:['normal'],
@@ -3419,8 +3419,16 @@ function getTodayStr(){
 }
 function getDailyChallenge(){
   const seed=getDailySeed();
-  const idx=seed%DAILY_CHALLENGES.length;
-  const ch={...DAILY_CHALLENGES[idx]};
+  const all=getAllRecords();
+  const maxLevelReached=Math.max(...Object.values(all).map(r=>r.level||0),0);
+
+  // Filter out challenges that require a level the player hasn't reached yet,
+  // so e.g. Bomb Defuser (needs level 20) won't show up for newer players.
+  const eligible=DAILY_CHALLENGES.filter(c=>!c.minLevelReq||maxLevelReached>=c.minLevelReq);
+  const pool=eligible.length>0?eligible:DAILY_CHALLENGES;
+
+  const idx=seed%pool.length;
+  const ch={...pool[idx]};
   ch.goal=ch.getGoal(seed);
   ch.mode=ch.modes[seed%ch.modes.length];
   return ch;
