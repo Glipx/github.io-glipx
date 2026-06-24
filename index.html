@@ -56,6 +56,16 @@
     #levelup-splash.show{display:block;animation:levelup-anim 1.4s ease-out forwards}
     .levelup-text{font-size:52px;font-weight:700;color:#FAC775;text-shadow:0 0 40px #FAC775cc,0 0 80px #FAC77544}
     .levelup-sub{font-size:16px;color:#e0e8ff;margin-top:6px;text-shadow:0 0 10px rgba(255,255,255,0.3)}
+    /* MILESTONE level-up — bigger, fullscreen-dim celebration for level 10/25/50/100/150/200/250/300 */
+    #milestone-overlay{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(20,16,8,0.55),rgba(5,4,2,0.85));display:none;align-items:center;justify-content:center;z-index:13;flex-direction:column;text-align:center}
+    #milestone-overlay.show{display:flex;animation:milestone-fade 2.4s ease-out forwards}
+    @keyframes milestone-fade{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+    .milestone-line{width:220px;height:2px;background:linear-gradient(90deg,transparent,#FAC775,transparent);margin:14px auto;animation:milestone-line-grow .6s ease-out}
+    @keyframes milestone-line-grow{from{width:0}to{width:220px}}
+    .milestone-level{font-size:64px;font-weight:800;color:#FFD700;text-shadow:0 0 30px #FFD700cc,0 0 70px #FAC77566;letter-spacing:4px;animation:milestone-pop .7s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes milestone-pop{0%{transform:scale(0.3);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+    .milestone-title{font-size:26px;font-weight:700;color:#fff;margin-top:8px;text-shadow:0 0 16px rgba(255,255,255,0.5);letter-spacing:2px}
+    .milestone-sub{font-size:14px;color:#e0c89a;margin-top:14px;opacity:0.9}
     #achievement-toast{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#1a3d2e;border:0.5px solid #1D9E75;border-radius:10px;padding:6px 14px;font-size:12px;color:#7ee8bb;display:none;z-index:20;white-space:nowrap;animation:achievement-slide .3s ease-out}
 
     /* START SCREEN */
@@ -548,6 +558,13 @@
     <div id="record-flash"><div id="record-text">🏆 NEW RECORD!</div></div>
     <div id="combo-milestone"><div class="cm-text" id="cm-text">🔥 COMBO x10!</div><div class="cm-sub" id="cm-sub">On fire!</div></div>
     <div id="levelup-splash"><div class="levelup-text">LEVEL UP!</div><div class="levelup-sub" id="levelup-sub">Level 2</div></div>
+    <div id="milestone-overlay">
+      <div class="milestone-line"></div>
+      <div class="milestone-level" id="milestone-level">LEVEL 50</div>
+      <div class="milestone-title" id="milestone-title">VETERAN</div>
+      <div class="milestone-line"></div>
+      <div class="milestone-sub" id="milestone-sub"></div>
+    </div>
     <button id="pause-btn">⏸</button>
 
     <div id="start-screen">
@@ -784,6 +801,10 @@ const levelGoal=document.getElementById('level-goal');
 const levelFill=document.getElementById('level-progress-fill');
 const levelupSplash=document.getElementById('levelup-splash');
 const levelupSub=document.getElementById('levelup-sub');
+const milestoneOverlay=document.getElementById('milestone-overlay');
+const milestoneLevel=document.getElementById('milestone-level');
+const milestoneTitle=document.getElementById('milestone-title');
+const milestoneSub=document.getElementById('milestone-sub');
 const timeBox=document.getElementById('time-box');
 const adBanner=document.getElementById('ad-banner');
 const interstitial=document.getElementById('interstitial');
@@ -830,43 +851,43 @@ const LEVEL_CONFIG=[
   {pts:6160, time:36, spawnBase:380, lifeBase:880,  theme:'deepsea'},
   {pts:7040, time:36, spawnBase:358, lifeBase:820,  theme:'deepsea'},
   {pts:8030, time:34, spawnBase:338, lifeBase:760,  theme:'deepsea'},
-  {pts:9140, time:34, spawnBase:318, lifeBase:700,  theme:'deepsea'},
+  {pts:3000, time:34, spawnBase:318, lifeBase:700,  theme:'deepsea'},
   // 🏙️ Neon City — city skyline (21-25)
-  {pts:10380,time:32, spawnBase:300, lifeBase:660,  theme:'city'},
-  {pts:11760,time:32, spawnBase:284, lifeBase:630,  theme:'city'},
-  {pts:13290,time:30, spawnBase:270, lifeBase:605,  theme:'city'},
-  {pts:14990,time:30, spawnBase:258, lifeBase:580,  theme:'city'},
-  {pts:16870,time:28, spawnBase:255, lifeBase:560,  theme:'city'},
+  {pts:3300,time:32, spawnBase:300, lifeBase:660,  theme:'city'},
+  {pts:3600,time:32, spawnBase:284, lifeBase:630,  theme:'city'},
+  {pts:3900,time:30, spawnBase:270, lifeBase:605,  theme:'city'},
+  {pts:4200,time:30, spawnBase:258, lifeBase:580,  theme:'city'},
+  {pts:4500,time:28, spawnBase:255, lifeBase:560,  theme:'city'},
   // 🌃 Cyberpunk — holograms, flying cars (26-30)
-  {pts:18950,time:28, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
-  {pts:21240,time:26, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
-  {pts:23760,time:26, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
-  {pts:26520,time:25, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
-  {pts:29540,time:25, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
+  {pts:4800,time:28, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
+  {pts:5100,time:26, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
+  {pts:5400,time:26, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
+  {pts:5700,time:25, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
+  {pts:6000,time:25, spawnBase:255, lifeBase:560,  theme:'cyberpunk'},
   // 🏜️ Desert — dunes, heat haze (31-35)
-  {pts:33000,time:24, spawnBase:255, lifeBase:560,  theme:'desert'},
-  {pts:36800,time:24, spawnBase:255, lifeBase:560,  theme:'desert'},
-  {pts:41000,time:23, spawnBase:255, lifeBase:560,  theme:'desert'},
-  {pts:45600,time:23, spawnBase:255, lifeBase:560,  theme:'desert'},
-  {pts:50700,time:22, spawnBase:255, lifeBase:560,  theme:'desert'},
+  {pts:6300,time:24, spawnBase:255, lifeBase:560,  theme:'desert'},
+  {pts:6600,time:24, spawnBase:255, lifeBase:560,  theme:'desert'},
+  {pts:6900,time:23, spawnBase:255, lifeBase:560,  theme:'desert'},
+  {pts:7200,time:23, spawnBase:255, lifeBase:560,  theme:'desert'},
+  {pts:7500,time:22, spawnBase:255, lifeBase:560,  theme:'desert'},
   // ⚡ Sandstorm — reduced visibility (36-40)
-  {pts:56300,time:22, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
-  {pts:62500,time:21, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
-  {pts:69400,time:21, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
-  {pts:77000,time:20, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
-  {pts:85400,time:20, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
+  {pts:7800,time:22, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
+  {pts:8100,time:21, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
+  {pts:8400,time:21, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
+  {pts:8700,time:20, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
+  {pts:9000,time:20, spawnBase:255, lifeBase:560,  theme:'sandstorm'},
   // 🌌 Space — stars, planets (41-45)
-  {pts:94700,time:20, spawnBase:255, lifeBase:560,  theme:'space'},
-  {pts:105000,time:19,spawnBase:255, lifeBase:560,  theme:'space'},
-  {pts:116500,time:19,spawnBase:255, lifeBase:560,  theme:'space'},
-  {pts:129000,time:18,spawnBase:255, lifeBase:560,  theme:'space'},
-  {pts:143000,time:18,spawnBase:255, lifeBase:560,  theme:'space'},
+  {pts:9300,time:20, spawnBase:255, lifeBase:560,  theme:'space'},
+  {pts:9600,time:19,spawnBase:255, lifeBase:560,  theme:'space'},
+  {pts:9900,time:19,spawnBase:255, lifeBase:560,  theme:'space'},
+  {pts:10200,time:18,spawnBase:255, lifeBase:560,  theme:'space'},
+  {pts:10500,time:18,spawnBase:255, lifeBase:560,  theme:'space'},
   // 🚀 Deep Space — derelict station, asteroids (46-50)
-  {pts:158500,time:18,spawnBase:255, lifeBase:560,  theme:'deepspace'},
-  {pts:175500,time:17,spawnBase:255, lifeBase:560,  theme:'deepspace'},
-  {pts:194500,time:17,spawnBase:255, lifeBase:560,  theme:'deepspace'},
-  {pts:215500,time:16,spawnBase:255, lifeBase:560,  theme:'deepspace'},
-  {pts:238500,time:16,spawnBase:255, lifeBase:560,  theme:'deepspace'},
+  {pts:10800,time:18,spawnBase:255, lifeBase:560,  theme:'deepspace'},
+  {pts:11100,time:17,spawnBase:255, lifeBase:560,  theme:'deepspace'},
+  {pts:11400,time:17,spawnBase:255, lifeBase:560,  theme:'deepspace'},
+  {pts:11700,time:16,spawnBase:255, lifeBase:560,  theme:'deepspace'},
+  {pts:12000,time:16,spawnBase:255, lifeBase:560,  theme:'deepspace'},
 ];
 
 // THEMES
@@ -905,7 +926,9 @@ function getLevelCfg(lvl){
   const cfg={...LEVEL_CONFIG[idx]};
   if(lvl>LEVEL_CONFIG.length){
     const e=lvl-LEVEL_CONFIG.length;
-    cfg.pts=LEVEL_CONFIG[LEVEL_CONFIG.length-1].pts+e*50000;
+    // Continue the same gentle +300/level linear growth used for levels 20-50,
+    // instead of the old +50000/level jump which made levels past 50 absurdly steep.
+    cfg.pts=LEVEL_CONFIG[LEVEL_CONFIG.length-1].pts+e*300;
     cfg.time=Math.max(15,cfg.time);
     cfg.spawnBase=255;cfg.lifeBase=560;
     cfg.theme='deepspace';
@@ -1475,6 +1498,51 @@ function tryLevelUp(){
   if(levelScore>=cfg.pts)doLevelUp();
 }
 
+// Milestone levels get a special fullscreen celebration with a title.
+// Titles below 10 stay empty since the player hasn't earned a rank yet.
+const MILESTONE_TITLES={
+  10:'Rookie',
+  18:'Challenger',
+  25:'Veteran',
+  35:'Elite',
+  40:'Master',
+  45:'Grandmaster',
+  50:'Champion',
+  60:'Legend',
+};
+function getMilestoneTitle(level){
+  // Use the highest milestone reached at or below this level, so the title
+  // is meaningful even for levels beyond 300 (still shows "Legend").
+  const keys=Object.keys(MILESTONE_TITLES).map(Number).sort((a,b)=>a-b);
+  let title=null;
+  for(const k of keys){if(level>=k)title=MILESTONE_TITLES[k];}
+  return title;
+}
+function showMilestoneCelebration(level){
+  const title=MILESTONE_TITLES[level];
+  if(!title)return;
+  milestoneLevel.textContent=`LEVEL ${level}`;
+  milestoneTitle.textContent=`${title.toUpperCase()} UNLOCKED`;
+  milestoneSub.textContent=`You've earned the rank of ${title}`;
+  milestoneOverlay.classList.remove('show');void milestoneOverlay.offsetWidth;
+  milestoneOverlay.classList.add('show');
+  // Extra celebratory particle burst, bigger and longer than the normal level-up burst
+  const aW=arena.clientWidth,aH=arena.clientHeight;
+  for(let i=0;i<36;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div');p.className='particle';
+      const colors=['#FFD700','#FAC775','#FFA500','#ffffff','#FFE066'];
+      const col=colors[Math.floor(Math.random()*colors.length)];
+      const sx=Math.random()*aW;const sy=Math.random()*aH;
+      const a=Math.random()*Math.PI*2;const d=60+Math.random()*120;
+      const sz=6+Math.random()*6;
+      p.style.cssText=`width:${sz}px;height:${sz}px;border-radius:50%;background:${col};position:absolute;left:${sx}px;top:${sy}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
+      arena.appendChild(p);setTimeout(()=>p.remove(),700);
+    },i*30);
+  }
+  setTimeout(()=>{milestoneOverlay.classList.remove('show');},2500);
+}
+
 function doLevelUp(){
   soundLevelUp();
   clearTimeout(spawnTimer);clearInterval(countTimer);clearInterval(moveTimer);
@@ -1482,20 +1550,27 @@ function doLevelUp(){
   targets.forEach(t=>{clearTimeout(t.timeout);if(t.moveInterval)clearInterval(t.moveInterval);t.el.remove();});targets=[];
   currentLevel++;levelScore=0;
   const cfg=getLevelCfg(currentLevel);
-  levelupSub.textContent=`Level ${currentLevel} · ${cfg.pts} pts needed`;
-  levelupSplash.classList.remove('show');void levelupSplash.offsetWidth;levelupSplash.classList.add('show');
-  // Celebration particles burst
-  const aW=arena.clientWidth,aH=arena.clientHeight;
-  for(let i=0;i<20;i++){
-    setTimeout(()=>{
-      const p=document.createElement('div');p.className='particle';
-      const colors=['#FAC775','#378ADD','#1D9E75','#7F77DD','#D85A30'];
-      const col=colors[Math.floor(Math.random()*colors.length)];
-      const sx=Math.random()*aW;const sy=Math.random()*aH;
-      const a=Math.random()*Math.PI*2;const d=40+Math.random()*80;
-      p.style.cssText=`width:8px;height:8px;border-radius:50%;background:${col};position:absolute;left:${sx}px;top:${sy}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
-      arena.appendChild(p);setTimeout(()=>p.remove(),520);
-    },i*40);
+  const isMilestone=!!MILESTONE_TITLES[currentLevel];
+
+  if(isMilestone){
+    // Big fullscreen celebration instead of the normal small splash
+    showMilestoneCelebration(currentLevel);
+  } else {
+    levelupSub.textContent=`Level ${currentLevel} · ${cfg.pts} pts needed`;
+    levelupSplash.classList.remove('show');void levelupSplash.offsetWidth;levelupSplash.classList.add('show');
+    // Celebration particles burst
+    const aW=arena.clientWidth,aH=arena.clientHeight;
+    for(let i=0;i<20;i++){
+      setTimeout(()=>{
+        const p=document.createElement('div');p.className='particle';
+        const colors=['#FAC775','#378ADD','#1D9E75','#7F77DD','#D85A30'];
+        const col=colors[Math.floor(Math.random()*colors.length)];
+        const sx=Math.random()*aW;const sy=Math.random()*aH;
+        const a=Math.random()*Math.PI*2;const d=40+Math.random()*80;
+        p.style.cssText=`width:8px;height:8px;border-radius:50%;background:${col};position:absolute;left:${sx}px;top:${sy}px;--tx:${Math.cos(a)*d}px;--ty:${Math.sin(a)*d}px;`;
+        arena.appendChild(p);setTimeout(()=>p.remove(),520);
+      },i*40);
+    }
   }
   updateLevelBar();checkAch();
   applyTheme(cfg.theme);
@@ -1505,7 +1580,7 @@ function doLevelUp(){
     spawnTimer=setTimeout(()=>spawnTarget(),500);
     // Wave attack level 8+
     if(currentLevel>=13)setTimeout(()=>spawnWave(),3000);
-  },1600);
+  },isMilestone?2600:1600);
 }
 
 function startLevelTimer(){
@@ -2185,7 +2260,7 @@ function showGOScreen(){
     `:'';
     go.innerHTML=`
       <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
-      <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
+      <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}${getMilestoneTitle(currentLevel)?' · '+getMilestoneTitle(currentLevel):''}</div>
       <div class="go-score">${score}</div>
       <div class="go-label">points</div>
       <div class="go-stats">
@@ -2329,7 +2404,7 @@ function endGameAfterRevive(){
   const go=document.createElement('div');go.id='game-over-screen';
   go.innerHTML=`
     <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
-    <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
+    <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}${getMilestoneTitle(currentLevel)?' · '+getMilestoneTitle(currentLevel):''}</div>
     <div class="go-score">${score}</div>
     <div class="go-label">points</div>
     <div class="go-stats">
@@ -2362,7 +2437,7 @@ document.getElementById('revive-skip-btn').addEventListener('click',()=>{
   const goSkip=document.createElement('div');goSkip.id='game-over-screen';
   goSkip.innerHTML=`
     <div class="game-logo" style="font-size:28px">GLIP<span style="color:#378ADD">X</span></div>
-    <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}</div>
+    <div class="go-level">${MODES[currentMode].label} · Level ${currentLevel}${getMilestoneTitle(currentLevel)?' · '+getMilestoneTitle(currentLevel):''}</div>
     <div class="go-score">${score}</div>
     <div class="go-label">points</div>
     <div class="go-stats">
@@ -2510,6 +2585,11 @@ function playMusicNote(){
 function startMusic(){
   if(!musicOn||musicPlaying)return;
   musicPlaying=true;
+  try{
+    // Restore gain to audible level — stopMusic() from a previous game
+    // leaves it at 0, and startMusic() must not assume it's already correct.
+    if(musicGain&&musicAC)musicGain.gain.setValueAtTime(0.7,musicAC.currentTime);
+  }catch(e){}
   playMusicNote();
 }
 
@@ -2861,9 +2941,11 @@ function openStats(){
   const bestLevel=Math.max(...Object.values(all).map(r=>r.level||0),0);
   const bestComboStat=Math.max(...Object.values(all).map(r=>r.combo||0),0);
   const streak=getDailyState().streak||0;
+  const playerTitle=getMilestoneTitle(bestLevel);
 
   const content=document.getElementById('stats-content');
   content.innerHTML=`
+    ${playerTitle?`<div style="text-align:center;background:linear-gradient(135deg,#3a2e10,#2a2008);border:0.5px solid #FAC775;border-radius:12px;padding:12px;margin-bottom:14px"><div style="font-size:11px;color:#FAC775;text-transform:uppercase;letter-spacing:.08em">Your Rank</div><div style="font-size:24px;font-weight:700;color:#FFD700;margin-top:2px">${playerTitle}</div></div>`:''}
     <div class="stat-section">Gameplay</div>
     <div class="stat-row"><span class="stat-row-label">Games played</span><span class="stat-row-val">${s.gamesPlayed||0}</span></div>
     <div class="stat-row"><span class="stat-row-label">Total score</span><span class="stat-row-val">${(s.totalScore||0).toLocaleString()}</span></div>
