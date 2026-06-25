@@ -2679,10 +2679,13 @@ function showLocalNotification(title,body,tag){
   if(!('Notification' in window))return;
   if(Notification.permission!=='granted')return;
   try{
+    // 'icon' shows in the notification body (can be full color).
+    // 'badge' shows tiny in the status bar — Android requires a plain
+    // white silhouette here, otherwise it falls back to a blank/white box.
     if(navigator.serviceWorker&&navigator.serviceWorker.getRegistration){
       navigator.serviceWorker.getRegistration().then(reg=>{
         if(reg){
-          reg.showNotification(title,{body,tag,icon:'icon-192.png',badge:'icon-192.png'});
+          reg.showNotification(title,{body,tag,icon:'icon-192.png',badge:'badge-96.png'});
         } else {
           new Notification(title,{body,tag,icon:'icon-192.png'});
         }
