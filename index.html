@@ -356,15 +356,35 @@
     window.GlipxLeaderboard = {
       // Check if a name is already taken by a DIFFERENT player.
       // Names are checked case-insensitively to avoid "Anna" vs "anna" duplicates.
+      // We check BOTH the 'usernames' registry (for names reserved after this
+      // system was added) AND the actual leaderboard entries directly (to also
+      // catch names that were saved before the usernames registry existed).
       async isNameTaken(name){
         try{
           const playerId = window.GlipxLeaderboard._getPlayerId();
           const nameKey = name.toLowerCase().trim();
+
+          // 1. Check the usernames registry first (fast, exact lookup)
           const ref = doc(db, 'usernames', nameKey);
           const existing = await getDoc(ref);
-          if(!existing.exists())return false;
-          // Taken only if it belongs to someone else
-          return existing.data().playerId !== playerId;
+          if(existing.exists()){
+            return existing.data().playerId !== playerId;
+          }
+
+          // 2. Fallback: scan leaderboard collections directly for any entry
+          // with this name (case-insensitive) belonging to someone else.
+          // This catches names saved before the usernames registry existed.
+          for(const mode of ['normal','blitz','zen']){
+            const q = query(collection(db, 'leaderboard_'+mode));
+            const snap = await getDocs(q);
+            for(const d of snap.docs){
+              const data=d.data();
+              if(data.name && data.name.toLowerCase().trim()===nameKey && d.id!==playerId){
+                return true;
+              }
+            }
+          }
+          return false;
         }catch(e){
           console.error('isNameTaken error', e);
           return false; // fail open — don't block the player on a network hiccup
