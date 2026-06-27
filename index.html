@@ -2850,7 +2850,7 @@ async function renderLeaderboard(mode){
     row.innerHTML=`
       <div class="lb-rank ${rankClass}">${rank}</div>
       <div class="lb-name">${isMe?'⭐ ':''}${escapeHtml(entry.name||'Player')}</div>
-      <div class="lb-meta">Lvl ${entry.level||1}</div>
+      <div class="lb-meta">Lvl ${entry.level||1} · x${entry.combo||1}</div>
       <div class="lb-score">${(entry.score||0).toLocaleString()}</div>
     `;
     list.appendChild(row);
